@@ -1,0 +1,6 @@
+export {default as Search} from "./Search"
+export {default as Button} from "./Button"
+export {default as InputForm} from "./InputForm"
+export {default as AuthForm} from "./AuthForm"
+export {default as Otp} from "./Otp"
+export {default as AuthFormLogin} from "./AuthFormLogin"
