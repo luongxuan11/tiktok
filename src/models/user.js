@@ -27,7 +27,9 @@ module.exports = (sequelize, DataTypes) => {
     verifyOTP: {
       type: DataTypes.BOOLEAN,
       defaultValue: false, 
-    }
+    },
+    passwordResetToken: DataTypes.TEXT,
+    passwordResetExpires: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'User',

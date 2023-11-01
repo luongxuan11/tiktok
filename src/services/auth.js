@@ -4,6 +4,10 @@ import { create_access_token, create_refresh_token } from "../middlewares/jwt";
 import jwt from "jsonwebtoken";
 import generateOTP from "../helpers/generateOTP";
 import { v4 } from "uuid";
+import resetToken from "../helpers/resetToken";
+import { sendEmail } from "../helpers/sendMail";
+import { date } from "joi";
+const crypto = require("crypto");
 
 const hashPassword = (password) => {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
@@ -167,6 +171,105 @@ export const logout = (cookie) =>
       resolve({
         err: 0,
         mess: "Đăng xuất thành công",
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+// forgot password
+/*
+  1. người dùng gửi mail lên
+  2. server check xem email có hợp lệ không => hợp lệ thì gửi mail + kèm link ()
+  3. báo cho client check mail => click vào link
+*/
+export const forgotPassword = (email) => new Promise(async (resolve, reject) => {
+    try {
+      const {passwordResetToken, passwordResetExpires} = resetToken()
+
+      const user = await db.User.findOne({
+        where: { email },
+        raw: true,
+      });
+      if (!user) {
+        return resolve({
+          err: 1,
+          mess: "Email chưa được đănhg kí hoặc bạn đã nhập sai... vui lòng thử lại.",
+        });
+      } else {
+        await db.User.update(
+          {
+            passwordResetToken,
+            passwordResetExpires
+          },
+          {
+            where: { email },
+          }
+        );
+      }
+
+      const html = `
+    Vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.
+    Lưu ý: Link này sẽ hết hạn sau 15 phút kể từ bây giờ.
+    <a href=${process.env.SERVER_URL}/api/v1/auth/reset-password/${passwordResetToken}>click here</a>
+    `;
+      const res = sendEmail(email, html);
+
+    resolve({
+      err: res ? 0 : 1,
+      mess: res ? "Chúng tôi đã gửi mail cho bạn vui lòng kiểm tra gmail." : "Opps! error"
+    })
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+/*
+  * reset password: 
+    1. find token into db
+    2. check expire token
+    3. check expire token
+    4. finish update password =>> remove value
+*/
+
+export const checkResetPassword = (password, token) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const user = await db.User.findOne({
+        where: {
+          passwordResetToken: token
+        },
+        attributes: ['passwordResetExpires'],
+        raw: true
+      })
+      if(!user) return resolve({
+        err: 1,
+        mess: "Opps!, Token resetPassword invalid."
+      })
+
+      // check expire token
+      const currentTime = Date.now();
+      console.log(currentTime)
+      console.log(user)
+      if(user.passwordResetExpires < currentTime){
+        return resolve({
+          err: 1,
+          mess: "Token has expired!"
+        })
+      }
+
+      // finish update password =>> remove value
+      const res = await db.User.update({
+        password: hashPassword(password),
+        passwordResetToken: null,
+        passwordResetExpires: null
+      }, {
+        where: {passwordResetToken: token}
+      })
+
+      resolve({
+        err: res ? 0 : 1,
+        mess: res ? "Updated password " : "Update password fail!",
       });
     } catch (error) {
       reject(error);

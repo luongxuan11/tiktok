@@ -1,11 +1,12 @@
-import nodemailer from 'nodemailer';
+import { number } from "joi";
+import nodemailer from "nodemailer";
 
 // Hàm gửi email
-export const sendEmail = async (toEmail, otp) => {
+export const sendEmail = async (toEmail, option) => {
   try {
     // Tạo một bộ gửi email
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com', // Thay thế bằng máy chủ email của bạn
+      host: "smtp.gmail.com", // Thay thế bằng máy chủ email của bạn
       port: 587, // Cổng email
       secure: false, // false nếu sử dụng TLS
       auth: {
@@ -14,24 +15,36 @@ export const sendEmail = async (toEmail, otp) => {
       },
     });
 
-    const mailOptions = {
-      from: 'no-reply@tiktok.com', // Địa chỉ email của bạn
-      to: toEmail, // Địa chỉ email của người dùng
-      subject: `Nhóm tài khoản Tiktok`, // Tiêu đề email
-      text: `Xin chào ${toEmail}
+    if (typeof option === number) {
+      const mailOptions = {
+        from: "no-reply@tiktok.com", // Địa chỉ email của bạn
+        to: toEmail, // Địa chỉ email của người dùng
+        subject: `Nhóm tài khoản Tiktok`, // Tiêu đề email
+        text: `Xin chào ${toEmail}
+        
+        Chúng tôi đã nhận yêu cầu mã dùng một lần để dùng cho tài khoản Tiktok của bạn.
+  
+        Mã dùng một lần của bạn là: ${option}
+  
+        Xin cám ơn
+        Nhóm tài khoản Tiktok`, // Nội dung email
+      };
+      // Gửi email
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent:", info.response);
       
-      Chúng tôi đã nhận yêu cầu mã dùng một lần để dùng cho tài khoản Tiktok của bạn.
-
-      Mã dùng một lần của bạn là: ${otp}
-
-      Xin cám ơn
-      Nhóm tài khoản Tiktok`, // Nội dung email
-    };
-
-    // Gửi email
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.response);
+    } else {
+      const mailOptions = {
+        from: "no-reply@tiktok.com", // Địa chỉ email người gửi
+        to: toEmail,
+        subject: `Nhóm tài khoản Tiktok`,
+        html: option,
+      };
+      // Gửi email
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent:", info.response);
+    }
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
   }
 };

@@ -38,6 +38,12 @@ module.exports = {
           type: Sequelize.BOOLEAN,
           defaultValue: false, 
       },
+      passwordResetToken: {
+        type: Sequelize.TEXT
+      },
+      passwordResetExpires: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP', defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
