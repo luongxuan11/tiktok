@@ -15,7 +15,7 @@ export const internalError = (res, err) => {
       // internal trả ra er 500
     return res.status(error.status).json({
       err: 1,
-      mess: error.message,
+      mess: error,
       description: err
     });
   };
