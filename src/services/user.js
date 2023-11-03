@@ -1,4 +1,5 @@
 import db from "../models";
+const cloudinary = require("cloudinary").v2;
 import generateOTP from "../helpers/generateOTP";
 import { sendEmail } from "../helpers/sendMail";
 import bcrypt from "bcrypt";
@@ -33,10 +34,23 @@ export const getUserCurrent = (userId) =>
    });
 
 // update
-export const updateUser = (userId, payload) =>
+export const updateImageUser = (userId, fileData) =>
    new Promise(async (resolve, reject) => {
       try {
-         const res = await db.User.update(payload, {
+         // Delete when there are avatar in the database
+         const deleteAvatarOld = await db.User.findOne({
+            where: {id: userId},
+            attributes: ['fileName']
+         })
+         if(deleteAvatarOld && fileData){
+            await cloudinary.uploader.destroy(deleteAvatarOld.fileName)
+         }
+
+         // update new avatar
+         const res = await db.User.update({
+            avatar: fileData.path,
+            fileName: fileData.filename
+         }, {
             where: { id: userId },
          });
          resolve({
@@ -46,8 +60,27 @@ export const updateUser = (userId, payload) =>
          });
       } catch (error) {
          reject(error);
+         if(fileData){
+            await cloudinary.uploader.destroy(fileData.fileName)
+         }
       }
    });
+
+export const updateUser = (id, body) => new Promise(async(resolve, reject) => {
+   try {
+      const user = await db.User.update(body, {
+         where: {id}
+      })
+
+      resolve({
+         err: user ? 0 : 1,
+         mess: user ? "Bạn đã đổi tên thành công" : "Opps! Error"
+      })
+   } catch (error) {
+      reject(error)
+   }
+})
+// =============== end update =============== //
 
 /*
   * change password

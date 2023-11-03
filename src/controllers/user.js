@@ -1,7 +1,7 @@
 import * as services from "../services";
-import { internalError, badRequest } from "../middlewares/handleError";
 import Joi from "joi";
-import { password, newPassword } from "../helpers/joi_schema";
+import { internalError, badRequest } from "../middlewares/handleError";
+import { password, newPassword, userName } from "../helpers/joi_schema";
 
 // read controller
 export const getUserCurrent = async (req, res) => {
@@ -15,21 +15,36 @@ export const getUserCurrent = async (req, res) => {
 };
 
 // update controller
-export const updateUser = async (req, res) => {
+export const updateImageUser = async (req, res) => {
      try {
           const { id } = req.user;
-          const { ...payload } = req.body;
-          if (!payload)
-               return res.status(400).json({
-                    err: 1,
-                    mess: "missing input",
-               });
-          const response = await services.updateUser(id, payload);
+          const fileData = req.file;
+          if(!fileData) return res.status(400).json({
+               err: 1,
+               mess: "Bạn cần phải nhập hình ảnh!"
+          })
+          const response = await services.updateImageUser(id, fileData);
           return res.status(200).json(response);
      } catch (error) {
           return internalError(res);
      }
 };
+export const updateUser = async(req, res) => {
+     try {
+          const {id} = req.user
+          const { error } = Joi.object({userName}).validate(req.body);
+          if (error) return badRequest(error.details[0]?.message, res);
+
+          const response = await services.updateUser(id, req.body);
+          return res.status(200).json(response);
+     } catch (error) {
+          return internalError(res)
+     }
+}
+// ============= end update ================== //
+
+// delete
+
 
 // change password
 export const changePassword = async (req, res) => {

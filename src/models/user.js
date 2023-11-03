@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     tiktok_id: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    avatar: DataTypes.STRING,
+    avatar: DataTypes.TEXT,
     role_code: DataTypes.STRING,
     refresh_token: DataTypes.STRING,
     otp: DataTypes.INTEGER,
@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false, 
     },
     passwordResetToken: DataTypes.TEXT,
-    passwordResetExpires: DataTypes.TEXT
+    passwordResetExpires: DataTypes.TEXT,
+    fileName: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'User',

@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       avatar: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       role_code: {
         type: Sequelize.STRING,
@@ -42,6 +42,9 @@ module.exports = {
         type: Sequelize.TEXT
       },
       passwordResetExpires: {
+        type: Sequelize.TEXT
+      },
+      fileName: {
         type: Sequelize.TEXT
       },
       createdAt: {
