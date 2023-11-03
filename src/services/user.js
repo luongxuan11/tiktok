@@ -127,7 +127,41 @@ export const changePassword = (id, body) =>
       }
    });
 
-// delete
+// delete user
+export const deleteUser = (id, password) => new Promise(async(resolve, reject) => {
+   try {
+      const user = await db.User.findOne({
+         where: {id},
+         attributes: ['fileName', 'password']
+      })
+
+      // check pass
+      const isChecked = await bcrypt.compareSync(password, user.password);
+      if(!isChecked) return resolve({
+         err: 1,
+         mess: "Mật khẩu không khớp vui lòng thử lại"
+      })
+
+      // delete file
+      const deleteFile = await cloudinary.uploader.destroy(user.fileName)
+      if(!deleteFile) return resolve({
+         err: 1,
+         mess: "Opps! Có vấn đề về đường truyền"
+      })
+      const res = await db.User.destroy({
+         where: {id}
+      })
+
+      resolve({
+         err: (deleteFile && res) ? 0 : 1,
+         mess: (deleteFile && res) ? "Xóa tài khoản thành công" : "Error! Thất bại",
+      })
+   } catch (error) {
+      reject(error)
+   }   
+})
+
+
 
 // send otp
 export const sendOtp = (id, email) =>

@@ -83,10 +83,7 @@ export const login = ({ email, password }, response) =>
    });
 
 // api refresh token
-export const refreshAccessToken = (
-   cookie,
-   res, // lưu ý: khi bắt được lỗi 401 bên getUser thì gọi api này
-) =>
+export const refreshAccessToken = ( cookie, res) => // lưu ý: khi bắt được lỗi 401 bên getUser thì gọi api này
    new Promise(async (resolve, reject) => {
       try {
          // Xác minh refresh_token bằng cách sử dụng jwt.verify

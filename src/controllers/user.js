@@ -43,9 +43,6 @@ export const updateUser = async(req, res) => {
 }
 // ============= end update ================== //
 
-// delete
-
-
 // change password
 export const changePassword = async (req, res) => {
      try {
@@ -59,6 +56,22 @@ export const changePassword = async (req, res) => {
           return internalError(res);
      }
 };
+
+// delete user
+export const deleteUser = async(req, res) => {
+     try {
+          const {id}  = req.user
+          const {password} = req.body
+          if(!password) return res.status(404).json({
+               err: 1,
+               mess: "Yêu cầu nhập mật khẩu trước khi xóa tài khoản"
+          })
+          const response = await services.deleteUser(id, password);
+          return res.status(200).json(response);
+     } catch (error) {
+          return internalError(res)
+     }
+}
 
 // send otp
 export const sendOtp = async (req, res) => {

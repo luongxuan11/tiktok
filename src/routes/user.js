@@ -13,6 +13,7 @@ userRouter.get('/', controllers.getUserCurrent)
 userRouter.put('/update-image-user', uploadCloud.single("image") ,controllers.updateImageUser)
 userRouter.put('/update-user', controllers.updateUser)
 userRouter.put('/update-password', controllers.changePassword)
+userRouter.post('/delete-user', controllers.deleteUser)
 userRouter.post('/send-otp', controllers.sendOtp)
 userRouter.put('/verify-otp', controllers.verifyOtp)
 
