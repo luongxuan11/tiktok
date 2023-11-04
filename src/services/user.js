@@ -42,8 +42,12 @@ export const updateImageUser = (userId, fileData) =>
             where: {id: userId},
             attributes: ['fileName']
          })
-         if(deleteAvatarOld && fileData){
-            await cloudinary.uploader.destroy(deleteAvatarOld.fileName)
+         if(deleteAvatarOld.fileName && fileData){
+            try {
+               await cloudinary.uploader.destroy(deleteAvatarOld.fileName)
+            } catch (error) {
+               reject(error)
+            }
          }
 
          // update new avatar
@@ -54,15 +58,15 @@ export const updateImageUser = (userId, fileData) =>
             where: { id: userId },
          });
          resolve({
-            err: res[0] > 0 ? 0 : 1,
-            mess: res[0] > 0 ? "updated user successfully!" : "fail to update",
+            err: res ? 0 : 1,
+            mess: res ? "updated user successfully!" : "fail to update",
             userData: res,
          });
       } catch (error) {
-         reject(error);
          if(fileData){
             await cloudinary.uploader.destroy(fileData.fileName)
          }
+         reject(error);
       }
    });
 
