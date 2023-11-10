@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     file_name: DataTypes.TEXT,
     file_id: DataTypes.STRING,
     original_name: DataTypes.TEXT,
-    images: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Cache',

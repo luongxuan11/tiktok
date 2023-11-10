@@ -9,7 +9,7 @@ router.use(verifyToken)
 router.post('/create-video', googleDriveCloud ,controllers.createNewPost)
 router.get('/get-cache',controllers.getCache)
 router.post('/delete-video',controllers.deleteFile)
-router.get('/delete-cache',controllers.deleteCache)
+router.delete('/delete-cache',controllers.deleteCache)
 
 
 export default router
