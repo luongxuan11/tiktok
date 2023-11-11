@@ -4,6 +4,7 @@ dotenv.config();
 import { writeBufferToInput } from "../helpers/writeFileToFolder";
 import { v4 as generateId } from "uuid";
 import { reduceFfmpeg, createThumbnails } from "../helpers/ffmpeg";
+import generateOTP from "../helpers/generateOTP";
 
 // mid handle data into google drive
 const googleDriveCloud = async (req, res, next) => {
@@ -31,7 +32,9 @@ const googleDriveCloud = async (req, res, next) => {
       const inputFilePath = writeBufferToInput(req.file.buffer, "mp4");
       const outputFileName = `reduce_${Date.now()}${generateId()}${req.file.originalname}`;
       await reduceFfmpeg(inputFilePath, outputFileName, req);
-      await createThumbnails(inputFilePath, req);
+      req.generateUserFolderId = generateOTP()
+      let userFolderId = req.generateUserFolderId
+      await createThumbnails(inputFilePath, req, userFolderId);
       next();
    });
 };

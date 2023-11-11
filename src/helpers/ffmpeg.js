@@ -44,10 +44,10 @@ export const reduceFfmpeg = (inputFilePath, outputFileName, req) => {
    });
 };
 
-export const createThumbnails = async (inputFilePath, req) => {
+export const createThumbnails = async (inputFilePath, req, userFolderId) => {
    const { id } = req.user;
    const outputDirectory = "/workspace/tiktok/server/src/onOutput";
-   const userFolder = path.join(outputDirectory, id);
+   const userFolder = path.join(outputDirectory, `${id}-${userFolderId}`);
    
    // tạo folder theo tên người dùng
    fs.mkdirSync(userFolder);
@@ -62,7 +62,7 @@ export const createThumbnails = async (inputFilePath, req) => {
                   .input(inputFilePath)
                   .seekInput(timestamp)
                   .frames(1)
-                  .size("720x1280")
+                  .size("720x1280") 
                   .inputOptions(["-threads 4"])
                   .addOption("-preset veryfast")
                   .on("end", function () {

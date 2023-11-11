@@ -3,7 +3,7 @@ import { v4 as generateId } from "uuid";
 import { deleteFolderThumbnail } from "../helpers/deleteFolderThumbnail";
 
 // create
-export const createNewPost = (id, fileUrl, fileId, drive, original_name) =>
+export const createNewPost = (id, fileUrl, fileId, drive, original_name, generateUserFolderId) =>
    new Promise(async (resolve, reject) => {
       try {
          await db.Cache.create({
@@ -12,11 +12,13 @@ export const createNewPost = (id, fileUrl, fileId, drive, original_name) =>
             file_name: fileUrl.replace("=download", ""),
             file_id: fileId,
             original_name,
+            generateUserFolderId,
          });
 
          resolve({
             err: 0,
             mess: "create video success!",
+            data: fileId
          });
       } catch (error) {
          if (fileId) {
@@ -33,11 +35,11 @@ export const createNewPost = (id, fileUrl, fileId, drive, original_name) =>
    });
 
 // get cache
-export const getCache = (id) =>
+export const getCache = (videoId) =>
    new Promise(async (resolve, reject) => {
       try {
          const res = await db.Cache.findOne({
-            where: { user_id: id },
+            where: { file_id: videoId },
             attributes: {
                exclude: ["createdAt", "updatedAt"],
             },
@@ -53,11 +55,21 @@ export const getCache = (id) =>
    });
 
 //   delete file and google drive
-export const deleteFile = (id, fileId, drive) =>
+export const deleteFile = (id, fileId, drive, generateUserFolderId) =>
    new Promise(async (resolve, reject) => {
       try {
+         const cache = await db.Cache.findOne({
+            where: {
+               user_id: id,
+            },
+            attributes: ["generateUserFolderId"],
+            raw: true,
+         });
+
          // deleteFolder
-         await deleteFolderThumbnail(id);
+         if (cache.generateUserFolderId === generateUserFolderId) {
+            await deleteFolderThumbnail(id, cache.generateUserFolderId);
+         }
 
          //   delete file google
          if (fileId) {
@@ -74,7 +86,7 @@ export const deleteFile = (id, fileId, drive) =>
          }
          //   delete database
          const res = await db.Cache.destroy({
-            where: { user_id: id },
+            where: {generateUserFolderId},
          });
          resolve({
             err: res ? 0 : 1,
@@ -86,14 +98,24 @@ export const deleteFile = (id, fileId, drive) =>
    });
 
 //   delete db cache not google file
-export const deleteCache = (id) =>
+export const deleteCache = (id, deleted) =>
    new Promise(async (resolve, reject) => {
       try {
          // deleteFolder
-         await deleteFolderThumbnail(id);
-
+         const cache = await db.Cache.findOne({
+            where: {
+               user_id: id,
+            },
+            attributes: ["generateUserFolderId"],
+            raw: true,
+         });
+         // return console.log(cache.generateUserFolderId, deleted, id)
+         // delete folder
+         if (cache.generateUserFolderId === deleted) {
+            await deleteFolderThumbnail(id, deleted);
+         }
          const res = await db.Cache.destroy({
-            where: { user_id: id },
+            where: {generateUserFolderId: deleted},
          });
 
          resolve({

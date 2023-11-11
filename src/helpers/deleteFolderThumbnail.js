@@ -3,8 +3,8 @@ const path = require("path");
 
 const userFolderPath = "/workspace/tiktok/server/src/onOutput";
 
-export const deleteFolderThumbnail = async (folderToDelete) => {
-   const folderPathToDelete = path.join(userFolderPath, folderToDelete);
+export const deleteFolderThumbnail = async (folderToDelete, generateUserFolderId) => {
+   const folderPathToDelete = path.join(userFolderPath, `${folderToDelete}-${generateUserFolderId}`);
    await fs
       .rm(folderPathToDelete, { recursive: true })
       .then(() => {

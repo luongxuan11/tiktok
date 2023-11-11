@@ -20,6 +20,9 @@ module.exports = {
       original_name: {
         type: Sequelize.TEXT
       },
+      generateUserFolderId: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP', defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
