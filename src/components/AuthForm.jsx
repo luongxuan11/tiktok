@@ -59,8 +59,8 @@ const AuthForm = ({ setShowForm }) => {
          if (invalids === 0 && isChecked) {
             const response = await apiRegister(payload);
 
-            if (response?.data.err === 0) {
-              Swal.fire("Thành công", response.data.mess, "success").then(() => {
+            if (response.err === 0) {
+              Swal.fire("Thành công", response.mess, "success").then(() => {
                 setPayload({
                   userName: "",
                   email: "",
@@ -70,7 +70,7 @@ const AuthForm = ({ setShowForm }) => {
                 setStep(true);
               });
             } else {
-               Swal.fire("Oops !", response.data.mess, "error");
+               Swal.fire("Oops !", response.mess, "error");
                setStep(false);
             }
          }

@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import storage from "redux-persist/lib/storage"; // khi reload trang thì giá trị k đổi nên sẽ lưu nó dưới local
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import authReducer from "./authReducer";
+import getUserCurrent from "./userReducer";
 
 import persistReducer from "redux-persist/es/persistReducer";
 
@@ -20,6 +21,8 @@ const authConfig = {
 const rootReducer = combineReducers({
    // như trên đã nói hàm combine này gán cho biến có tên là rootReducer
    auth: persistReducer(authConfig, authReducer),
+   user: getUserCurrent
+
 });
 
 export default rootReducer; //export ra file redux

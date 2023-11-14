@@ -7,7 +7,7 @@ import fe7 from "./img/fe7.png"
 import fe8 from "./img/fe8.png"
 import fe9 from "./img/fe9.png"
 import fe from "./img/fe.png"
-import upload from "./img/upload.jpg"
+import user from "./img/user.png"
 
 const images = {
     fe2,
@@ -19,6 +19,6 @@ const images = {
     fe8,
     fe9,
     fe,
-    upload
+    user
 }
 export default images
