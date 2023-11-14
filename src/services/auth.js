@@ -197,11 +197,11 @@ export const forgotPassword = (email) =>
     Lưu ý: Link này sẽ hết hạn sau 15 phút kể từ bây giờ.
     <a href=${process.env.SERVER_URL}/api/v1/auth/reset-password/${passwordResetToken}>click here</a>
     `;
-         const res = sendEmail(email, html);
+         const res = await sendEmail(email, html);
 
          resolve({
             err: res ? 0 : 1,
-            mess: res ? "Chúng tôi đã gửi mail cho bạn vui lòng kiểm tra gmail." : "Opps! error",
+            mess: res ? `Chúng tôi đã gửi mail với mã ${res} - vui lòng kiểm tra gmail.` : "Opps! error",
          });
       } catch (error) {
          reject(error);

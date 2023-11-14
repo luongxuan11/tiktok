@@ -15,7 +15,6 @@ export const createNewPost = async (req, res) => {
          });
       }
       const test = await handlePipe(file);
-      console.log("test", test);
 
       const response = await services.createNewPost(id, test.fileUrl, test.fileId, drive(), file.originalname, generateUserFolderId);
       return res.status(200).json(response);

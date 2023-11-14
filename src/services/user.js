@@ -12,7 +12,7 @@ export const getUserCurrent = (userId) =>
          const res = await db.User.findOne({
             where: { id: userId },
             attributes: {
-               exclude: ["password", "refresh_token", "otp"],
+               exclude: ["password", "refresh_token", "otp", "passwordResetExpires", "passwordResetToken", "role_code"],
             },
             include: [
                {
@@ -193,11 +193,11 @@ export const sendOtp = (id, email) =>
          await user.save();
 
          // Gửi mã OTP mới đến địa chỉ email của người dùng
-         await sendEmail(email, +newOtp);
+         const resMail = await sendEmail(email, +newOtp);
 
          resolve({
-            err: 0,
-            mess: "OTP resent successfully",
+            err: resMail ? 0 : 1,
+            mess: resMail ? `Chúng tôi đã gửi Mail cho bạn vui lòng kiểm tra tin nhắn. ${resMail}` : "Có lỗi xảy ra khi gửi mail.",
          });
       } catch (error) {
          reject(error);

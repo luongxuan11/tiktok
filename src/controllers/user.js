@@ -80,12 +80,12 @@ export const sendOtp = async (req, res) => {
           // console.log(email)
           const { id } = req.user;
           if (!email)
-               return res.status(401).json({
+               return res.status(404).json({
                     err: 1,
                     mess: "require email!",
                });
+          console.log(email)
           const response = await services.sendOtp(id, email);
-
           return res.status(200).json(response);
      } catch (error) {
           return internalError(res, error.mess);

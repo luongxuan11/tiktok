@@ -17,13 +17,13 @@
    "useTabs": false,
    "vueIndentScriptAndStyle": false,
    "overrides": [
-      {
-         "files": ["*.css", "*.scss"],
-         "options": {
-            "singleQuote": false,
-            "semi": true,
-            "tabWidth": 3
-         }
-      }
+       {
+           "files": ["*.css", "*.scss"],
+           "options": {
+               "singleQuote": false,
+               "semi": true,
+               "tabWidth": 3
+           }
+       }
    ]
 }

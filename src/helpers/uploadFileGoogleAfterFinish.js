@@ -50,7 +50,7 @@ export const handlePipe = (file) =>
           const fileUrl = fileInfo.data.webContentLink;
           const fileId = createFile.data.id;
          resolve({
-            fileUrl, 
+            fileUrl,
             fileId
          })
       } catch (error) {
