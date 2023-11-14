@@ -18,7 +18,7 @@ const Home = () => {
         {showHeader && <Header />}
         {showHeader && <SideBar />}
         <div className="wrapper">
-          <Outlet />
+          <Outlet/>
         </div>
     </div>
   )

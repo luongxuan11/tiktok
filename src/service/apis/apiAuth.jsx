@@ -36,7 +36,6 @@ export const apiLogout = () => new Promise( async(resolve, reject) => {
             method: 'get',
             url: '/api/v1/user/logout',
         })
-
         resolve(response)
     } catch (error) {
         reject(error)

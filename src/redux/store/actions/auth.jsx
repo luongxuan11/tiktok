@@ -1,21 +1,21 @@
 import actionTypes from "../../actionType";
-import {apiRegister, apiLogin} from "../../../service/apis"
+import {apiLogin} from "../../../service/apis"
 
 
 // login
 export const login = (payload) => async (dispatch) => {
     try {
     const response = await apiLogin(payload)
-    if(response?.data.err === 0){
+    if(response?.err === 0){
         dispatch({
             type: actionTypes.LOGIN_SUCCESS,
-            data: response.data.access_token,
+            data: response.access_token,
         })
     } else{
         console.log(response)
         dispatch({
             type: actionTypes.LOGIN_FAIL,
-            data: response.data.mess
+            data: response.mess
         })
     }
 

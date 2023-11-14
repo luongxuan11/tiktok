@@ -2,7 +2,7 @@ import React from 'react'
 
 const HomeTitle = () => {
   return (
-    <div>HomeTitle</div>
+    <div>HomeTitle lorem1000</div>
   )
 }
 

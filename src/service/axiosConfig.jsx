@@ -5,36 +5,45 @@ const instance = axios.create({
 });
 
 
+/*
+  --- add token into header ---
+  1. Một cụm interceptors bao gồm req, res
+*/
 instance.interceptors.request.use(
-    function (config) {
-      // thích hợp để gán header vào đây
+    (config) => {
       let token = JSON.parse(window.localStorage.getItem("persist:auth"))?.token.slice(1, -1);
-      config.headers = {
-        authorization: token ? `${token}` : null,
-      };
+      config.headers = {authorization: token ? `${token}` : null};
   
       return config;
     },
-    function (error) {
-      // Làm gì đó với lỗi request
-      console.log("check erro axiosConfig at row 15", error);
+    (error) => {
       return Promise.reject(error);
     }
 );
 
 
-// interceptors response
-axios.interceptors.response.use(
-  function (response) {
-    // trước khi data gửi từ sever về thì sẽ chạy ở đây trước
-    // refreshToken === 401 authorization!
-    
-    
+/*
+    --- bộ res bao gồm ---\
+    1. status 200 
+    2. status ngoài 200 bắt đầu gọi api refresh token
+*/
+
+instance.interceptors.response.use(
+ (response) => {
     return response.data;
   },
-  function (error) {
-    // Bất kì mã trạng thái nào lọt ra ngoài tầm 2xx đều khiến hàm này được trigger\
-    return error.response.data;
+ async(error) => {
+    const originalConfig = error.config
+    console.log("accessToken expired!")
+    if(error.response && error.response.status === 401){
+      try {
+        console.log("call refreshToken api")
+        const result = await instance.post(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/refresh-token`)
+        console.log("check refresh token when called => ", result)
+      } catch (error) {
+        
+      }
+    }
   }
 );
 

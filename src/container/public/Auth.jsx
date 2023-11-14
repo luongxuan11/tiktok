@@ -10,7 +10,7 @@ const { IoIosAdd } = icons;
 
 const Auth = () => {
    const [showForm, setShowForm] = useState(false);
-
+   
    const handleShowForm = () => {
       setShowForm(true);
    };

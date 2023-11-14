@@ -45,8 +45,10 @@ const Header = () => {
   //  logout
   const handleLogout = async () =>{
     const response = await apiLogout()
-    if(response.data.err === 0){
-      Swal.fire("Thành công !", response.data.mess, "success");
+    if(response?.err === 0){
+      Swal.fire("Thành công !", response.mess, "success");
+    }else{
+      Swal.fire("Thất bại!", response.mess, "error");
     }
     dispatch(actions.logout())
   }
