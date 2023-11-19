@@ -7,6 +7,6 @@ const actionTypes = {
     LOGOUT: 'LOGUOT',
 
     // user
-    GET_CURRENT: 'GET_CURRENT'
+    GET_CURRENT: 'GET_CURRENT',
 }
 export default actionTypes

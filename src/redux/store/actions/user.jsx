@@ -1,11 +1,10 @@
 import actionTypes from "../../actionType";
-import {apiGetUser, apiLogout} from "../../../service/apis"
+import {apiGetUser} from "../../../service/apis"
 
 
 export const getUserCurrent = () => async (dispatch) => {  
     try {
     const response = await apiGetUser()
-    // console.log(response)
     if(response.err === 0){  
         dispatch({
             type: actionTypes.GET_CURRENT,
@@ -18,8 +17,6 @@ export const getUserCurrent = () => async (dispatch) => {
             currentData: null,
             mess: response.mess
         })
-        dispatch({type: actionTypes.LOGOUT})
-        await apiLogout()
     }
     } catch (error) {
         dispatch({
@@ -27,7 +24,5 @@ export const getUserCurrent = () => async (dispatch) => {
             currentData: null,
             mess: error
         })
-        dispatch({type: actionTypes.LOGOUT})
-        await apiLogout()
     }
 }

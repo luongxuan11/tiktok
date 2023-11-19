@@ -18,7 +18,6 @@ export const login = (payload) => async (dispatch) => {
             data: response.mess
         })
     }
-
     } catch (error) {
         
         dispatch({
@@ -27,7 +26,6 @@ export const login = (payload) => async (dispatch) => {
         })
     }
 }
-
 
 // logout
 export const logout = () => ({

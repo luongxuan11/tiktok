@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import {useDispatch, useSelector} from 'react-redux'
 import { Home, HomeTitle, Auth } from "./container/public";
 import { path } from "./utilities/constant";
-import { apiGetUser } from "./service/apis";
 import * as actions from "./redux/store/actions"
 import "./App.scss";
 
@@ -14,7 +13,7 @@ function App() {
    useEffect(()=>{
     setTimeout(() =>{
       isLogin && dispatch(actions.getUserCurrent())
-    }, 1000)
+    }, 1000) 
   }, [isLogin])
 
    return (

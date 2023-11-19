@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, memo} from "react";
 import logo from "../../assets/img/logo.svg";
 import { Link } from "react-router-dom";
 import { path } from "../../utilities/constant";
@@ -34,7 +34,6 @@ const Header = () => {
 
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
-   console.log(currentData);
    const dispatch = useDispatch();
 
    const handleActive = () => {
@@ -43,7 +42,7 @@ const Header = () => {
    };
    const handleLeave = () => {
       const id = setTimeout(() => {
-         setHidden(false);
+         setHidden(false);   
       }, 700);
       setTimeoutId(id);
    };
@@ -167,4 +166,4 @@ const Header = () => {
    );
 };
 
-export default Header;
+export default memo(Header);

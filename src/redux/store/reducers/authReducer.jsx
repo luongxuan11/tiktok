@@ -15,6 +15,13 @@ const authReducer = (state = initState, action) => {
             token: action.data,
             mess: "",
          };
+      case actionTypes.UPDATE_TOKEN:
+         return {
+            ...state,
+            token: action.data,
+            isLogin: true,
+            mess: "",
+         };
       case actionTypes.LOGIN_FAIL:
          return {
             ...state,
@@ -29,7 +36,7 @@ const authReducer = (state = initState, action) => {
             isLogin: false,
             token: null,
             mess: "",
-         };
+         };  
       default:
          return state;
    }
