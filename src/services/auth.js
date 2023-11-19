@@ -89,7 +89,7 @@ export const refreshAccessToken = ( cookie, res) => // lưu ý: khi bắt đư�
          // Xác minh refresh_token bằng cách sử dụng jwt.verify
          jwt.verify(cookie.refresh_token, process.env.JWT_SECRET_REFRESH, async (err, decode) => {
             if (err) {
-               return res.status(401).json({
+               return res.status(419).json({
                   err: 1,
                   mess: "Refresh token không hợp lệ hoặc đã hết hạn",
                });

@@ -84,7 +84,6 @@ export const sendOtp = async (req, res) => {
                     err: 1,
                     mess: "require email!",
                });
-          console.log(email)
           const response = await services.sendOtp(id, email);
           return res.status(200).json(response);
      } catch (error) {

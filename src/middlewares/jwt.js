@@ -11,7 +11,7 @@ export const create_access_token = (res) =>{
             role_code: res.role_code
         },
         process.env.JWT_SECRET,
-        { expiresIn: "15d" }
+        { expiresIn: "2h" }
     ) : null
 }
 

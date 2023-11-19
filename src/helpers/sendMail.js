@@ -17,7 +17,6 @@ export const sendEmail = async (toEmail, option) => {
 
       if (typeof option === "number") {
          const otp = option.toString();
-         console.log("check", typeof otp);
          const mailOptions = {
             from: "no-reply@tiktok.com", // Địa chỉ email của bạn
             to: toEmail, // Địa chỉ email của người dùng
