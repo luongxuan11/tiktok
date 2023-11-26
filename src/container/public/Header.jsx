@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo} from "react";
 import logo from "../../assets/img/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { path } from "../../utilities/constant";
 import { Search, Button, AuthFormLogin, Popup } from "../../components";
 import icons from "../../utilities/icons";
@@ -35,6 +35,7 @@ const Header = () => {
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
    const dispatch = useDispatch();
+   const navigate = useNavigate()
 
    const handleActive = () => {
       setHidden(true);
@@ -51,11 +52,21 @@ const Header = () => {
          clearTimeout(timeoutId); // Hủy timeout khi component unmount
       };
    }, [timeoutId]);
-
    //  show form
    const handleShowForm = () => {
       setShowForm(true);
    };
+   // handle show when click upload
+   const handleCheckIntoCreator = () => {
+      if(!isLogin){
+         setShowForm(true)
+      }else if(isLogin && !currentData.verifyOTP){
+         setShowPopup(true)
+      }else{
+         navigate(`${path.UPLOAD}`)
+      }
+   }
+
    //  logout
    const handleLogout = async () => {
       const response = await apiLogout();
@@ -77,11 +88,8 @@ const Header = () => {
             <div className="btn-box row">
                <Button
                   btnClass="header__btn--upload row"
-                  text={
-                     <>
-                        <IoIosAdd /> Tải lên
-                     </>
-                  }
+                  text={<><IoIosAdd /> Tải lên</>}
+                  onClick={handleCheckIntoCreator}
                />
                {isLogin && (
                   <div className="message">

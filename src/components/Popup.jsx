@@ -9,7 +9,7 @@ const Popup = ({ title, content, cancel, access, setShowPopup, showOtp, setShowO
 
   const [loading, setLoading] = useState(false)
 
-  const handleShowOtp = async() => {
+  const handleShowOtp = async () => {
     setLoading(true)
     const response = await apiSendOtp({email: currentData})
     if(response.err === 0){

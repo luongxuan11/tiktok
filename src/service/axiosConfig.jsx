@@ -1,5 +1,4 @@
 import axios from "axios"
-import Swal from "sweetalert2";
 
 
 const instance = axios.create({
@@ -65,10 +64,7 @@ instance.interceptors.response.use(
           console.error("refresh token expired")
           const res = await instance.get(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/logout`)
           if(res.err === 0 || res.err === 1){
-            Swal.fire("Phiên đăng nhập hến hạn", "Vui lòng đăng nhập lại để tiếp tục sử dụng tính năng", "error").then(() => {
-              window.localStorage.removeItem("persist:auth");
-              window.location.reload();
-            })
+            window.localStorage.removeItem("persist:auth");
           }
         }
         return Promise.reject(error);

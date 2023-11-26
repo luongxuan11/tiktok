@@ -82,11 +82,6 @@ const AuthForm = ({ setShowForm }) => {
    };
 
 
-  //  navigate to home
-  useEffect(() =>{
-    isLogin && navigate('/')
-  }, [isLogin, navigate])
-
   // sweet alert2
   useEffect(() =>{
     mess && Swal.fire('Oops !', mess, 'error')

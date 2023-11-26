@@ -12,4 +12,4 @@ const Search = () => {
   )
 }
 
-export default memo(Search)
+export default Search
