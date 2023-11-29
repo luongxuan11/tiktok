@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
 
@@ -12,7 +12,8 @@ const UploadPhone = () => {
    const [currentTime, setCurrentTime] = useState(0);
    const [duration, setDuration] = useState(0);
 
-   const togglePlay = () => {
+   const togglePlay = useCallback((e) => {
+      e.stopPropagation()
       if (videoRef.current) {
          if (isPlaying) {
            videoRef.current.pause();
@@ -21,13 +22,15 @@ const UploadPhone = () => {
          }
          setIsPlaying(!isPlaying);
        }
-   }
-   const toggleMute = () => { 
+   }, [isPlaying])
+
+   const toggleMute = useCallback((e) => {
+      e.stopPropagation(); 
       if (videoRef.current) {
          videoRef.current.muted = !isMute;
          setIsMute(!isMute)
        }
-   }
+   }, [isMute])
 
    // format time
    const formatTime = (time) => {
@@ -37,18 +40,18 @@ const UploadPhone = () => {
       return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
    };
 
+   const handleTimeUpdate = () => {
+      setCurrentTime(videoRef.current.currentTime);
+   };
+   const handleLoadedMetadata = () => {
+      setDuration(videoRef.current.duration);
+   };
+
+   const handleVideoEnded = () => {
+      setIsPlaying(false);
+   };
+   
    useEffect(() => {
-      const handleTimeUpdate = () => {
-         setCurrentTime(videoRef.current.currentTime);
-      };
-      const handleLoadedMetadata = () => {
-         setDuration(videoRef.current.duration);
-      };
-
-      const handleVideoEnded = () => {
-         setIsPlaying(false);
-      };
-
       if (videoRef.current) {
          videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
          videoRef.current.addEventListener("ended", handleVideoEnded);
@@ -56,7 +59,7 @@ const UploadPhone = () => {
          setDuration(videoRef.current.duration);
       }
 
-      // Clear sự kiện khi component bị hủy
+      // unmount
       return () => {
          if (videoRef.current) {
             videoRef.current.removeEventListener("timeupdate", handleTimeUpdate);
@@ -64,8 +67,7 @@ const UploadPhone = () => {
             videoRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata);
          }
       };
-   }, [videoRef]);
-
+   }, []);
 
    const calculatePercentage = () => {
       return (currentTime / duration) * 100;
@@ -90,12 +92,12 @@ const UploadPhone = () => {
                </div>
                <div className="inner-info row">
                   <div className="inner-info__user row">
-                     <span>@Lươn?</span>
+                     <span>@Hihi?</span>
                      <span>link anh</span>
                      <div className="inner-info__user--icon row">
                         <IoMusicalNotes className="icon" />
                         <small>
-                           <span>Âm thanh gốc - @Lươn?</span>
+                           <span>Âm thanh gốc - @Hihi?</span>
                         </small>
                      </div>
                   </div>
@@ -122,11 +124,11 @@ const UploadPhone = () => {
          <div onClick={togglePlay} className="phone-control-box row">
             <div className="phone-control-box__1">
                <div className="control-duration row">
-                  <i onClick={togglePlay} className="icon-duration icon-duration-action">{isPlaying ? <FaPause/> : <MdOutlinePlayCircle/>}</i>
+                  <i onClick={(e) => togglePlay(e)} className="icon-duration icon-duration-action">{isPlaying ? <FaPause/> : <MdOutlinePlayCircle/>}</i>
                   <span>
                      <small>{formatTime(currentTime)}</small> / <small>{formatTime(duration)}</small>
                   </span>
-                  <i onClick={toggleMute} className="icon-duration icon-duration-volume">{isMute ? <IoVolumeMute/> : <GoUnmute/>}</i>
+                  <i onClick={(e) => toggleMute(e)} className="icon-duration icon-duration-volume">{isMute ? <IoVolumeMute/> : <GoUnmute/>}</i>
                </div>
                <div className="control__process">
                   <small></small>
@@ -138,4 +140,4 @@ const UploadPhone = () => {
    );
 };
 
-export default UploadPhone;
+export default memo(UploadPhone);

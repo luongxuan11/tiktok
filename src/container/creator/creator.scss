@@ -128,8 +128,9 @@
       //body
       .creator-body__wrapper {
          flex: 1;
+         justify-content: center;
          background-color: #f8f8f8;
-         // padding: 24px 60px;
+
          min-height: 100vh;
          .creator-home {
             align-items: flex-start;
@@ -250,6 +251,7 @@
          .creator-upload {
             padding: 24px 95px;
             min-width: 1100px;
+            max-width: 1280px;
             .upload-desk {
                background: #fff;
                padding: 64px 50px;
@@ -314,6 +316,7 @@
                   gap: 35px;
                   .upload-phone {
                      width: 280px;
+                     min-width: 280px;
                      height: 570px;
                      background-color: #121515;
                      border-radius: 40px;
@@ -587,7 +590,96 @@
 
                   //detail-group
                   .detail-group {
-                     flex: 1;
+                     width: 712px;
+                     h4 {
+                        font-weight: 500;
+                     }
+                     .detail-note {
+                        position: relative;
+                        .detail-heading {
+                           margin-bottom: 7px;
+                           justify-content: space-between;
+                           &__text {
+                              color: #73747b;
+                           }
+                        }
+                        input {
+                           width: 100%;
+                           border: 1px solid #e0e0e0;
+                           padding: 12px 25px;
+                           border-radius: 5px;
+                           cursor: text;
+                        }
+                        span {
+                           position: absolute;
+                           right: 15px;
+                           top: 35px;
+                           font-weight: 600;
+                           font-size: 1.5rem;
+                           cursor: pointer;
+                        }
+                        margin-bottom: 30px;
+                     }
+                     .detail-imageBox {
+                        .detail-drag {
+                           position: relative;
+                           user-select: none;
+                           .imageBox-wrapper {
+                              height: 166px;
+                              width: 100%;
+                              min-width: 100%;
+                              border: 1px solid #e0e0e0;
+                              border-radius: 3px;
+                              margin-top: 5px;
+                              padding: 6px;
+                              overflow: hidden;
+                              img {
+                                 height: 100%;
+                                 width: 84px;
+                                 object-fit: cover;
+                                 object-position: center;
+                                 &:first-child {
+                                    margin-left: 0px;
+                                 }
+                              }
+                           }
+                           &__touch {
+                              position: absolute;
+                              height: 100%;
+                              width: 100%;
+                              top: -2px;
+                              left: 0;
+                              -webkit-appearance: none;
+                              background: transparent;
+                              pointer-events: none;
+                              z-index: 999;
+                           }
+                           &__touch::-webkit-slider-thumb {
+                              -webkit-appearance: none;
+                              width: 100px;
+                              height: 164px;
+                              background: transparent;
+                              border-radius: 5px;
+                              pointer-events: auto;
+                              position: relative;
+                           }
+                           small {
+                              display: block;
+                              height: 156px;
+                              width: 92px;
+                              position: absolute;
+                              border: 5px solid white;
+                              border-radius: 5px;
+                              scale: 1.14;
+                              top: 4px;
+                              box-shadow: rgba(34, 90, 89, 0.2) 2px 4px 20px;
+                              video {
+                                 width: 100%;
+                                 height: 100%;
+                              }
+                           }
+                        }
+                     }
                   }
                }
             }

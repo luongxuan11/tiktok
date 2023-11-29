@@ -40,7 +40,7 @@ const CreatorCenter = () => {
                </Link>
                <SidebarCreator/>
             </nav>
-            <div className="creator-body__wrapper">
+            <div className="creator-body__wrapper row">
             {(location.pathname === "/creator-center/" || location.pathname === "/creator-center") ? <CreatorCenterHome/> : <Outlet/>}
             </div>
          </section>
