@@ -48,11 +48,11 @@ export const createThumbnails = async (inputFilePath, req, userFolderId) => {
    const { id } = req.user;
    const outputDirectory = "/workspace/tiktok/server/src/onOutput";
    const userFolder = path.join(outputDirectory, `${id}-${userFolderId}`);
-   
+
    // tạo folder theo tên người dùng
    fs.mkdirSync(userFolder);
    if (fs.existsSync(userFolder)) {
-      for (let percentage = 5; percentage <= 100; percentage += 5) {
+      for (let percentage = 20; percentage < 100; percentage += 10) {
          try {
             const totalDuration = await getVideoDuration(inputFilePath);
             const timestamp = (percentage / 100) * totalDuration;
@@ -62,7 +62,7 @@ export const createThumbnails = async (inputFilePath, req, userFolderId) => {
                   .input(inputFilePath)
                   .seekInput(timestamp)
                   .frames(1)
-                  .size("720x1280") 
+                  .size("84x150")
                   .inputOptions(["-threads 4"])
                   .addOption("-preset veryfast")
                   .on("end", function () {

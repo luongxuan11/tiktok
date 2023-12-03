@@ -8,7 +8,8 @@ export const create_access_token = (res) =>{
         {
             id: res.id,
             email: res.email,
-            role_code: res.role_code
+            role_code: res.role_code,
+            verifyOTP: res.verifyOTP
         },
         process.env.JWT_SECRET,
         { expiresIn: "2h" }
