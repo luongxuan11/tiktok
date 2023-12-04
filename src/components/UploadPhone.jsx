@@ -2,35 +2,39 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
 
-const { control_image, live, user } = images;
-const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute} = icons;
-
 const UploadPhone = () => {
+   const { control_image, live, user } = images;
+   const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute, CiCircleCheck } = icons;
+
    const videoRef = useRef(null);
    const [isPlaying, setIsPlaying] = useState(false);
    const [isMute, setIsMute] = useState(false);
    const [currentTime, setCurrentTime] = useState(0);
    const [duration, setDuration] = useState(0);
 
-   const togglePlay = useCallback((e) => {
-      e.stopPropagation()
-      if (videoRef.current) {
-         if (isPlaying) {
-           videoRef.current.pause();
-         } else {
-           videoRef.current.play();
+   const togglePlay = useCallback(
+      (e) => {
+         e.stopPropagation();
+         if (videoRef.current) {
+            if (isPlaying) {
+               videoRef.current.pause();
+            } else {
+               videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
          }
-         setIsPlaying(!isPlaying);
-       }
-   }, [isPlaying])
+      },[isPlaying]);
 
-   const toggleMute = useCallback((e) => {
-      e.stopPropagation(); 
-      if (videoRef.current) {
-         videoRef.current.muted = !isMute;
-         setIsMute(!isMute)
-       }
-   }, [isMute])
+   const toggleMute = useCallback(
+      (e) => {
+         e.stopPropagation();
+         if (videoRef.current) {
+            videoRef.current.muted = !isMute;
+            setIsMute(!isMute);
+         }
+      },
+      [isMute],
+   );
 
    // format time
    const formatTime = (time) => {
@@ -50,7 +54,7 @@ const UploadPhone = () => {
    const handleVideoEnded = () => {
       setIsPlaying(false);
    };
-   
+
    useEffect(() => {
       if (videoRef.current) {
          videoRef.current.addEventListener("timeupdate", handleTimeUpdate);
@@ -124,17 +128,27 @@ const UploadPhone = () => {
          <div onClick={togglePlay} className="phone-control-box row">
             <div className="phone-control-box__1">
                <div className="control-duration row">
-                  <i onClick={(e) => togglePlay(e)} className="icon-duration icon-duration-action">{isPlaying ? <FaPause/> : <MdOutlinePlayCircle/>}</i>
+                  <i onClick={(e) => togglePlay(e)} className="icon-duration icon-duration-action">
+                     {isPlaying ? <FaPause /> : <MdOutlinePlayCircle />}
+                  </i>
                   <span>
                      <small>{formatTime(currentTime)}</small> / <small>{formatTime(duration)}</small>
                   </span>
-                  <i onClick={(e) => toggleMute(e)} className="icon-duration icon-duration-volume">{isMute ? <IoVolumeMute/> : <GoUnmute/>}</i>
+                  <i onClick={(e) => toggleMute(e)} className="icon-duration icon-duration-volume">
+                     {isMute ? <IoVolumeMute /> : <GoUnmute />}
+                  </i>
                </div>
                <div className="control__process">
                   <small></small>
                   <span style={{ width: `${calculatePercentage()}%` }}></span>
                </div>
             </div>
+         </div>
+
+         <div className="phone-change__link row">
+            <CiCircleCheck className="phone-change__link--icon" />
+            <span className="phone-change__link--video">eqwew wegqwy wuegwq eqwugewq eqwge</span>
+            <small className="phone-change__link--change">Thay đổi video</small>
          </div>
       </div>
    );

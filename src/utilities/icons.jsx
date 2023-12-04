@@ -1,4 +1,4 @@
-import { IoIosAdd} from "react-icons/io";
+import { IoIosAdd, IoIosCut, IoMdArrowDropdown} from "react-icons/io";
 import { BsThreeDotsVertical, BsSearch, BsEyeSlash, BsArrowReturnLeft } from "react-icons/bs";
 import { FcIdea } from "react-icons/fc";
 import { RiQuestionAnswerLine, RiHome4Line} from "react-icons/ri";
@@ -11,13 +11,14 @@ import { DiReact } from "react-icons/di";
 import { SiPostgresql } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
 import { FiUpload } from "react-icons/fi";
-import {CiShare1, CiCircleList } from "react-icons/ci";
+import {CiShare1, CiCircleList, CiCircleCheck  } from "react-icons/ci";
 import {PiEyeDuotone, PiEyeClosedDuotone, PiPaperPlaneTiltBold} from "react-icons/pi";
 import {AiOutlineCloseCircle} from "react-icons/ai";
 import {MdKeyboardArrowLeft, MdCloudUpload, MdFavorite, MdOutlinePlayCircle } from "react-icons/md";
-import { FaRegFontAwesome, FaCommentDots, FaPause   } from "react-icons/fa6";
+import { FaRegFontAwesome, FaCommentDots, FaPause, FaCheck} from "react-icons/fa6";
 import { PiShareFatFill } from "react-icons/pi";
 import { GoUnmute } from "react-icons/go";
+import { TfiSplitH } from "react-icons/tfi";
 
 
 const icons = {
@@ -62,7 +63,12 @@ const icons = {
     MdOutlinePlayCircle,
     FaPause,
     IoVolumeMute,
-    GoUnmute
+    GoUnmute,
+    IoIosCut,
+    TfiSplitH,
+    IoMdArrowDropdown,
+    FaCheck,
+    CiCircleCheck 
 };
 
 export default icons;

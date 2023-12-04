@@ -2,7 +2,7 @@ import React, { useState, memo} from 'react';
 import { Waypoint } from 'react-waypoint';
 import './text.scss';
 import TextAnimated from './TextAnimated';
-import img from "../../assets/img/img.jpg"
+// import img from "../../assets/img/img.jpg"
 import TextDev1 from './TextDev1';
 import TextDev2 from './TextDev2';
 import TextDev3 from './TextDev3';

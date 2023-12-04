@@ -9,9 +9,9 @@ import CreatorCenterHome from "./CreatorCenterHome";
 import { path } from "../../utilities/constant";
 
 
-const { logo, user } = logos;
 
 const CreatorCenter = () => {
+   const { logo, user } = logos;
    const { currentData } = useSelector((state) => state.user);
    const {isLogin} = useSelector((state) => state.auth);
    const location = useLocation();
