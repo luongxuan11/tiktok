@@ -17,10 +17,22 @@ module.exports = {
       privacy: {
         type: Sequelize.STRING
       },
-      file_name: {
+      video_file_name: {
         type: Sequelize.TEXT
       },
-      file_id: {
+      video_file_id: {
+        type: Sequelize.STRING
+      },
+      thumb_file_id: {
+        type: Sequelize.STRING
+      },
+      thumb_file_name: {
+        type: Sequelize.STRING
+      },
+      comment_status: {
+        type: Sequelize.BOOLEAN
+      },
+      tag: {
         type: Sequelize.STRING
       },
       createdAt: {

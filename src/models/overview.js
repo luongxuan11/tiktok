@@ -18,8 +18,12 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.STRING,
     title: DataTypes.TEXT,
     privacy: DataTypes.STRING,
-    file_name: DataTypes.TEXT,
-    file_id: DataTypes.STRING,
+    video_file_name: DataTypes.TEXT,
+    video_file_id: DataTypes.STRING,
+    thumb_file_name: DataTypes.STRING,
+    thumb_file_id: DataTypes.STRING,
+    comment_status: DataTypes.BOOLEAN,
+    tag: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Overview',

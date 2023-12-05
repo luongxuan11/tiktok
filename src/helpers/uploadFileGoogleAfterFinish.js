@@ -47,8 +47,8 @@ export const handlePipe = (file) =>
             fields: "webViewLink, webContentLink", // Chỉ lấy trường webViewLink chứa URL
          });
           // Lấy URL và id từ thông tin tệp
-          const fileUrl = fileInfo.data.webContentLink;
           const fileId = createFile.data.id;
+          const fileUrl = fileInfo.data.webContentLink;
          resolve({
             fileUrl,
             fileId

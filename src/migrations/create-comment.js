@@ -14,9 +14,8 @@ module.exports = {
       comment: {
         type: Sequelize.TEXT,
       },
-      like: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+      userId: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
