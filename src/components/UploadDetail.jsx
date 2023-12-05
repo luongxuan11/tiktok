@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo } from "react";
 import captureImage from "../utilities/canvasGenThumb";
 import icons from "../utilities/icons";
 import SwitchBtn from "./animation/SwitchBtn";
 
-const UploadDetail = ({ canvas, setInfoEditDetail }) => {
+const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
    const { IoMdArrowDropdown, FaCheck } = icons;
 
    const [textLength, setTextLength] = useState(0);
@@ -12,6 +12,7 @@ const UploadDetail = ({ canvas, setInfoEditDetail }) => {
    const [isChecked, setIsChecked] = useState(false);
    const [optionValue, setOptionValue] = useState("Công khai");
    const [selectedItems, setSelectedItems] = useState(["Bình luận", "Duet", "Ghép nối"]);
+   const [videoURL, setVideoURL] = useState(null);
    const outSide = useRef(null);
 
    const video = useRef(null);
@@ -22,6 +23,17 @@ const UploadDetail = ({ canvas, setInfoEditDetail }) => {
       setInfoEditDetail(value);
       setTextLength(value.length);
    };
+
+   useEffect(() => {
+      // Tạo URL mới khi videoFile.file thay đổi
+      if (videoFile && videoFile.file) {
+         const newVideoURL = URL.createObjectURL(videoFile.file);
+         setVideoURL(newVideoURL);
+         return () => {
+            URL.revokeObjectURL(newVideoURL);
+         };
+      }
+   }, [videoFile]);
 
    // position image
    const handleRangeChange = (e) => {
@@ -107,7 +119,9 @@ const UploadDetail = ({ canvas, setInfoEditDetail }) => {
          <div className="detail-imageBox">
             <h4>Ảnh bìa</h4>
             <div className="detail-drag">
-               <div className="imageBox-wrapper row"></div>
+               <div className="imageBox-wrapper row">
+
+               </div>
                <input
                   type="range"
                   className="detail-drag__touch"
@@ -118,7 +132,7 @@ const UploadDetail = ({ canvas, setInfoEditDetail }) => {
                <small style={{ left: `${positionVideo()}px` }}>
                   <video
                      ref={video}
-                     src="https://drive.google.com/uc?id=1zJc8ccTxw4fCXPSy1ZiqpF1npj00yhNo&export"
+                     src={videoURL}
                      preload="auto"
                      draggable="false"
                      playsInline
@@ -213,4 +227,4 @@ const UploadDetail = ({ canvas, setInfoEditDetail }) => {
    );
 };
 
-export default UploadDetail;
+export default memo(UploadDetail);

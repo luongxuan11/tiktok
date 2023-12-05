@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
 
-const UploadPhone = () => {
+const UploadPhone = ({videoFile}) => {
    const { control_image, live, user } = images;
    const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute, CiCircleCheck } = icons;
 
@@ -11,17 +11,28 @@ const UploadPhone = () => {
    const [isMute, setIsMute] = useState(false);
    const [currentTime, setCurrentTime] = useState(0);
    const [duration, setDuration] = useState(0);
+   const [videoURL, setVideoURL] = useState(null);
+
+   useEffect(() => {
+      // Tạo URL mới khi videoFile.file thay đổi
+      if (videoFile && videoFile.file) {
+         const newVideoURL = URL.createObjectURL(videoFile.file);
+         setVideoURL(newVideoURL);
+         return () => {
+            URL.revokeObjectURL(newVideoURL);
+         };
+      }
+   }, [videoFile]);
 
    const togglePlay = useCallback(
       (e) => {
          e.stopPropagation();
-         if (videoRef.current) {
-            if (isPlaying) {
-               videoRef.current.pause();
-            } else {
-               videoRef.current.play();
-            }
-            setIsPlaying(!isPlaying);
+         if(isPlaying){
+            videoRef.current.pause()
+            setIsPlaying(false)
+         }else{
+            videoRef.current.play()
+            setIsPlaying(true)
          }
       },[isPlaying]);
 
@@ -32,9 +43,7 @@ const UploadPhone = () => {
             videoRef.current.muted = !isMute;
             setIsMute(!isMute);
          }
-      },
-      [isMute],
-   );
+      },[isMute]);
 
    // format time
    const formatTime = (time) => {
@@ -86,7 +95,7 @@ const UploadPhone = () => {
             <span></span>
          </div>
          <div className="phone-screen">
-            <video ref={videoRef} preload="auto" src="https://drive.google.com/uc?id=1zJc8ccTxw4fCXPSy1ZiqpF1npj00yhNo&export"></video>
+            <video ref={videoRef} preload="auto" src={videoURL}></video>
             <div className="phone-screen__inner row">
                <div className="inner-heading row">
                   <img src={live} alt="tiktok" />
@@ -125,7 +134,7 @@ const UploadPhone = () => {
             </div>
          </div>
          <img className="phone-control__img" src={control_image} alt="tiktok" />
-         <div onClick={togglePlay} className="phone-control-box row">
+         <div onClick={(e) => togglePlay(e)} className="phone-control-box row">
             <div className="phone-control-box__1">
                <div className="control-duration row">
                   <i onClick={(e) => togglePlay(e)} className="icon-duration icon-duration-action">
@@ -144,10 +153,14 @@ const UploadPhone = () => {
                </div>
             </div>
          </div>
+         <div className="handle-video__upload row">
+            <div className="loader-handle"></div>
+            <span>Tối ưu hóa hiển thị...</span>
+         </div>
 
          <div className="phone-change__link row">
             <CiCircleCheck className="phone-change__link--icon" />
-            <span className="phone-change__link--video">eqwew wegqwy wuegwq eqwugewq eqwge</span>
+            <span className="phone-change__link--video">{videoFile.name || ''}</span>
             <small className="phone-change__link--change">Thay đổi video</small>
          </div>
       </div>
