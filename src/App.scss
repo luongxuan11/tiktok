@@ -5,7 +5,7 @@
 body {
    background-color: #121212;
    font-family: "Roboto";
-   // overflow-x: hidden;
+   overflow: auto;
 }
 // common
 .container {
@@ -45,7 +45,7 @@ body {
    font-weight: 600;
 }
 .hidden {
-   display: none;
+   display: none !important;
 }
 .gradient {
    color: transparent;

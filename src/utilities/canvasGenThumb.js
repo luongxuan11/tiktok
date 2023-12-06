@@ -1,4 +1,4 @@
-const captureImage = (video, canvas) => {
+export const captureImage = (video, canvas) => {
    if (video?.current) {
       const canvasCtx = canvas.current.getContext("2d");
       canvas.current.width = video.current.videoWidth;
@@ -14,5 +14,3 @@ const captureImage = (video, canvas) => {
       //   setCapturedImage(imageSrc);
    }
 };
-
-export default captureImage;

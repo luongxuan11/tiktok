@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect, memo } from "react";
-import captureImage from "../utilities/canvasGenThumb";
+import React, { useRef, useState, useEffect, memo, useCallback } from "react";
+import { captureImage } from "../utilities/canvasGenThumb";
 import icons from "../utilities/icons";
 import SwitchBtn from "./animation/SwitchBtn";
+import { generateVideoThumbnails } from "@rajesh896/video-thumbnails-generator";
 
-const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
+const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, setGetThumbnail }) => {
    const { IoMdArrowDropdown, FaCheck } = icons;
 
    const [textLength, setTextLength] = useState(0);
@@ -14,16 +15,23 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
    const [selectedItems, setSelectedItems] = useState(["Bình luận", "Duet", "Ghép nối"]);
    const [videoURL, setVideoURL] = useState(null);
    const outSide = useRef(null);
-
    const video = useRef(null);
+   const [thumbnails, setThumbnails] = useState([]);
 
    // set length text
-   const handleCheckLengthInput = (e) => {
-      const value = e.target.value;
-      setInfoEditDetail(value);
-      setTextLength(value.length);
-   };
+   const handleCheckLengthInput = useCallback(
+      (e) => {
+         const value = e.target.value;
+         setPayload((prev) => ({
+            ...prev,
+            title: value,
+         }));
+         setTextLength(value.length);
+      },
+      [setPayload],
+   );
 
+   // generate video
    useEffect(() => {
       // Tạo URL mới khi videoFile.file thay đổi
       if (videoFile && videoFile.file) {
@@ -37,7 +45,7 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
 
    // position image
    const handleRangeChange = (e) => {
-      let maxValue = +e.target.max;
+      let maxValue = 100;
       let valueThumb = +e.target.value;
       let position = (valueThumb / maxValue) * 100;
       setRangeValue(position);
@@ -46,7 +54,7 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
       }
    };
    const positionVideo = () => {
-      let result = rangeValue * 6 === 590 ? rangeValue * 6 - 25 : rangeValue * 6;
+      let result = rangeValue * 6 === 600 ? rangeValue * 6 + 18 : rangeValue * 6;
       return result;
    };
 
@@ -86,7 +94,6 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
    }, []);
 
    // allow
-
    const handleItemClick = (item) => {
       switch (item) {
          case "Bình luận":
@@ -103,6 +110,21 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
       }
    };
 
+   // getThumbnail
+   useEffect(() => {
+      const generateThumbnails = async () => {
+         try {
+            const thumbnailArray = await generateVideoThumbnails(videoFile?.file, 8, "file");
+            setThumbnails(thumbnailArray);
+            setGetThumbnail(true)
+         } catch (error) {
+            console.error("Error generating thumbnails:", error);
+         }
+      };
+
+      generateThumbnails();
+   }, [videoURL]);
+
    // jsx
    return (
       <div className="detail-group">
@@ -113,30 +135,20 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
                   <small>{textLength}</small>/<small>1100</small>
                </div>
             </div>
-            <input type="text" onChange={(e) => handleCheckLengthInput(e)} maxLength={1100} />
+            <input type="text" value={payload.title} onChange={(e) => handleCheckLengthInput(e)} maxLength={1100} />
             <span>@</span>
          </div>
          <div className="detail-imageBox">
             <h4>Ảnh bìa</h4>
             <div className="detail-drag">
                <div className="imageBox-wrapper row">
-
+                  {getThumbnail ? thumbnails.map((thumbnail, index) => (
+                     <img key={index} src={thumbnail} alt={`Thumbnail ${index}`} />
+                  )) : <span></span>}
                </div>
-               <input
-                  type="range"
-                  className="detail-drag__touch"
-                  value={rangeValue}
-                  onChange={(e) => handleRangeChange(e)}
-                  max={100}
-               ></input>
-               <small style={{ left: `${positionVideo()}px` }}>
-                  <video
-                     ref={video}
-                     src={videoURL}
-                     preload="auto"
-                     draggable="false"
-                     playsInline
-                  ></video>
+               <input type="range" className={`detail-drag__touch`} value={rangeValue} onChange={(e) => handleRangeChange(e)} max={100}></input>
+               <small className={`${!getThumbnail ? "hidden" : ""}`} style={{ left: `${positionVideo()}px` }}>
+                  <video ref={video} src={videoURL} preload="auto" draggable="false" playsInline></video>
                </small>
             </div>
          </div>
@@ -148,22 +160,13 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
                   <IoMdArrowDropdown className={`item icon ${showOption ? "icon--active" : ""}`} />
                </div>
                <div className={`privacy-box__option row ${showOption ? "privacy-box__option--active" : ""}`}>
-                  <span
-                     className={optionValue === "Công khai" ? "active" : ""}
-                     onClick={() => handleSelectOption("Công khai")}
-                  >
+                  <span className={optionValue === "Công khai" ? "active" : ""} onClick={() => handleSelectOption("Công khai")}>
                      Công khai
                   </span>
-                  <span
-                     className={optionValue === "Bạn bè" ? "active" : ""}
-                     onClick={() => handleSelectOption("Bạn bè")}
-                  >
+                  <span className={optionValue === "Bạn bè" ? "active" : ""} onClick={() => handleSelectOption("Bạn bè")}>
                      Bạn bè
                   </span>
-                  <span
-                     className={optionValue === "Chỉ mình tôi" ? "active" : ""}
-                     onClick={() => handleSelectOption("Chỉ mình tôi")}
-                  >
+                  <span className={optionValue === "Chỉ mình tôi" ? "active" : ""} onClick={() => handleSelectOption("Chỉ mình tôi")}>
                      Chỉ mình tôi
                   </span>
                </div>
@@ -197,30 +200,30 @@ const UploadDetail = ({ canvas, setInfoEditDetail, videoFile }) => {
                <h4>Khai báo nội dung bài đăng</h4>
                <SwitchBtn isChecked={isChecked} setIsChecked={setIsChecked} />
             </div>
-            <p className="detail-declaration__title">
-               Cho người khác biết bài đăng này quảng bá thương hiệu, sản phẩm hay dịch vụ.
-            </p>
+            <p className="detail-declaration__title">Cho người khác biết bài đăng này quảng bá thương hiệu, sản phẩm hay dịch vụ.</p>
             <div className="declaration-rule row">
                <div className="declaration-rule__trademark">
                   <h4>Thương hiệu của bạn</h4>
                   <p className="p">Bạn đang quảng bá cho bản thân hoặc doanh nghiệp của chính mình.</p>
                </div>
-               {isChecked && <>
-                  <div className="declaration-rule__headTo">
-                     <h4>Nội dung định hướng thương hiệu</h4>
-                     <p className="p">
-                        Bạn đang hợp tác có trả phí với một thương hiệu. Sau khi đăng video, hãy mở ứng dụng TikTok dành
-                        cho thiết bị di động và liên kết chiến dịch trong mục “Cài đặt quảng cáo” của video.
-                     </p>
-                  </div>
-                  <div className="declaration-rule__note">
-                     <h4>Website với mục đích học tập</h4>
-                     <p className="p">
-                        Trang web này được thiết lập với mục đích học tập và nâng cao kiến thức, không có bất kỳ hoạt
-                        động thương mại nào và hoàn toàn tuân theo quy định về bản quyền.
-                     </p>
-                  </div>
-               </>}
+               {isChecked && (
+                  <>
+                     <div className="declaration-rule__headTo">
+                        <h4>Nội dung định hướng thương hiệu</h4>
+                        <p className="p">
+                           Bạn đang hợp tác có trả phí với một thương hiệu. Sau khi đăng video, hãy mở ứng dụng TikTok dành cho thiết bị di động và liên kết chiến dịch trong mục
+                           “Cài đặt quảng cáo” của video.
+                        </p>
+                     </div>
+                     <div className="declaration-rule__note">
+                        <h4>Website với mục đích học tập</h4>
+                        <p className="p">
+                           Trang web này được thiết lập với mục đích học tập và nâng cao kiến thức, không có bất kỳ hoạt động thương mại nào và hoàn toàn tuân theo quy định về bản
+                           quyền.
+                        </p>
+                     </div>
+                  </>
+               )}
             </div>
          </div>
       </div>

@@ -1,8 +1,9 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
+import formatTime from "../utilities/formatTime";
 
-const UploadPhone = ({videoFile}) => {
+const UploadPhone = ({videoFile, getThumbnail}) => {
    const { control_image, live, user } = images;
    const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute, CiCircleCheck } = icons;
 
@@ -17,7 +18,7 @@ const UploadPhone = ({videoFile}) => {
       // Tạo URL mới khi videoFile.file thay đổi
       if (videoFile && videoFile.file) {
          const newVideoURL = URL.createObjectURL(videoFile.file);
-         setVideoURL(newVideoURL);
+         setVideoURL(newVideoURL); 
          return () => {
             URL.revokeObjectURL(newVideoURL);
          };
@@ -44,14 +45,6 @@ const UploadPhone = ({videoFile}) => {
             setIsMute(!isMute);
          }
       },[isMute]);
-
-   // format time
-   const formatTime = (time) => {
-      const hours = Math.floor(time / 3600);
-      const minutes = Math.floor((time % 3600) / 60);
-      const seconds = Math.floor(time % 60);
-      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-   };
 
    const handleTimeUpdate = () => {
       setCurrentTime(videoRef.current.currentTime);
@@ -153,14 +146,14 @@ const UploadPhone = ({videoFile}) => {
                </div>
             </div>
          </div>
-         <div className="handle-video__upload row">
+         {!getThumbnail && <div className="handle-video__upload row">
             <div className="loader-handle"></div>
             <span>Tối ưu hóa hiển thị...</span>
-         </div>
+         </div>}
 
          <div className="phone-change__link row">
             <CiCircleCheck className="phone-change__link--icon" />
-            <span className="phone-change__link--video">{videoFile.name || ''}</span>
+            <span className="phone-change__link--video">{`${videoFile?.name.slice(0, 18)}...` || ''}</span>
             <small className="phone-change__link--change">Thay đổi video</small>
          </div>
       </div>
