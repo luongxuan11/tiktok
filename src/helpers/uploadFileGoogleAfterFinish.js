@@ -14,45 +14,57 @@ export const drive = () => {
    return authDrive;
 };
 
-export const handlePipe = (file) =>
+export const handlePipe = (files) =>
    new Promise(async (resolve, reject) => {
       try {
-         // dịch lại kiểu pipe do google drive không hiểu kiểu buffer
-         const bufferStream = new Readable();
-         bufferStream.push(file.buffer);
-         bufferStream.push(null);
-         // push in drive
-         const createFile = await drive().files.create({
-            requestBody: {
-               name: file.originalname,
-               mimeType: file.mimetype,
-            },
-            media: {
-               mimeType: file.mimetype,
-               body: bufferStream,
-            },
-         });
+         const authDrive = drive(); // Lấy đối tượng drive đã được xác thực
+         const fileDetails = [];
 
-         // Cài đặt quyền truy cập công khai cho tệp
-         await drive().permissions.create({
-            fileId: createFile.data.id,
-            requestBody: {
-               role: "reader",
-               type: "anyone",
-            },
-         });
+         for (const fileType in files) {
+            for (const file of files[fileType]) {
+               const bufferStream = new Readable();
+               bufferStream.push(file.buffer);
+               bufferStream.push(null);
 
-         const fileInfo = await drive().files.get({
-            fileId: createFile.data.id,
-            fields: "webViewLink, webContentLink", // Chỉ lấy trường webViewLink chứa URL
-         });
-          // Lấy URL và id từ thông tin tệp
-          const fileId = createFile.data.id;
-          const fileUrl = fileInfo.data.webContentLink;
-         resolve({
-            fileUrl,
-            fileId
-         })
+               // Tạo tệp trên Google Drive
+               const createFile = await authDrive.files.create({
+                  requestBody: {
+                     name: file.originalname,
+                     mimeType: file.mimetype,
+                  },
+                  media: {
+                     mimeType: file.mimetype,
+                     body: bufferStream,
+                  },
+               });
+
+               // Thiết lập quyền truy cập công khai cho tệp
+               await authDrive.permissions.create({
+                  fileId: createFile.data.id,
+                  requestBody: {
+                     role: "reader",
+                     type: "anyone",
+                  },
+               });
+
+               // Lấy thông tin tệp và URL tới tệp
+               const fileInfo = await authDrive.files.get({
+                  fileId: createFile.data.id,
+                  fields: "webViewLink, webContentLink, shared",
+               });
+
+               const fileId = createFile.data.id;
+               const fileUrl = fileInfo.data.webContentLink;
+               
+               // Thêm thông tin URL và ID vào đối tượng file
+               const fileDetail = {
+                  fileId: fileId,
+                  fileUrl: fileUrl,
+                };
+                fileDetails.push(fileDetail);
+            }
+         }
+         resolve(fileDetails);
       } catch (error) {
          reject(error);
       }

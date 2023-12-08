@@ -12,4 +12,5 @@ router.get('/get-post',controllers.getPostOfUser)
 
 
 
+
 export default router

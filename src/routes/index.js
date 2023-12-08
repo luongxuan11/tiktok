@@ -7,7 +7,6 @@ const initRouter = (app) =>{
     app.use('/api/v1/user', userRouter)
     app.use('/api/v1/auth', auth)
     app.use('/api/v1/overview', overview)
-
     app.use(notfound)
 }
 

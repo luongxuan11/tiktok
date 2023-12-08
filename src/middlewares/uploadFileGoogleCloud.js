@@ -22,16 +22,17 @@ const setupUploadFile = (req, res, next) => {
    const upload = multer({
       storage,
       limits: {
-         fileSize: 50 * 1024 * 1024, // Giới hạn tệp tải lên dưới 50MB
+         fileSize: 100 * 1024 * 1024, // limit
       },
       fileFilter: (req, file, callback) => {
-         if (file.mimetype === "video/mp4") {
+         if (file.mimetype === "video/mp4" || file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
             callback(null, true);
          } else {
-            callback(new Error("Chỉ cho phép tải lên các tệp video MP4"), false);
+            console.log(`File with mimetype ${file.mimetype} is not valid.`);
+            callback(new Error("tệp tải lên không hợp lệ"), false);
          }
       },
-   }).single("video");
+   }).fields([{ name: 'video', maxCount: 1 }, { name: 'image', maxCount: 1 }]);
    
    // save into folder
    upload(req, res, async (err) => {
@@ -39,37 +40,38 @@ const setupUploadFile = (req, res, next) => {
          console.error("Error uploading file:", err);
          return res.status(500).send("Error uploading file.");
       }
-      console.log(req.body)
-      // const inputFilePath = writeBufferToInput(req.file.buffer, "mp4", userId);
-      // //   const outputFilePath = inputFilePath.replace(".mp4", "_compressed.mp4");
-      // const outputFilePath = writeBufferToOutput(req.file.buffer, "mp4", userId);
-      // // Check if req.file exists
+      const inputVideoPath = writeBufferToInput(req.files.video[0].buffer, "mp4", userId);
+      //   const outputFilePath = inputFilePath.replace(".mp4", "_compressed.mp4");
+      const outputVideoPath = writeBufferToOutput(req.files.video[0].buffer, "mp4", userId);
+      // Check if req.file exists
 
-      // const videoOptionsDefault = {
-      //    preset: "Very Fast 720p30",
-      //    "encoder-profile": "main",
-      //    "encoder-level": "3.1",
-      //    quality: 22,
-      //    width: 720,
-      //    height: 1280,
-      // };
+      const videoOptionsDefault = {
+         preset: "Very Fast 720p30",
+         "encoder-profile": "main",
+         "encoder-level": "3.1",
+         quality: 22,
+         width: 720,
+         height: 1280,
+      };
 
-      // const videoOptions = req.body.videoOptions || videoOptionsDefault;
+      const videoOptions = req.body.videoOptions || videoOptionsDefault;
 
-      // compressVideo(inputFilePath, outputFilePath, videoOptions, (err, stdout, stderr) => {
-      //    if (err) {
-      //       console.error("Error compressing video:", err);
-      //       deleteTemporaryFile(inputFilePath);
-      //       return res.status(500).send("Error compressing video.");
-      //    }
-      //    const compressedVideoBuffer = fs.readFileSync(outputFilePath);
+      compressVideo(inputVideoPath, outputVideoPath, videoOptions, (err, stdout, stderr) => {
+         if (err) {
+            console.error("Error compressing video:", err);
+            deleteTemporaryFile(inputVideoPath);
+            return res.status(500).send("Error compressing video.");
+         }
+         const compressedVideoBuffer = fs.readFileSync(outputVideoPath);
 
-      //    // Gán buffer này cho thuộc tính buffer của req.file
-      //    req.file.buffer = compressedVideoBuffer;
-      //    req.file.size = compressedVideoBuffer.length;
-      //    deleteTemporaryFile(outputFilePath);
-      //    next();
-      // });
+         // Gán buffer này cho thuộc tính buffer của req.file
+         req.files.video[0].buffer  = compressedVideoBuffer;
+         req.files.video[0].size = compressedVideoBuffer.length;
+         deleteTemporaryFile(outputVideoPath);
+         deleteTemporaryFile(inputVideoPath);
+         
+         next();
+      });
    });
 };
 

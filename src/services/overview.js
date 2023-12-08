@@ -1,17 +1,22 @@
 import db from "../models";
 import { v4 as generateId } from "uuid";
+import deleteFilesOnDrive from "../helpers/deleteFileOnDrive";
 
 // create
-export const createOverview = (id, privacy, file_name, file_id, body) =>
+export const createNewPost = (id, fileDetails, body, authDrive) =>
   new Promise(async (resolve, reject) => {
     try {
       await db.Overview.create({
         id: generateId(),
         user_id: id,
         title: body?.title || "",
-        privacy,
-        file_name,
-        file_id,
+        privacy: body.privacy,
+        comment_status: body.comment_status,
+        video_file_name: fileDetails[0].fileUrl,
+        video_file_id: fileDetails[0].fileId,
+        image_file_name: fileDetails[1].fileUrl,
+        image_file_id: fileDetails[1].fileId,
+        tag: body?.tag || null
       });
 
       resolve({
@@ -19,6 +24,7 @@ export const createOverview = (id, privacy, file_name, file_id, body) =>
         mess: "create success!",
       });
     } catch (error) {
+      await deleteFilesOnDrive(fileDetails, authDrive)
       reject(error);
     }
   });
