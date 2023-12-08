@@ -1,10 +1,11 @@
-export {default as Search} from "./Search"
-export {default as Button} from "./Button"
-export {default as InputForm} from "./InputForm"
-export {default as AuthForm} from "./AuthForm"
-export {default as AuthFormLogin} from "./AuthFormLogin"
-export {default as Popup} from "./Popup"
-export {default as VerifyOtp} from "./VerifyOtp"
-export {default as UploadPhone} from "./UploadPhone"
-export {default as UploadDetail} from "./UploadDetail"
-export {default as EditVideo} from "./EditVideo"
+export { default as Search } from "./Search";
+export { default as Button } from "./Button";
+export { default as InputForm } from "./InputForm";
+export { default as AuthForm } from "./AuthForm";
+export { default as AuthFormLogin } from "./AuthFormLogin";
+export { default as PopupOtp } from "./PopupOtp";
+export { default as VerifyOtp } from "./VerifyOtp";
+export { default as UploadPhone } from "./UploadPhone";
+export { default as UploadDetail } from "./UploadDetail";
+export { default as EditVideo } from "./EditVideo";
+export { default as Popup } from "./Popup";

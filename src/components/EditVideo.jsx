@@ -4,12 +4,16 @@ import icons from "../utilities/icons";
 import formatTime from "../utilities/formatTime";
 
 const EditVideo = ({ videoFile, setShowEditVideo }) => {
-   const { IoMusicalNotes, SiAudiomack, PiImageDuotone, FaPlay, FaPause } = icons;
+   const { BiBarChartSquare, PiImageDuotone, FaPlay, FaPause } = icons;
    const [videoURL, setVideoURL] = useState(null);
    const [currentTime, setCurrentTime] = useState(0);
    const [duration, setDuration] = useState(0);
    const [isPlaying, setIsPlaying] = useState(false);
+   const [valueEncode, setValueEncode] = useState("basic");
    const videoRef = useRef(null);
+
+   // heading value
+   const heading = valueEncode === "basic" ? "Chất lượng đầu ra" : "Độ phân giải tùy chỉnh";
 
    useEffect(() => {
       // Tạo URL mới khi videoFile.file thay đổi
@@ -23,16 +27,18 @@ const EditVideo = ({ videoFile, setShowEditVideo }) => {
    }, [videoFile]);
 
    const togglePlay = useCallback(
-    (e) => {
-       e.stopPropagation();
-       if(isPlaying){
-          videoRef.current.pause()
-          setIsPlaying(false)
-       }else{
-          videoRef.current.play()
-          setIsPlaying(true)
-       }
-    },[isPlaying]);
+      (e) => {
+         e.stopPropagation();
+         if (isPlaying) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+         } else {
+            videoRef.current.play();
+            setIsPlaying(true);
+         }
+      },
+      [isPlaying],
+   );
 
    const handleTimeUpdate = () => {
       setCurrentTime(videoRef.current?.currentTime);
@@ -63,61 +69,77 @@ const EditVideo = ({ videoFile, setShowEditVideo }) => {
       };
    }, []);
 
+   // handle encode
+   const handleEncode = (value) => {
+      setValueEncode(value);
+   };
+
    return (
       <div className="video-custom row">
          <div className="video-custom__box">
             <div className="custom-box__heading row">
                <h2>Chỉnh sửa video</h2>
                <Button btnClass={"cancel"} onClick={() => setShowEditVideo(false)} text={"Huỷ bỏ"} />
-               <Button btnClass={"access"} text={"Lưu bản chỉnh sửa"} />
+               <Button btnClass={"access"} onClick={() => setShowEditVideo(false)} text={"Lưu bản chỉnh sửa"} />
             </div>
             <div className="custom-box__wrapper row">
                <div className="box-wrapper__sidebar row">
-                  <div className="item row">
-                     <IoMusicalNotes className="icon" />
-                     <span>Âm thanh</span>
+                  <div onClick={() => handleEncode("basic")} className={`item row ${valueEncode === "basic" ? "item--active" : ""}`}>
+                     <BiBarChartSquare className="icon" />
+                     <span>Ouput</span>
                   </div>
-                  <div className="item row">
+                  <div onClick={() => handleEncode("image")} className={`item row ${valueEncode === "image" ? "item--active" : ""}`}>
                      <PiImageDuotone className="icon" />
                      <span>Hình ảnh</span>
                   </div>
-                  <div className="item row">
-                     <SiAudiomack className="icon" />
-                     <span>Encoder</span>
-                  </div>
                </div>
                <div className="box-wrapper__options">
-                  <h3>Chất lượng đầu ra</h3>
-                  <div className="options row">
-                     <div className="item row">
-                        <span>Thông số mặc định:</span>
-                        <small>Mặc định</small>
+                  <h3>{heading}</h3>
+                  {valueEncode === "basic" ? (
+                     <div className="options row">
+                        <div className="item row">
+                           <span>Thông số mặc định:</span>
+                           <small>Mặc định</small>
+                        </div>
+                        <div className="item row">
+                           <span>Preset:</span>
+                           <small>Very Fast 720p30</small>
+                        </div>
+                        <div className="item row">
+                           <span>Audio:</span>
+                           <small>aac basic</small>
+                        </div>
+                        <div className="item row">
+                           <span>Encoder-profile:</span>
+                           <small>main</small>
+                        </div>
+                        <div className="item row">
+                           <span>Encoder-level:</span>
+                           <small>"3.1"</small>
+                        </div>
+                        <div className="item row">
+                           <span>Quality:</span>
+                           <small>22</small>
+                        </div>
+                        <div className="item row">
+                           <span>Display:</span>
+                           <small>720x1280</small>
+                        </div>
                      </div>
-                     <div className="item row">
-                        <span>Preset:</span>
-                        <small>Very Fast 720p30</small>
+                  ) : (
+                     <div className="options-change row">
+                        <div className="item row">
+                           <input type="checkbox" />
+                           <span>Preset:</span>
+                           <small>Very Fast 1080p30</small>  
+                        </div>
+                        <div className="item row">
+                           <input type="checkbox" />
+                           <span>Encoder-level:</span>
+                           <small>"4.1"</small>
+                        </div>
                      </div>
-                     <div className="item row">
-                        <span>Audio:</span>
-                        <small>aac basic</small>
-                     </div>
-                     <div className="item row">
-                        <span>Encoder-profile:</span>
-                        <small>main</small>
-                     </div>
-                     <div className="item row">
-                        <span>Encoder-level:</span>
-                        <small>"3.1"</small>
-                     </div>
-                     <div className="item row">
-                        <span>Quality:</span>
-                        <small>22</small>
-                     </div>
-                     <div className="item row">
-                        <span>Display:</span>
-                        <small>720x1280</small>
-                     </div>
-                  </div>
+                  )}
                </div>
                <div className="box-wrapper__video row">
                   <div className="video row">
@@ -133,7 +155,7 @@ const EditVideo = ({ videoFile, setShowEditVideo }) => {
                </div>
                <div className="control-process__custom">
                   <div className="input-detail row">
-                    <span>Tính năng cắt video tạm thời khóa để bảo trì!</span>
+                     <span>Tính năng cắt video tạm thời khóa để bảo trì!</span>
                   </div>
                </div>
             </div>

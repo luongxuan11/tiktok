@@ -61,7 +61,7 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
    // function capture image from video
    useEffect(() => {
       const debounceTimeout = setTimeout(() => {
-         captureImage(video, canvas);
+         captureImage(video, canvas, setPayload);
       }, 1000);
       return () => {
          clearTimeout(debounceTimeout);
@@ -77,6 +77,10 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
    const handleSelectOption = (value) => {
       setShowOption(false);
       setOptionValue(value);
+      setPayload(prev => ({
+         ...prev,
+         privacy: optionValue,
+      }))
    };
 
    // onclick outSide
@@ -114,7 +118,7 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
    useEffect(() => {
       const generateThumbnails = async () => {
          try {
-            const thumbnailArray = await generateVideoThumbnails(videoFile?.file, 8, "file");
+            const thumbnailArray = await generateVideoThumbnails(videoFile?.file, 8);
             setThumbnails(thumbnailArray);
             setGetThumbnail(true)
          } catch (error) {
@@ -124,6 +128,13 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
 
       generateThumbnails();
    }, [videoURL]);
+
+   useEffect(() => {
+      setPayload(prev => ({
+         ...prev,
+         comment_status: selectedItems.includes("Bình luận") ? 1 : 0
+      }))
+   }, [selectedItems])
 
    // jsx
    return (
@@ -142,9 +153,10 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
             <h4>Ảnh bìa</h4>
             <div className="detail-drag">
                <div className="imageBox-wrapper row">
-                  {getThumbnail ? thumbnails.map((thumbnail, index) => (
+                  {getThumbnail && thumbnails.map((thumbnail, index) => (
                      <img key={index} src={thumbnail} alt={`Thumbnail ${index}`} />
-                  )) : <span></span>}
+                  ))}
+                  <span className={`${getThumbnail ? "imageBox--active" : ""}`}></span>
                </div>
                <input type="range" className={`detail-drag__touch`} value={rangeValue} onChange={(e) => handleRangeChange(e)} max={100}></input>
                <small className={`${!getThumbnail ? "hidden" : ""}`} style={{ left: `${positionVideo()}px` }}>

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
 import icons from "../../utilities/icons";
-import { Button, UploadPhone, UploadDetail, EditVideo } from "../../components";
+import { Button, UploadPhone, UploadDetail, EditVideo, Popup} from "../../components";
+import Swal from "sweetalert2";
 
 const { MdCloudUpload, IoIosCut, TfiSplitH } = icons;
 
@@ -10,7 +11,7 @@ const CreatorUpload = () => {
    const [showEditVideo, setShowEditVideo] = useState(false);
    const [getThumbnail, setGetThumbnail] = useState(false);
    const [payload, setPayload] = useState({})
-
+   const [showPopup, setShowPopup] = useState(false)
 
    const canvas = useRef(null);
    const fileInputRef = useRef(null);
@@ -48,6 +49,23 @@ const CreatorUpload = () => {
       };
    }, [showEditVideo]);
 
+   // unset post 
+   const handleUnsetPost = useCallback(() => {
+      setShowUploadDetail(false);
+      setShowEditVideo(false);
+      setGetThumbnail(false);
+      setShowPopup(false)
+   }, [])
+
+   // submit
+   const handleSubmit = async() =>{
+      if(payload.video && payload.image){
+         Swal.fire("Thành công !", "Thành công", "success");
+      }else{
+         Swal.fire("Thất bại!", "Opps! có lỗi rùi!", "error");
+      }
+   }
+
    return (
       <section className="creator-upload">
          {showUploadDetail && (
@@ -59,7 +77,7 @@ const CreatorUpload = () => {
                   </div>
                   <div className="edit-detail__info row">
                      <span>
-                     {payload.title.length >= 20 ? `${payload.title.slice(0, 20)}...`: payload.title}
+                     {payload?.title?.length >= 20 ? `${payload?.title?.slice(0, 20)}...`: payload.title}
                      </span>
                      <span>312 3 21 31</span>
                   </div>
@@ -108,17 +126,18 @@ const CreatorUpload = () => {
                      <p>Đăng video vào tài khoản của bạn</p>
                   </div>
                   <div className="upload-detail row">
-                     <UploadPhone getThumbnail={getThumbnail} videoFile={videoFile}/>
+                     <UploadPhone handleUnsetPost={handleUnsetPost} getThumbnail={getThumbnail} videoFile={videoFile}/>
                      <UploadDetail getThumbnail={getThumbnail} setGetThumbnail={setGetThumbnail} payload={payload} setPayload={setPayload} videoFile={videoFile} canvas={canvas} />
                   </div>
                   <div className="upload-action__box row">
-                     <Button text={"Hủy bỏ"} btnClass={"btn action__box--1"} />
-                     <Button text={"Đăng"} btnClass={"btn action__box--2"} />
+                     <Button onClick={() => setShowPopup(true)} text={"Hủy bỏ"} btnClass={`btn action__box--1`} />
+                     <Button text={"Đăng"} onClick={handleSubmit} btnClass={`btn action__box--2 ${!getThumbnail ? "action__box--notImage" : ""}`} />
                   </div>
                </>
             )}
          </div>
          {(showEditVideo && showUploadDetail) ? <EditVideo setShowEditVideo={setShowEditVideo} videoFile={videoFile}/> : ""}
+         {showPopup && <Popup accessAction={handleUnsetPost} title={"Hủy bỏ bài đăng này"} setShowPopup={setShowPopup} content={"Video và tất cả chỉnh sửa sẽ bị hủy bỏ."} cancel={"Tiếp tục chỉnh sửa"} access={"Hủy bỏ"}/>}
       </section>
    );
 };

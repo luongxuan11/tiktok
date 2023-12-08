@@ -831,6 +831,13 @@
                                  width: 85px;
                                  background: #16182312;
                               }
+                              .imageBox--active{
+                                 position: absolute;
+                                 width: 100%;
+                                 background: #ffffffa6;
+                                 z-index: 0;
+                                 left: 0;
+                              }
                            }
                            &__touch {
                               position: absolute;
@@ -1016,6 +1023,11 @@
                      background: #fe2c55;
                      color: #fff;
                   }
+                  .action__box--notImage{
+                     background-color: #ebebeb;
+                     color: #16182357;
+                     cursor: not-allowed;
+                  }
                }
             }
 
@@ -1047,10 +1059,11 @@
                         }
                      }
                      .access {
-                        background: #ebebeb;
-                        margin-left: 20px;
-                        color: #16182357;
-                        cursor: not-allowed;
+                        cursor: pointer;
+                        background: #fe2c55;
+                        color: #fff;
+                        font-weight: 600;
+                        margin-left: 15px;
                      }
                   }
 
@@ -1058,14 +1071,14 @@
                      width: 100%;
                      align-items: flex-start;
                      .box-wrapper__sidebar {
-                        width: 7.7%;
+                        max-width: 7.7%;
                         flex-direction: column;
                         row-gap: 20px;
-                        padding-top: 20px;
                         .item {
                            flex-direction: column;
                            row-gap: 10px;
                            cursor: pointer;
+                           padding: 10px 13px;
                            .icon {
                               font-size: 2.5rem;
                            }
@@ -1073,6 +1086,12 @@
                               font-size: 1.2rem;
                               font-weight: 500;
                            }
+                           &:first-child{
+                              padding: 13px 20px;
+                           }
+                        }
+                        .item--active{
+                           background-color: #dadada;
                         }
                      }
                      .box-wrapper__options {
@@ -1080,11 +1099,15 @@
                         height: 420px;
                         border-left: 1px solid #d5d5d5;
                         border-right: 1px solid #d5d5d5;
+                        overflow: auto;
                         h3 {
                            font-size: 1.8rem;
                            text-align: center;
                            padding: 15px;
                            border-bottom: 1px solid #c7c5c5;
+                           position: sticky;
+                           top: 0;
+                           background-color: #fff;
                         }
                         .options {
                            flex-direction: column;
@@ -1106,6 +1129,39 @@
                                  font-size: 1.4rem;
                                  color: #16182357;
                                  font-weight: 600;
+                              }
+                           }
+                        }
+                        .options-change{
+                           flex-direction: column;
+                           row-gap: 10px;
+                           padding: 20px 0;
+                           align-items: flex-start;
+                           .item {
+                              width: 100%;
+                              padding: 10px 20px;
+                              cursor: pointer;
+                              &:nth-child(even) {
+                                 background-color: rgba(186, 186, 186, 0.134);
+                              }
+                              span {
+                                 width: 170px;
+                                 font-weight: 600;
+                              }
+                              small {
+                                 font-size: 1.4rem;
+                                 color: #16182357;
+                                 font-weight: 600;
+                              }
+                              &:hover{
+                                 background-color: #059af682;
+                                 color: #fff;
+                                 small{
+                                    color: yellow;
+                                 }
+                              }
+                              input{
+                                 margin-right: 10px;
                               }
                            }
                         }
@@ -1160,6 +1216,35 @@
                            font-weight: 600;
                            font-size: 1.8rem;
                         }
+                     }
+                  }
+               }
+            }
+            .popup{
+               .popup-box{
+                  p{
+                     color: #161823bf;
+                     font-size: 1.6rem;
+                     font-weight: 400;
+                  }
+                  padding: 36px 48px;
+                  .popup-box__action{
+                     flex-direction: column;
+                     row-gap: 15px;
+                     .popup-box__btn{
+                        width: 100%;
+                        border-radius: 2px;
+                        padding: 15px 20px;
+                     }
+                     .popup-box__btn--cancel {
+                        background-color: #fe2c55;
+                        color: #fff;
+                     }
+                     .popup-box__btn--access{
+                        background: #fff;
+                        color: #000;
+                        border: 1px solid #1618231f;
+                        color: #161823;
                      }
                   }
                }

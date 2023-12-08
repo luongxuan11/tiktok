@@ -2,8 +2,9 @@ import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
 import formatTime from "../utilities/formatTime";
+import Popup from "./Popup";
 
-const UploadPhone = ({videoFile, getThumbnail}) => {
+const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost}) => {
    const { control_image, live, user } = images;
    const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute, CiCircleCheck } = icons;
 
@@ -13,6 +14,7 @@ const UploadPhone = ({videoFile, getThumbnail}) => {
    const [currentTime, setCurrentTime] = useState(0);
    const [duration, setDuration] = useState(0);
    const [videoURL, setVideoURL] = useState(null);
+   const [showPopup, setShowPopup] = useState(false)
 
    useEffect(() => {
       // Tạo URL mới khi videoFile.file thay đổi
@@ -47,10 +49,10 @@ const UploadPhone = ({videoFile, getThumbnail}) => {
       },[isMute]);
 
    const handleTimeUpdate = () => {
-      setCurrentTime(videoRef.current.currentTime);
+      setCurrentTime(videoRef.current?.currentTime);
    };
    const handleLoadedMetadata = () => {
-      setDuration(videoRef.current.duration);
+      setDuration(videoRef.current?.duration);
    };
 
    const handleVideoEnded = () => {
@@ -154,8 +156,9 @@ const UploadPhone = ({videoFile, getThumbnail}) => {
          <div className="phone-change__link row">
             <CiCircleCheck className="phone-change__link--icon" />
             <span className="phone-change__link--video">{`${videoFile?.name.slice(0, 18)}...` || ''}</span>
-            <small className="phone-change__link--change">Thay đổi video</small>
+            <small onClick={() => setShowPopup(true)} className="phone-change__link--change">Thay đổi video</small>
          </div>
+         {showPopup && <Popup accessAction={handleUnsetPost} title={"Thay thế video này?"} setShowPopup={setShowPopup} content={"Chú thích và cài đặt video vẫn sẽ được lưu."} cancel={"Tiếp tục chỉnh sửa"} access={"Thay thế"}/>}
       </div>
    );
 };

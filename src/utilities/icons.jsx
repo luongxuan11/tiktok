@@ -5,7 +5,7 @@ import { RiQuestionAnswerLine, RiHome4Line} from "react-icons/ri";
 import { BsKeyboard, BsFillPlayFill, BsBookmarkDash } from "react-icons/bs";
 import { IoCloudyNightOutline, IoMusicalNotes, IoVolumeMute} from "react-icons/io5";
 import { SlWrench } from "react-icons/sl";
-import { BiBadgeCheck, BiCheckDouble, BiSolidLockAlt, BiMessageAltMinus, BiLogIn, BiMessageDetail  } from "react-icons/bi";
+import { BiBadgeCheck,BiBarChartSquare , BiCheckDouble, BiSolidLockAlt, BiMessageAltMinus, BiLogIn, BiMessageDetail  } from "react-icons/bi";
 import { FaNodeJs, FaFigma, FaPlay  } from "react-icons/fa";
 import { DiReact } from "react-icons/di";
 import { SiPostgresql, SiAudiomack } from "react-icons/si";
@@ -71,7 +71,8 @@ const icons = {
     CiCircleCheck,
     SiAudiomack,
     PiImageDuotone,
-    FaPlay 
+    FaPlay,
+    BiBarChartSquare 
 };
 
 export default icons;

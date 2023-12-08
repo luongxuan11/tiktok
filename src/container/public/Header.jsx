@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo} from "react";
 import logo from "../../assets/img/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { path } from "../../utilities/constant";
-import { Search, Button, AuthFormLogin, Popup } from "../../components";
+import { Search, Button, AuthFormLogin, PopupOtp } from "../../components";
 import icons from "../../utilities/icons";
 import { Toggle } from "../../components/animation";
 import { useSelector, useDispatch } from "react-redux";
@@ -159,7 +159,7 @@ const Header = () => {
          </div>
          {showForm && <AuthFormLogin setShowForm={setShowForm} />}
          {showPopup && (
-            <Popup
+            <PopupOtp
                title="Kích hoạt tài khoản"
                content="hệ thống yêu cầu bạn phải kích hoạt tài khoản để sử dụng các tính năng."
                access="Xác nhận"
