@@ -6,6 +6,7 @@ dotenv.config();
 const cookieParser = require("cookie-parser"); // reding cookie
 import initRouter from "./src/routes";
 const path = require('path');
+import deleteFileOnCloudinary from "./src/helpers/deleteFileOnCloudinary";
 
 const port = process.env.PORT || 3001;
 

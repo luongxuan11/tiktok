@@ -1,15 +1,12 @@
 import * as services from "../services";
 import { internalError, badRequest } from "../middlewares/handleError";
-import { drive, handlePipe } from "../helpers/uploadFileGoogleAfterFinish";
-import deleteFilesOnDrive from "../helpers/deleteFileOnDrive";
 
 export const createNewPost = async (req, res) => {
-   const authDrive = drive();
    let fileDetails;
    try {
       // check invalid
       const { id } = req.user;
-      const files = req.files;
+      const files = req.filesDetail;
       const body = req.body;
 
       //   const generateUserFolderId = req.generateUserFolderId;
@@ -19,12 +16,12 @@ export const createNewPost = async (req, res) => {
             mess: "Thiếu thông tin bắt buộc",
          });
       }
-      fileDetails = await handlePipe(files);
-      
-      const response = await services.createNewPost(id, fileDetails, body, authDrive);
-      return res.status(200).json(response);
+      // fileDetails = await handleUploadToRandomCloudinary(files);
+      console.log(files)
+      // const response = await services.createNewPost(id, fileDetails, body, authDrive);
+      // return res.status(200).json(response);
    } catch (error) {
-      await deleteFilesOnDrive(fileDetails, authDrive)
+      // await deleteFilesOnDrive(fileDetails, authDrive)
       internalError(res, error.message);
    }
 };

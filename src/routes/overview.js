@@ -3,7 +3,7 @@ import express from "express"
 const router = express.Router()
 import { verifyToken } from "../middlewares/verify_token"
 import { requireVerifyOtp } from "../middlewares/verify_uploadVideo"
-import setupUploadFile from "../middlewares/uploadFileGoogleCloud"
+import setupUploadFile from "../middlewares/uploadFileMuntipleCloudinary"
 
 // private route
 router.use(verifyToken)
