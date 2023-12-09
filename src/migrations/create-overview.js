@@ -35,6 +35,9 @@ module.exports = {
       tag: {
         type: Sequelize.STRING
       },
+      api_key: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: 'TIMESTAMP', defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')

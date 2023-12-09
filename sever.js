@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 dotenv.config();
 const cookieParser = require("cookie-parser"); // reding cookie
 import initRouter from "./src/routes";
-const path = require('path');
-import deleteFileOnCloudinary from "./src/helpers/deleteFileOnCloudinary";
+const path = require("path");
+import { deleteCloudinaryVideo } from "./src/helpers/deleteFileOnCloudinary";
 
 const port = process.env.PORT || 3001;
 
@@ -21,6 +21,7 @@ app.use(
       credentials: true, // Cho phép sử dụng Cookie
    }),
 );
+
 
 // middleware đọc data
 app.use(cookieParser()); // tương tác cookie

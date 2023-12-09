@@ -30,9 +30,25 @@ const setupUploadFile = (req, res, next) => {
          api_key: process.env.CLOUDINARY_KEY1,
          api_secret: process.env.CLOUDINARY_SECRET1,
       },
+      {
+         cloud_name: process.env.CLOUDINARY_NAME2,
+         api_key: process.env.CLOUDINARY_KEY2,
+         api_secret: process.env.CLOUDINARY_SECRET2,
+      },
    ];
 
-   const randomAccount = cloudinaryAccounts[Math.floor(Math.random() * cloudinaryAccounts.length)];
+   const getRandomAccount = () => {
+      const randomNumber = Math.random();
+      if (randomNumber < 1 / 3) {
+         return cloudinaryAccounts[0];
+      } else if (randomNumber < 2 / 3) {
+         return cloudinaryAccounts[1];
+      } else {
+         return cloudinaryAccounts[2];
+      }
+   };
+
+   const randomAccount = getRandomAccount();
    cloudinary.config(randomAccount);
 
    const upload = multer({
@@ -94,13 +110,14 @@ const setupUploadFile = (req, res, next) => {
             });
 
             req.filesDetail = {
-               video_file_name: videoUploadResult.secure_url,  // URL của video
-               video_file_id: videoUploadResult.public_id,  // ID của video trên Cloudinary
-               video_cloud: videoUploadResult.api_key,
+               video_file_name: videoUploadResult.secure_url, // URL của video
+               video_file_id: videoUploadResult.public_id, // ID của video trên Cloudinary
                thumb_file_name: imageUploadResult.secure_url,
                thumb_file_id: imageUploadResult.public_id,
-               thumb_cloud: imageUploadResult.api_key
-             };
+               account_cloud: videoUploadResult.api_key,
+            };
+            // console.log(videoUploadResult);
+            // console.log(imageUploadResult);
             deleteTemporaryFile(inputVideoPath);
             deleteTemporaryFile(outputVideoPath);
             deleteTemporaryFile(outputImagePath);

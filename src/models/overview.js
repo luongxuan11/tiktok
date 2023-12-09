@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     thumb_file_name: DataTypes.STRING,
     thumb_file_id: DataTypes.STRING,
     comment_status: DataTypes.BOOLEAN,
-    tag: DataTypes.STRING
+    tag: DataTypes.STRING,
+    api_key: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Overview',
