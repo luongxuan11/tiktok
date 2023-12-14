@@ -3,7 +3,7 @@ import images from "../../assets/imgExport"
 
 const {new_comment, user} = images
 
-const CreatorCenterHome = () => {
+const CreatorCenterHome = ({currentData}) => {
    return (
       <main className="creator-home row">
          <div className="creator-home__wrapper row">
@@ -32,8 +32,8 @@ const CreatorCenterHome = () => {
          <aside className="creator-home__info">
             <div className="info-user">
                 <div className="info-user__detail row">
-                    <img src={user} alt="" />
-                    <span>user name</span>
+                    <img src={currentData.avatar ? currentData.avatar : user} alt="tiktok" />
+                    <span>{currentData?.userName}</span>
                 </div>
                 <div className="info-user__interact row">
                     <div className="interact__item row">

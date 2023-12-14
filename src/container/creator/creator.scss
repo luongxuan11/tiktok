@@ -36,6 +36,7 @@
                border-radius: 3px;
             }
             small {
+               position: absolute;
                background: linear-gradient(0.25turn, #25f4ee 0px, rgb(37, 244, 238) 50%, rgb(254, 44, 85) 50%, rgb(254, 44, 85) 100%);
                width: 126.5px;
                padding: 0 3px;
@@ -299,8 +300,12 @@
                            font-weight: 400;
                            font-size: 1.6rem;
                         }
-                        &:last-child {
+                     }
+                     .edit-detail__info--time {
+                        span {
                            font-size: 1.4rem;
+                           color: rgba(22, 24, 35, 0.3411764706);
+                           font-weight: 500;
                         }
                      }
                   }
@@ -831,7 +836,7 @@
                                  width: 85px;
                                  background: #16182312;
                               }
-                              .imageBox--active{
+                              .imageBox--active {
                                  position: absolute;
                                  width: 100%;
                                  background: #ffffffa6;
@@ -1023,7 +1028,7 @@
                      background: #fe2c55;
                      color: #fff;
                   }
-                  .action__box--notImage{
+                  .action__box--notImage {
                      background-color: #ebebeb;
                      color: #16182357;
                      cursor: not-allowed;
@@ -1086,11 +1091,11 @@
                               font-size: 1.2rem;
                               font-weight: 500;
                            }
-                           &:first-child{
+                           &:first-child {
                               padding: 13px 20px;
                            }
                         }
-                        .item--active{
+                        .item--active {
                            background-color: #dadada;
                         }
                      }
@@ -1132,7 +1137,7 @@
                               }
                            }
                         }
-                        .options-change{
+                        .options-change {
                            flex-direction: column;
                            row-gap: 10px;
                            padding: 20px 0;
@@ -1153,14 +1158,14 @@
                                  color: #16182357;
                                  font-weight: 600;
                               }
-                              &:hover{
+                              &:hover {
                                  background-color: #059af682;
                                  color: #fff;
-                                 small{
+                                 small {
                                     color: yellow;
                                  }
                               }
-                              input{
+                              input {
                                  margin-right: 10px;
                               }
                            }
@@ -1220,18 +1225,18 @@
                   }
                }
             }
-            .popup{
-               .popup-box{
-                  p{
+            .popup {
+               .popup-box {
+                  p {
                      color: #161823bf;
                      font-size: 1.6rem;
                      font-weight: 400;
                   }
                   padding: 36px 48px;
-                  .popup-box__action{
+                  .popup-box__action {
                      flex-direction: column;
                      row-gap: 15px;
-                     .popup-box__btn{
+                     .popup-box__btn {
                         width: 100%;
                         border-radius: 2px;
                         padding: 15px 20px;
@@ -1240,7 +1245,7 @@
                         background-color: #fe2c55;
                         color: #fff;
                      }
-                     .popup-box__btn--access{
+                     .popup-box__btn--access {
                         background: #fff;
                         color: #000;
                         border: 1px solid #1618231f;

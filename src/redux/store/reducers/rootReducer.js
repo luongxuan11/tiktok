@@ -3,6 +3,7 @@ import storage from "redux-persist/lib/storage"; // khi reload trang thì giá t
 import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel2";
 import authReducer from "./authReducer";
 import getUserCurrent from "./userReducer";
+import postReducer from "./postReducer";
 
 import persistReducer from "redux-persist/es/persistReducer";
 
@@ -21,7 +22,8 @@ const authConfig = {
 const rootReducer = combineReducers({
    // như trên đã nói hàm combine này gán cho biến có tên là rootReducer
    auth: persistReducer(authConfig, authReducer),
-   user: getUserCurrent
+   user: getUserCurrent,
+   posts: postReducer,
 
 });
 

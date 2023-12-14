@@ -81,10 +81,13 @@ const AuthFormLogin = ({ setShowForm }) => {
                      icon={showPassword ? <PiEyeDuotone /> : <PiEyeClosedDuotone />}
                   />}
                </div>
-               <div className="form-control__forget">
+               <div className="form-control__forget row">
                   <Link onClick={() => setForgetPassword(prev => !prev)} to={!forgetPassword ? path.FORGET : "/"}>
                      {!forgetPassword ? "Bạn quên mật khẩu?" : "Đăng nhập"}
                   </Link>
+                  {!forgetPassword && <Link to={"/auth"}>
+                     Tạo tài khoản mới
+                  </Link>}
                </div>
                <Button btnClass={`form-control__btn`} text={!forgetPassword ? "Tiếp tục" : "Làm mới mật khẩu"} />
                <span

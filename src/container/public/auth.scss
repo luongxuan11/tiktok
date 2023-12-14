@@ -3,6 +3,15 @@
    height: 100vh;
    background-color: #000;
    overflow-x: hidden;
+   &::-webkit-scrollbar {
+      width: 4px;
+   }
+   &::-webkit-scrollbar-thumb {
+      border-radius: 999px;
+      background: #74737336;
+   }
+   &::-webkit-scrollbar-track {
+   }
    .auth-header {
       // border: 1px solid #fff;
       justify-content: space-between;
@@ -87,7 +96,7 @@
                   height: 100%;
                   background: #cee6e5;
                }
-               &__step--pending.step2{
+               &__step--pending.step2 {
                   transition: all 0.5s ease;
                   width: 100%;
                }
@@ -174,17 +183,15 @@
             &__btn.error {
                cursor: not-allowed;
             }
-
-            
          }
-         .close{
+         .close {
             position: absolute;
             top: 15px;
             right: 15px;
             font-size: 2rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            &:hover{
+            &:hover {
                scale: 1.2;
             }
          }

@@ -5,6 +5,8 @@ const actionTypes = {
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
     LOGIN_FAIL: 'LOGIN_FAIL',
     LOGOUT: 'LOGUOT',
+    GET_POST_LIMIT: "GET_POST_LIMIT",
+    GET_POST_FALSE: "GET_POST_FALSE",
 
     // user
     GET_CURRENT: 'GET_CURRENT',

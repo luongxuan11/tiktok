@@ -7,14 +7,16 @@ export const captureImage = (video, canvas, setPayload) => {
       //   // Vẽ video lên canvas
       canvasCtx.drawImage(video.current, 0, 0, canvas.current.width, canvas.current.height);
 
-      //   // Lấy hình ảnh dưới dạng URL
-        const imageSrc = canvas.current.toDataURL("image/png");
-        if(imageSrc){
-         setPayload(prev => ({
+      canvas.current.toBlob((blob) => {
+         // Tạo đối tượng File từ Blob
+         const imageFile = new File([blob], 'tiktok_image.png', { type: 'image/png' });
+
+         // Gán đối tượng File vào state hoặc payload
+         setPayload((prev) => ({
             ...prev,
-            image: imageSrc
-         }))
-        }
+            image: imageFile,
+         }));
+      }, 'image/png');
 
       //   // Đặt hình ảnh đã chụp
       //   setCapturedImage(imageSrc);

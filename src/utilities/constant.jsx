@@ -1,6 +1,6 @@
 export const path = {
     HOME: "/*",
-    HOME_TITLE: "*/",
+    HOME_TITLE: "foryou",
     AUTH: "auth/*",
     FORGET: "reset-password/",
 

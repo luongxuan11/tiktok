@@ -2,12 +2,9 @@ import React, {useEffect, useState} from 'react'
 import Header from './Header'
 import SideBar from './SideBar'
 import { Outlet, useLocation} from "react-router-dom";
+import HomeTitle from './HomeTitle';
 const Home = () => {
   const location = useLocation();
-  const [showHeader, setShowHeader] = useState(true);
-  useEffect(() => {
-    location.pathname.includes("/auth") && setShowHeader(false);
-  }, [location]);
 
 
 
@@ -15,10 +12,10 @@ const Home = () => {
   // jsx
   return (
     <div className='home'>
-        {showHeader && <Header />}
-        {showHeader && <SideBar />}
-        <div className="wrapper">
-          <Outlet/>
+        <Header />
+        <div className="wrapper row">
+        <SideBar />
+        {(location.pathname === "/" ) ? <HomeTitle /> : <Outlet/>}
         </div>
     </div>
   )

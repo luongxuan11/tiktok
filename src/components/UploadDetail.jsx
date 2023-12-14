@@ -77,10 +77,6 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
    const handleSelectOption = (value) => {
       setShowOption(false);
       setOptionValue(value);
-      setPayload(prev => ({
-         ...prev,
-         privacy: optionValue,
-      }))
    };
 
    // onclick outSide
@@ -135,6 +131,16 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
          comment_status: selectedItems.includes("Bình luận") ? 1 : 0
       }))
    }, [selectedItems])
+
+   useEffect(() => {
+      if (optionValue) {
+         setPayload((prev) => ({
+            ...prev,
+            privacy: optionValue,
+         }));
+      }
+   }, [optionValue]);
+
 
    // jsx
    return (

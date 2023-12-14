@@ -11,18 +11,17 @@ import { path } from "../../utilities/constant";
 
 
 const CreatorCenter = () => {
-   const { logo, user } = logos;
+   const { logo1, user } = logos;
    const { currentData } = useSelector((state) => state.user);
    const {isLogin} = useSelector((state) => state.auth);
    const location = useLocation();
    if(!isLogin) return <Navigate to='/' replace={true}/>;
    let checkUploadBtn = location.pathname === "/creator-center/upload" ? "creator-sidebar__btn--active" : "";
-
    return (
       <section className="creator">
          <nav className="creator-nav row">
             <div className="creator-nav__box row">
-               <img src={logo} alt="tiktok" />
+               <img src={logo1} alt="tiktok" />
                <div className="creator-nav__box--custom">
                   <span>Creator Center</span>
                   <small></small>
@@ -41,7 +40,7 @@ const CreatorCenter = () => {
                <SidebarCreator/>
             </nav>
             <div className="creator-body__wrapper row">
-            {(location.pathname === "/creator-center/" || location.pathname === "/creator-center") ? <CreatorCenterHome/> : <Outlet/>}
+            {(location.pathname === "/creator-center/" || location.pathname === "/creator-center") ? <CreatorCenterHome currentData={currentData}/> : <Outlet/>}
             </div>
          </section>
       </section>

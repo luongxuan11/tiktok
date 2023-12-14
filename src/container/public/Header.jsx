@@ -1,5 +1,4 @@
-import React, { useState, useEffect, memo} from "react";
-import logo from "../../assets/img/logo.svg";
+import React, { useState, useEffect, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { path } from "../../utilities/constant";
 import { Search, Button, AuthFormLogin, PopupOtp } from "../../components";
@@ -7,25 +6,14 @@ import icons from "../../utilities/icons";
 import { Toggle } from "../../components/animation";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../redux/store/actions";
-import { apiLogout} from "../../service/apis";
+import { apiLogout } from "../../service/apis";
 import Swal from "sweetalert2";
 import images from "../../assets/imgExport";
 
-const {
-   IoIosAdd,
-   BsThreeDotsVertical,
-   FcIdea,
-   RiQuestionAnswerLine,
-   BsKeyboard,
-   IoCloudyNightOutline,
-   PiPaperPlaneTiltBold,
-   BiMessageAltMinus,
-   BsBookmarkDash,
-   BiLogIn,
-} = icons;
-const { user } = images;
-
 const Header = () => {
+   const { user, logo } = images;
+   const { IoIosAdd, BsThreeDotsVertical, FcIdea, RiQuestionAnswerLine, BsKeyboard, IoCloudyNightOutline, PiPaperPlaneTiltBold, BiMessageAltMinus, BsBookmarkDash, BiLogIn } =
+      icons;
    const [hidden, setHidden] = useState(false);
    const [timeoutId, setTimeoutId] = useState(null);
    const [showForm, setShowForm] = useState(false);
@@ -35,7 +23,7 @@ const Header = () => {
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
    const dispatch = useDispatch();
-   const navigate = useNavigate()
+   const navigate = useNavigate();
 
    const handleActive = () => {
       setHidden(true);
@@ -43,7 +31,7 @@ const Header = () => {
    };
    const handleLeave = () => {
       const id = setTimeout(() => {
-         setHidden(false);   
+         setHidden(false);
       }, 700);
       setTimeoutId(id);
    };
@@ -58,14 +46,14 @@ const Header = () => {
    };
    // handle show when click upload
    const handleCheckIntoCreator = () => {
-      if(!isLogin){
-         setShowForm(true)
-      }else if(isLogin && !currentData.verifyOTP){
-         setShowPopup(true)
-      }else{
-         navigate(`${path.UPLOAD}`)
+      if (!isLogin) {
+         setShowForm(true);
+      } else if (isLogin && !currentData.verifyOTP) {
+         setShowPopup(true);
+      } else {
+         navigate(`${path.UPLOAD}`);
       }
-   }
+   };
 
    //  logout
    const handleLogout = async () => {
@@ -81,14 +69,18 @@ const Header = () => {
    return (
       <div className="header">
          <div className="header__box row">
-            <Link to={path.HOME}>
-               <img className="header__logo" src={logo} alt="tiktok" />
+            <Link className="header__box__logo" to={path.HOME}>
+               <img src={logo} alt="tiktok" />
             </Link>
             <Search />
             <div className="btn-box row">
                <Button
                   btnClass="header__btn--upload row"
-                  text={<><IoIosAdd /> Tải lên</>}
+                  text={
+                     <>
+                        <IoIosAdd /> Tải lên
+                     </>
+                  }
                   onClick={handleCheckIntoCreator}
                />
                {isLogin && (
@@ -106,11 +98,7 @@ const Header = () => {
 
                {!isLogin && <Button onClick={handleShowForm} btnClass={"header__btn--login"} text={"Đăng nhập"} />}
 
-               <span
-                  className={`header__dot ${isLogin ? "header__dot--avatar" : ""}`}
-                  onMouseEnter={handleActive}
-                  onMouseLeave={handleLeave}
-               >
+               <span className={`header__dot ${isLogin ? "header__dot--avatar" : ""}`} onMouseEnter={handleActive} onMouseLeave={handleLeave}>
                   {!isLogin ? (
                      <BsThreeDotsVertical />
                   ) : (
@@ -120,11 +108,7 @@ const Header = () => {
                      </>
                   )}
                </span>
-               <ul
-                  className={`btn-box__model ${!hidden ? "hidden" : ""}`}
-                  onMouseEnter={handleActive}
-                  onMouseLeave={handleLeave}
-               >
+               <ul className={`btn-box__model ${!hidden ? "hidden" : ""}`} onMouseEnter={handleActive} onMouseLeave={handleLeave}>
                   {isLogin && (
                      <li className="btn-box__model--item row">
                         <BsBookmarkDash /> Xem tài khoản

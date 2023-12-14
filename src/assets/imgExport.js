@@ -8,10 +8,12 @@ import fe8 from "./img/fe8.png"
 import fe9 from "./img/fe9.png"
 import fe from "./img/fe.png"
 import user from "./img/user.png"
-import logo from "./img/logo.svg"
+import logo from "./img/TikTok.svg"
+import logo1 from "./img/logo.svg"
 import new_comment from "./img/new-comment.svg"
 import control_image from "./img/control-image.jpg"
 import live from "./img/live.png"
+import btn_image from "./img/btn-image.png"
 
 const images = {
     fe2,
@@ -27,6 +29,8 @@ const images = {
     logo,
     new_comment,
     control_image,
-    live
+    live,
+    logo1,
+    btn_image
 }
 export default images

@@ -1,5 +1,5 @@
 import icons from "./icons";
-const { RiHome4Line, CiCircleList, BiMessageDetail, FaRegFontAwesome } = icons;
+const { RiHome4Line, CiCircleList, BiMessageDetail, FaRegFontAwesome, GoPeople, FaRegCompass, RiLiveLine  } = icons;
 export const menuManageCreator = [
    {
       id: 1,
@@ -27,8 +27,60 @@ export const menuManageCreator = [
    },
 ];
 
-export const menuEdit = [
+export const menuHome = [
    {
-      
+      id: 1,
+      text: "Dành cho bạn",
+      path: "/",
+      icon: <RiHome4Line className="sidebar--icon" />,
    },
+   {
+      id: 2,
+      text: "Đang follow",
+      path: "/following",
+      icon: <GoPeople  className="sidebar--icon" />,
+   },
+   {
+      id: 3,
+      text: "Khám phá",
+      path: "/explore",
+      icon: <FaRegCompass className="sidebar--icon" />,
+   },
+   {
+      id: 4,
+      text: "Live",
+      path: "/live",
+      icon: <RiLiveLine  className="sidebar--icon" />,
+   },
+];
+
+export const menuHomeDetail = [
+   {
+      id: 1,
+      item: "Giới thiệuBảng tinLiên hệ"
+   },
+   {
+      id: 2,
+      item: "Sự nghiệp"
+   },
+   {
+      id: 3,
+      item: "TikTok for GoodQuảng cáo"
+   },
+   {
+      id: 4,
+      item: "Cổng thông tin Tác giả"
+   },
+   {
+      id: 5,
+      item: "Nội dung chỉ mang tính chất học tập"
+   },
+   {
+      id: 6,
+      item: "Quyền riêng tư"
+   },
+   {
+      id: 7,
+      item: "Cổng thông tin Tác giả"
+   }
 ];

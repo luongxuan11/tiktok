@@ -4,7 +4,7 @@ import icons from "../utilities/icons";
 import formatTime from "../utilities/formatTime";
 import Popup from "./Popup";
 
-const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost}) => {
+const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
    const { control_image, live, user } = images;
    const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute, CiCircleCheck } = icons;
 
@@ -50,6 +50,7 @@ const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost}) => {
 
    const handleTimeUpdate = () => {
       setCurrentTime(videoRef.current?.currentTime);
+      setTime(duration)
    };
    const handleLoadedMetadata = () => {
       setDuration(videoRef.current?.duration);

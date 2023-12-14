@@ -1,12 +1,12 @@
 import { IoIosAdd, IoIosCut, IoMdArrowDropdown} from "react-icons/io";
 import { BsThreeDotsVertical, BsSearch, BsEyeSlash, BsArrowReturnLeft } from "react-icons/bs";
 import { FcIdea } from "react-icons/fc";
-import { RiQuestionAnswerLine, RiHome4Line} from "react-icons/ri";
+import { RiQuestionAnswerLine, RiHome4Line, RiLiveLine } from "react-icons/ri";
 import { BsKeyboard, BsFillPlayFill, BsBookmarkDash } from "react-icons/bs";
 import { IoCloudyNightOutline, IoMusicalNotes, IoVolumeMute} from "react-icons/io5";
 import { SlWrench } from "react-icons/sl";
 import { BiBadgeCheck,BiBarChartSquare , BiCheckDouble, BiSolidLockAlt, BiMessageAltMinus, BiLogIn, BiMessageDetail  } from "react-icons/bi";
-import { FaNodeJs, FaFigma, FaPlay  } from "react-icons/fa";
+import { FaNodeJs, FaFigma, FaPlay, FaRegCompass, FaRegUser  } from "react-icons/fa";
 import { DiReact } from "react-icons/di";
 import { SiPostgresql, SiAudiomack } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
@@ -17,8 +17,9 @@ import {AiOutlineCloseCircle} from "react-icons/ai";
 import {MdKeyboardArrowLeft, MdCloudUpload, MdFavorite, MdOutlinePlayCircle } from "react-icons/md";
 import { FaRegFontAwesome, FaCommentDots, FaPause, FaCheck} from "react-icons/fa6";
 import { PiShareFatFill, PiImageDuotone  } from "react-icons/pi";
-import { GoUnmute } from "react-icons/go";
+import { GoUnmute, GoPeople } from "react-icons/go";
 import { TfiSplitH } from "react-icons/tfi";
+import { TbWindow } from "react-icons/tb";
 
 
 const icons = {
@@ -72,7 +73,12 @@ const icons = {
     SiAudiomack,
     PiImageDuotone,
     FaPlay,
-    BiBarChartSquare 
+    BiBarChartSquare,
+    GoPeople,
+    FaRegCompass,
+    FaRegUser,
+    RiLiveLine,
+    TbWindow
 };
 
 export default icons;
