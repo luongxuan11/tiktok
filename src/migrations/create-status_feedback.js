@@ -2,16 +2,16 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Feedbacks", {
+    await queryInterface.createTable("Status_feedbacks", {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      comment_id: {
+      overview_id: {
         type: Sequelize.STRING,
       },
-      feedback: {
+      comment: {
         type: Sequelize.TEXT,
       },
       userId: {
@@ -30,6 +30,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Feedbacks");
+    await queryInterface.dropTable("Status_feedbacks");
   },
 };

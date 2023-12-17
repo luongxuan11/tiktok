@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      cmt_id: {
+      overview_id: {
         type: Sequelize.STRING,
       },
       comment: {

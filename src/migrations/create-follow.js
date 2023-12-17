@@ -9,29 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      follower_id: {
+      user_id: {
         type: Sequelize.STRING,
       },
-      notification: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      status_follow: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      expired: {
+      user_follow: {
         type: Sequelize.STRING,
       },
-      require_follower: {
-        type: Sequelize.STRING,
-      },
-      following_id: {
-        type: Sequelize.STRING,
-      },
-      require_following: {
-        type: Sequelize.STRING,
-      },
+      
       createdAt: {
         allowNull: false,
         type: "TIMESTAMP",

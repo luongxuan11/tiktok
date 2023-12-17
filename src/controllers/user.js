@@ -23,9 +23,8 @@ export const updateImageUser = async (req, res) => {
                err: 1,
                mess: "Bạn cần phải nhập hình ảnh!"
           })
-          console.log(fileData)
-          // const response = await services.updateImageUser(id, fileData);
-          // return res.status(200).json(response);
+          const response = await services.updateImageUser(id, fileData);
+          return res.status(200).json(response);
      } catch (error) {
           return internalError(res);
      }
