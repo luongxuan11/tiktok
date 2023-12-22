@@ -29,6 +29,16 @@ export const getPostLimit = async (req, res) => {
    }
 };
 
+export const getPostLimitDetail = async (req, res) => {
+   try {
+      const { page, text, id,  } = req.query;
+      const response = await services.getPostLimitDetail(page, text, id);
+      return res.status(200).json(response);
+   } catch (error) {
+      internalError(res, error.message);
+   }
+};
+
 export const getPostOfUser = async (req, res) => {
    try {
       const { id } = req.user;

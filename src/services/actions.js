@@ -17,12 +17,19 @@ export const search = (text) =>
          });
 
          const posts = await db.Overview.findAll({
-            attributes: ["title"],
+            attributes: ["id", "title"],
             where: {
                title: {
                   [Op.like]: `${text}%`,
                },
             },
+            include: [
+               {
+                  model: db.User,
+                  as: "user",
+                  attributes: ['tiktok_id'],
+               },
+            ]
          });
 
          resolve({
@@ -38,36 +45,56 @@ export const search = (text) =>
 export const follow = (id, follower) =>
    new Promise(async (resolve, reject) => {
       try {
-        const user = await db.Follow.findOne({
-          where: {
-             user_id: id,
-             user_follow: follower,
-          },
-       });
-       if (user) {
-        await db.Follow.destroy({
-           where: {
-              user_id: id,
-              user_follow: follower,
-           },
-        });
-        resolve({
-           err: 0,
-           mess: "follower record deleted successfully!",
-        });
-     } else {
-        const res = await db.Follow.create({
-           id: generateId(),
-           user_id: id,
-           user_follow: follower,
-        });
-        resolve({
-           err: res ? 0 : 1,
-           mess: res ? "New follow record created successfully!" : "có lỗi rồi",
-        });
-     }
+         const user = await db.Follow.findOne({
+            where: {
+               user_id: id,
+               user_follow: follower,
+            },
+         });
+         if (user) {
+            await db.Follow.destroy({
+               where: {
+                  user_id: id,
+                  user_follow: follower,
+               },
+            });
+            resolve({
+               err: 0,
+               mess: "follower record deleted successfully!",
+               state: "Follow"
+            });
+         } else {
+            const res = await db.Follow.create({
+               id: generateId(),
+               user_id: id,
+               user_follow: follower,
+            });
+            resolve({
+               err: res ? 0 : 1,
+               mess: res ? "New follow record created successfully!" : "có lỗi rồi",
+               state: "Đang follow"
+            });
+         }
+      } catch (error) {
+         reject(error);
+      }
+   });
 
 
+   export const getFollower = (query) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const res = await db.User.findAll({
+            attributes: ["id", "userName", "tiktok_id", "avatar"],
+            where: {
+               id: query.id_follow
+            }
+         })
+         resolve({
+            err: res ? 0 : 1,
+            mess: res ? "get follower successfully!" : "Opss! error",
+            data: res
+         })
       } catch (error) {
          reject(error);
       }

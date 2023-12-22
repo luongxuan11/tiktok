@@ -20,6 +20,13 @@ export const getUserCurrent = (userId) =>
                   as: "roleData",
                   attributes: ["id", "code", "value"],
                },
+               {
+                  model: db.Follow,
+                  as: "follow",
+                  attributes: {
+                     exclude: ['createdAt', 'updatedAt']
+                  }
+               },
             ],
          });
          // console.log("checking data...", res)

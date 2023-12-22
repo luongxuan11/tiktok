@@ -121,9 +121,17 @@ export const uploadFavorite = (userId, overviewId) =>
                   overview_id: overviewId,
                },
             });
+            const quantity = await db.Status.findAll({
+               nest: true,
+               attributes: ["id"],
+               where: {
+                  overview_id: overviewId,
+               },
+            });
             resolve({
                err: 0,
                mess: "Status record deleted successfully!",
+               length: quantity.length
             });
          } else {
             const res = await db.Status.create({
@@ -131,11 +139,75 @@ export const uploadFavorite = (userId, overviewId) =>
                user_id: userId,
                overview_id: overviewId,
             });
+            const quantity = await db.Status.findAll({
+               nest: true,
+               attributes: ["id"],
+               where: {
+                  overview_id: overviewId,
+               },
+            });
             resolve({
                err: res ? 0 : 1,
                mess: res ? "New status record created successfully!" : "có lỗi rồi",
+               length: quantity.length
             });
          }
+
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+
+   export const getPostLimitDetail = (page, text, id) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const limit = +process.env.LIMIT_DETAIL;
+         let offset = !page || +page <= 1 ? 0 : +page - 1;
+         
+
+         const res = await db.Overview.findAndCountAll({
+            nest: true,
+            offset: offset * limit,
+            limit: limit,
+            order: [["updatedAt", "DESC"]],
+            attributes: { exclude: ["createdAt", "video_file_id", "thumb_file_id"] },
+            include: [
+               {
+                  model: db.Comment,
+                  as: "comments",
+                  attributes: { exclude: ["createdAt"] },
+                  include: [
+                     {
+                        model: db.Feedback,
+                        as: "link_feedback",
+                        attributes: { exclude: ["createdAt"] },
+                     },
+                  ],
+               },
+               {
+                  model: db.Status,
+                  as: "status",
+                  attributes: { exclude: ["createdAt"] },
+               },
+               {
+                  model: db.Share,
+                  as: "share",
+                  attributes: { exclude: ["createdAt"] },
+               },
+               //db user
+               {
+                  model: db.User,
+                  as: "user",
+                  attributes: ["userName", "tiktok_id", "avatar"],
+               },
+            ],
+         });
+         resolve({
+            err: res ? 0 : 1,
+            mess: res ? "OK" : "got posts fail...",
+            res: res,
+         });
       } catch (error) {
          reject(error);
       }

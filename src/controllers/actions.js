@@ -17,6 +17,7 @@ export const follower = async (req, res) => {
    try {
       const { follower } = req.query;
       const { id } = req.user;
+
       if (!id || !follower)
          return res.status(404).json({
             err: 1,
@@ -25,6 +26,22 @@ export const follower = async (req, res) => {
       const response = await services.follow(id, follower);
       return res.status(200).json(response);
    } catch (error) {
+      return internalError(res, error.mess);
+   }
+};
+
+export const getFollower = async (req, res) => {
+   try {
+      const query = req.query;
+      if (!query || !query.id_follow)
+         return res.status(404).json({
+            err: 1,
+            mess: "missing input",
+         });
+      const response = await services.getFollower(query);
+      return res.status(200).json(response);
+   } catch (error) {
+      console.log(error);
       return internalError(res, error.mess);
    }
 };

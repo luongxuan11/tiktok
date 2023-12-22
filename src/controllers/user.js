@@ -102,7 +102,6 @@ export const verifyOtp = async (req, res) => {
                     mess: "require otp",
                });
           }
-          // console.log(otp)
 
           const response = await services.verifyOtp(id, otp);
           return res.status(200).json(response);
