@@ -8,8 +8,6 @@ const FollowBtn = ({ item, setShowForm, setShowPopup }) => {
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
    const dispatch = useDispatch();
-   // state
-   const [followStates, setFollowStates] = useState({});
 
    // handle
    const handleFollow = async (user_follow) => {
@@ -24,18 +22,15 @@ const FollowBtn = ({ item, setShowForm, setShowPopup }) => {
          if (response.err === 0) {
             isLogin && dispatch(actions.getUserCurrent());
          }
-         setFollowStates((prevFollowStates) => ({
-            ...prevFollowStates,
-            [user_follow]: response.state === "Đang follow",
-         }));
       }
    };
+
    return (
       <>
          <Button
             onClick={() => handleFollow(item.user_id)}
-            text={followStates[item.user_id] ? "Đang follow" : "Follow"}
-            btnClass={`${followStates[item.user_id] ? "info-user__btn--follow" : "info-user__btn"}`}
+            text={`${isLogin && currentData.follow?.some((el) => el.user_follow?.includes(item.user_id)) ? "Đang follow" : "Follow"}`}
+            btnClass={`${isLogin && currentData.follow?.some((el) => el.user_follow?.includes(item.user_id)) ? "info-user__btn--follow" : "info-user__btn"}`}
          />
       </>
    );

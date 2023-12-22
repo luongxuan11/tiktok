@@ -4,7 +4,7 @@ import icons from "../../utilities/icons";
 import { useDispatch, useSelector } from "react-redux";
 import images from "../../assets/imgExport";
 import { Waypoint } from "react-waypoint";
-import { AuthFormLogin, PopupOtp, FavoriteBtn, CommentBtn, ShareBtn, FollowBtn} from "../../components";
+import { AuthFormLogin, PopupOtp, FavoriteBtn, CommentBtn, ShareBtn, FollowBtn } from "../../components";
 import { apiUpdateFavorite, apiFollow } from "../../service/apis";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
@@ -128,7 +128,7 @@ const HomeTitle = () => {
                                     </span>
                                  </div>
                                  {currentData && currentData.id !== item.user_id && (
-                                    <FollowBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup}/>
+                                    <FollowBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup} />
                                  )}
                               </div>
                               <div className="info-video row">
@@ -142,9 +142,9 @@ const HomeTitle = () => {
                                     </div>
                                  </div>
                                  <div className="info-video__status row">
-                                    <FavoriteBtn item={item} setShowForm={setShowForm}/>
-                                    <CommentBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup}/>
-                                    <ShareBtn item={item}/>
+                                    <FavoriteBtn item={item} setShowForm={setShowForm} />
+                                    <CommentBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup} />
+                                    <ShareBtn item={item} />
                                  </div>
                               </div>
                               {appendSpan === index ? <Waypoint onEnter={handleCallApi} bottomOffset="50px" /> : ""}
