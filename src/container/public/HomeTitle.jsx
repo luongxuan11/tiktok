@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect, memo, useCallback } from "react";
 import { Button } from "../../components";
 import icons from "../../utilities/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getPostsLimit } from "../../redux/store/actions";
 import images from "../../assets/imgExport";
 import { Waypoint } from "react-waypoint";
-import { AuthFormLogin } from "../../components";
-import { apiUpdateFavorite } from "../../service/apis/apiPost";
+import { AuthFormLogin, PopupOtp, FavoriteBtn, CommentBtn, ShareBtn, FollowBtn} from "../../components";
+import { apiUpdateFavorite, apiFollow } from "../../service/apis";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router-dom";
+import * as actions from "../../redux/store/actions";
 
 const HomeTitle = () => {
    const { user } = images;
-   const { IoMusicalNotes, FaPlay, FaPause, GoUnmute, IoVolumeMute, MdFavorite, FaCommentDots, PiShareFatFill } = icons;
+   const { IoMusicalNotes, FaPlay, FaPause, GoUnmute, IoVolumeMute, PiShareFatFill } = icons;
    const dispatch = useDispatch();
    const location = useLocation();
 
@@ -31,7 +31,8 @@ const HomeTitle = () => {
    const [appendSpan, setAppendSpan] = useState("");
    const homeTitleRef = useRef(null);
    const [showForm, setShowForm] = useState(false);
-   const [stateFavorite, setStateFavorite] = useState();
+   const [showPopup, setShowPopup] = useState(false);
+   const [showOtp, setShowOtp] = useState(false);
 
    // toggle playing
    const togglePlay = useCallback((e, id) => {
@@ -68,7 +69,7 @@ const HomeTitle = () => {
 
    // spread post
    useEffect(() => {
-      if (post.length !== 0 && location.pathname === '/') {
+      if (post.length !== 0 && location.pathname === "/") {
          setPosts((prev) => [...prev, ...post]);
       }
    }, [post, location.pathname]);
@@ -79,55 +80,20 @@ const HomeTitle = () => {
          setAppendSpan(lastElement);
       }
    }, [posts]);
+   //  end spread post
 
    // api limit
    useEffect(() => {
-      dispatch(getPostsLimit({ page: lazyLoad }));
+      dispatch(actions.getPostsLimit({ page: lazyLoad }));
    }, [dispatch, lazyLoad]);
 
    const handleCallApi = () => {
-      let number = Math.floor(count / 2 - 1); // redux number post
+      let number = Math.floor(count / 5 - 1); // redux number post
       if (lazyLoad <= number) {
          setLazyLoad(lazyLoad + 1);
       }
    };
-
-   // favorite
-   const handleInteraction = async (e, id, length) => {
-      e.stopPropagation();
-      if (!isLogin) return setShowForm(true);
-      let toggleClass = e.currentTarget.classList.toggle("icon--active");
-      if (toggleClass) {
-         const response = await apiUpdateFavorite({
-            userId: currentData?.id,
-            overviewId: id,
-         });
-         if (response.err === 0) {
-            setStateFavorite({
-               id: id,
-               number: length === 0 ? 1 : length,
-            });
-         } else return Swal.fire("Thất bại!", response.mess, "error");
-      } else {
-         const response = await apiUpdateFavorite({
-            userId: currentData?.id,
-            overviewId: id,
-         });
-         if (response.err === 0) {
-            setStateFavorite({
-               id: id,
-               number: length === 0 ? 0 : length - 1,
-            });
-         } else return Swal.fire("Thất bại!", response.mess, "error");
-      }
-   };
-
-   const handleInteractionShareAndComment = () => {
-      if (!isLogin) {
-         setShowForm(true);
-      } else {
-      }
-   };
+   // end call api
 
    return (
       <>
@@ -137,9 +103,12 @@ const HomeTitle = () => {
                {posts &&
                   posts.length > 0 &&
                   posts.map((item, index) => {
+                     if (item.privacy === "Chỉ mình tôi") {
+                        return null;
+                     }
                      return (
                         <div key={index} className="post-item row">
-                           <div className="post-item__avatar avata">
+                           <div className="post-item__avatar avatar">
                               <img src={item.user?.avatar || user} alt="tiktok" />
                            </div>
 
@@ -158,8 +127,9 @@ const HomeTitle = () => {
                                        <IoMusicalNotes /> original sound - {item.user.userName}
                                     </span>
                                  </div>
-
-                                 <Button text={"Follow"} btnClass={"info-user__btn"} />
+                                 {currentData && currentData.id !== item.user_id && (
+                                    <FollowBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup}/>
+                                 )}
                               </div>
                               <div className="info-video row">
                                  <div className="info-video__original">
@@ -172,27 +142,9 @@ const HomeTitle = () => {
                                     </div>
                                  </div>
                                  <div className="info-video__status row">
-                                    <div className="icon-box row">
-                                       <small
-                                          onClick={(e) => handleInteraction(e, item.id, item.status.length)}
-                                          className={`icon-box__small row ${item.status.filter((el) => el.user_id === currentData?.id).length > 0 ? "icon--active" : ""}`}
-                                       >
-                                          <MdFavorite className="icon" />
-                                       </small>
-                                       <span>{stateFavorite && stateFavorite.id === item.id ? stateFavorite.number : item.status.length}</span>
-                                    </div>
-                                    <div className="icon-box row">
-                                       <small className="icon-box__small row">
-                                          <FaCommentDots className="icon" />
-                                       </small>
-                                       <span>{item.comments.length}</span>
-                                    </div>
-                                    <div className="icon-box row">
-                                       <small className="icon-box__small row">
-                                          <PiShareFatFill className="icon" />
-                                       </small>
-                                       <span>{item.share.length}</span>
-                                    </div>
+                                    <FavoriteBtn item={item} setShowForm={setShowForm}/>
+                                    <CommentBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup}/>
+                                    <ShareBtn item={item}/>
                                  </div>
                               </div>
                               {appendSpan === index ? <Waypoint onEnter={handleCallApi} bottomOffset="50px" /> : ""}
@@ -202,6 +154,18 @@ const HomeTitle = () => {
                   })}
             </div>
          </div>
+         {showPopup && (
+            <PopupOtp
+               title="Kích hoạt tài khoản"
+               content="hệ thống yêu cầu bạn phải kích hoạt tài khoản để sử dụng các tính năng."
+               access="Xác nhận"
+               cancel="Hủy bỏ"
+               setShowPopup={setShowPopup}
+               showOtp={showOtp}
+               setShowOtp={setShowOtp}
+               currentData={currentData.email}
+            />
+         )}
       </>
    );
 };

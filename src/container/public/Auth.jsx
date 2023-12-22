@@ -1,5 +1,5 @@
-import React, { useState} from "react";
-import { Navigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import icons from "../../utilities/icons";
 import { Button, AuthForm } from "../../components";
@@ -8,17 +8,15 @@ import ui from "../../assets/img/UI.png";
 import titok from "../../assets/img/tiktok.png";
 import "./auth.scss";
 
-const { IoIosAdd } = icons;
-
 const Auth = () => {
+   const { IoIosAdd, BsList } = icons;
    const [showForm, setShowForm] = useState(false);
-   const {isLogin} = useSelector((state) => state.auth)
-   if(isLogin) return <Navigate to="/" replace={true}/>
-   
+   const { isLogin } = useSelector((state) => state.auth);
+   if (isLogin) return <Navigate to="/" replace={true} />;
+
    const handleShowForm = () => {
       setShowForm(true);
    };
-
 
    return (
       <div className="auth-wrapper">

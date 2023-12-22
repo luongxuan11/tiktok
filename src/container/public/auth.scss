@@ -397,6 +397,12 @@
             }
          }
       }
+
+      .form{
+         .form-control{
+            width: 600px;
+         }
+      }
    }
 }
 
@@ -420,6 +426,20 @@
          flex-direction: column;
          span {
             font-size: 7rem;
+         }
+      }
+      .text-heading__btn {
+         flex-direction: column-reverse;
+         row-gap: 25px;
+         button {
+            width: 70%;
+            &:last-child {
+               &::before {
+                  width: 98.7%;
+                  top: 0.2px;
+                  left: 2.9px;
+               }
+            }
          }
       }
       .text-develop {
@@ -495,6 +515,106 @@
             span {
                font-size: 1.2rem !important;
             }
+         }
+      }
+   }
+}
+
+@media screen and (max-width: 450px) {
+   .auth-wrapper {
+      .text-heading__btn {
+         button {
+            &:last-child {
+               &::before {
+                  top: 0.8px;
+                  left: 2.2px;
+               }
+            }
+         }
+      }
+
+      .auth-header {
+         .auth-header__btn {
+            .login {
+               display: none;
+            }
+         }
+         .auth-header__list {
+            cursor: pointer;
+            color: #fff;
+            width: 32px;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            border: 1px solid #ffffff37;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            .icon {
+               font-size: 1.6rem;
+            }
+         }
+      }
+      .text-heading__box {
+         span {
+            font-size: 5.5rem;
+         }
+      }
+      .text-heading__content {
+         font-size: 1.3rem;
+      }
+      .text-develop {
+         .text-develop__title {
+            h2 {
+               font-size: 4rem;
+            }
+            p {
+               font-size: 1.2rem;
+            }
+         }
+         .text-develop__content{
+            .box-typing{
+               width: 100% !important;
+               .img{
+                  right: 0 !important;
+               }
+            }
+         }
+         .tiktok{
+            .tiktok__heading{
+               font-size: 4rem !important;
+            }
+            .box{
+               .box-env, .box-app{
+                  width: 100% !important;
+                  .title.card__skeleton.title4{
+                     height: 75px !important;
+                  }
+                  .title.card__skeleton.title2{
+                     margin-bottom: unset !important;
+                  }
+               }
+            }
+         }
+      }
+      .text-preview {
+         .text-preview__hero {
+            .title {
+               h2 {
+                  font-size: 4rem !important;
+               }
+               p {
+                  font-size: 1.2rem !important;
+               }
+            }
+         }
+      }
+      .form{
+         background-color: #000;
+         min-width: 350px;
+         .form-control{
+            width: 100%;
+            padding: 10px 15px;
          }
       }
    }

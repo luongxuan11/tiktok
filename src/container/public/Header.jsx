@@ -69,7 +69,7 @@ const Header = () => {
    return (
       <div className="header">
          <div className="header__box row">
-            <Link className="header__box__logo" to={path.HOME}>
+            <Link className="header__box__logo" to={'/'}>
                <img src={logo} alt="tiktok" />
             </Link>
             <Search />

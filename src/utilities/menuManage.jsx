@@ -1,5 +1,5 @@
 import icons from "./icons";
-const { RiHome4Line, CiCircleList, BiMessageDetail, FaRegFontAwesome, GoPeople, FaRegCompass, RiLiveLine  } = icons;
+const { RiHome4Line, CiCircleList, BiMessageDetail, FaRegFontAwesome, GoPeople, FaRegCompass, RiLiveLine, AiFillFire } = icons;
 export const menuManageCreator = [
    {
       id: 1,
@@ -49,7 +49,7 @@ export const menuHome = [
    {
       id: 4,
       text: "Live",
-      path: "/live",
+      path: "https://www.tiktok.com/live",
       icon: <RiLiveLine  className="sidebar--icon" />,
    },
 ];
@@ -84,3 +84,41 @@ export const menuHomeDetail = [
       item: "Cổng thông tin Tác giả"
    }
 ];
+
+export const favorite = [
+   {
+      id: 1,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "Gái xinh"
+   },
+   {
+      id: 2,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "Mẫu capcut giật giật"
+   },
+   {
+      id: 3,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "Phim kẻ ăn hồn"
+   },
+   {
+      id: 4,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "Kiến thức lập trình"
+   },
+   {
+      id: 5,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "Html có phải là ngôn ngữ lập trình không"
+   },
+   {
+      id: 6,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "1 mét vuông 2 chục ông react"
+   },
+   {
+      id: 7,
+      icon: <AiFillFire className="icon--search__box"/>,
+      item: "Làm thế nào để cho tất cả người học react vào 1 thùng xốp"
+   }
+]
