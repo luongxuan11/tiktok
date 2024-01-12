@@ -1,7 +1,7 @@
 import React, { memo, useState, useEffect, useRef, useCallback } from "react";
 import Button from "./Button";
 import icons from "../utilities/icons";
-import formatTime from "../utilities/formatTime";
+import {formatTime} from "../utilities/formatTime";
 
 const EditVideo = ({ videoFile, setShowEditVideo }) => {
    const { BiBarChartSquare, PiImageDuotone, FaPlay, FaPause } = icons;

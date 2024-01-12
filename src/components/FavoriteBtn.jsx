@@ -35,11 +35,11 @@ const FavoriteBtn = ({ setShowForm, item}) => {
       <div className="icon-box row">
          <small
             onClick={(e) => handleInteraction(e, item.id)}
-            className={`icon-box__small row ${item.status.filter((el) => el.user_id === currentData?.id).length > 0 && isLogin ? "icon--active" : ""}`}
+            className={`icon-box__small row ${item?.status.filter((el) => el.user_id === currentData?.id).length > 0 && isLogin ? "icon--active" : ""}`}
          >
             <MdFavorite className="icon" />
          </small>
-         <span>{stateFavorite && stateFavorite.id === item.id ? stateFavorite.number : item.status.length}</span>
+         <span>{stateFavorite && stateFavorite.id === item.id ? stateFavorite.number : item?.status.length}</span>
       </div>
    );
 };

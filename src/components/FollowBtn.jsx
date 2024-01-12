@@ -4,7 +4,7 @@ import * as actions from "../redux/store/actions";
 import Button from "./Button";
 import { apiFollow } from "../service/apis";
 
-const FollowBtn = ({ item, setShowForm, setShowPopup }) => {
+const FollowBtn = ({ item, setShowForm, setShowPopup, btnClass }) => {
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
    const dispatch = useDispatch();
@@ -29,8 +29,8 @@ const FollowBtn = ({ item, setShowForm, setShowPopup }) => {
       <>
          <Button
             onClick={() => handleFollow(item.user_id)}
-            text={`${isLogin && currentData.follow?.some((el) => el.user_follow?.includes(item.user_id)) ? "Đang follow" : "Follow"}`}
-            btnClass={`${isLogin && currentData.follow?.some((el) => el.user_follow?.includes(item.user_id)) ? "info-user__btn--follow" : "info-user__btn"}`}
+            text={`${isLogin && currentData.follow?.some((el) => el.user_follow?.includes(item?.user_id)) ? "Đang follow" : "Follow"}`}
+            btnClass={`${isLogin && currentData.follow?.some((el) => el.user_follow?.includes(item?.user_id)) ? "info-user__btn--follow" : "info-user__btn"} ${btnClass}`}
          />
       </>
    );

@@ -7,14 +7,15 @@ import { Waypoint } from "react-waypoint";
 import { AuthFormLogin, PopupOtp, FavoriteBtn, CommentBtn, ShareBtn, FollowBtn } from "../../components";
 import { apiUpdateFavorite, apiFollow } from "../../service/apis";
 import Swal from "sweetalert2";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as actions from "../../redux/store/actions";
 
 const HomeTitle = () => {
    const { user } = images;
-   const { IoMusicalNotes, FaPlay, FaPause, GoUnmute, IoVolumeMute, PiShareFatFill } = icons;
+   const { IoMusicalNotes, FaPlay, FaPause, GoUnmute, IoVolumeMute } = icons;
    const dispatch = useDispatch();
    const location = useLocation();
+   const navigate = useNavigate();
 
    // redux
    const { post, count } = useSelector((state) => state.posts);
@@ -94,6 +95,23 @@ const HomeTitle = () => {
       }
    };
    // end call api
+   // navigate route dom
+   const handleNavigateRouter = (url) => {
+      if (!isLogin) {
+         setShowForm(true);
+      } else if (isLogin && !currentData?.verifyOTP) {
+         setShowPopup(true);
+      } else {
+         navigate(url);
+      }
+   };
+
+   // reset password
+   useEffect(() => {
+      if (location.pathname.includes("reset-password")) {
+         setShowForm(true);
+      }
+   }, [location.pathname]);
 
    return (
       <>
@@ -108,7 +126,7 @@ const HomeTitle = () => {
                      }
                      return (
                         <div key={index} className="post-item row">
-                           <div className="post-item__avatar avatar">
+                           <div onClick={() => handleNavigateRouter(item.user.tiktok_id)} className="post-item__avatar avatar">
                               <img src={item.user?.avatar || user} alt="tiktok" />
                            </div>
 
@@ -117,7 +135,7 @@ const HomeTitle = () => {
                               <div className="info-user row">
                                  <div className="info-user__box">
                                     <div className="name row">
-                                       <strong>{item.user?.userName}</strong>
+                                       <strong onClick={() => handleNavigateRouter(item.user.tiktok_id)}>{item.user?.userName}</strong>
                                        <span> - {item.user.tiktok_id.slice(0, 20)}...</span>
                                     </div>
                                     <div className="title-box">
@@ -127,14 +145,18 @@ const HomeTitle = () => {
                                        <IoMusicalNotes /> original sound - {item.user.userName}
                                     </span>
                                  </div>
-                                 {currentData && currentData.id !== item.user_id && (
-                                    <FollowBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup} />
-                                 )}
+                                 {currentData && currentData.id !== item.user_id && <FollowBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup} />}
                               </div>
                               <div className="info-video row">
                                  <div className="info-video__original">
-                                    <video ref={(el) => (videoRefs.current[item.id] = el)} src={item.video_file_name} preload="auto" loop="loop"></video>
-                                    <div className="original-video__control row">
+                                    <video
+                                       poster={item.thumb_file_name}
+                                       ref={(el) => (videoRefs.current[item.id] = el)}
+                                       src={item.video_file_name}
+                                       preload="auto"
+                                       loop="loop"
+                                    ></video>
+                                    <div onClick={() => handleNavigateRouter(`/${item.user.tiktok_id}/video/${item.id}`)} className="original-video__control row">
                                        <span onClick={(e) => togglePlay(e, item.id)}>{playingCheck === item.id ? <FaPause className="icon" /> : <FaPlay className="icon" />}</span>
                                        <span onClick={(e) => toggleMute(e, item.id)}>
                                           {isMute ? <IoVolumeMute className="icon icon--mute" /> : <GoUnmute className="icon icon--mute" />}

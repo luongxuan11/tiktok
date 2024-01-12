@@ -14,6 +14,11 @@ import new_comment from "./img/new-comment.svg"
 import control_image from "./img/control-image.jpg"
 import live from "./img/live.png"
 import btn_image from "./img/btn-image.png"
+import twitter from "./img/twitter.svg"
+import whatsApp from "./img/washup.svg"
+import facebook from "./img/facebook.svg"
+import send from "./img/send.svg"
+
 
 const images = {
     fe2,
@@ -31,6 +36,10 @@ const images = {
     control_image,
     live,
     logo1,
-    btn_image
+    btn_image,
+    twitter,
+    whatsApp,
+    facebook,
+    send
 }
 export default images

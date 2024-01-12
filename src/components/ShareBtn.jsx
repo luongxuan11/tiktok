@@ -8,7 +8,7 @@ const ShareBtn = ({item}) => {
          <small className="icon-box__small row">
             <PiShareFatFill className="icon" />
          </small>
-         <span>{item.share.length}</span>
+         <span>{item?.share.length}</span>
       </div>
    );
 };

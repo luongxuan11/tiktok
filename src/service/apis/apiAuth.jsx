@@ -41,3 +41,31 @@ export const apiLogout = () => new Promise( async(resolve, reject) => {
         reject(error)
     }
 })
+
+// forgot
+export const apiForgotPassword = (email) => new Promise( async(resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: '/api/v1/auth/forgot',
+            params: email
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
+
+// reset password
+export const apiResetPassword = (payload) => new Promise( async(resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'put',
+            url: '/api/v1/auth/reset-password',
+            data: payload
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})

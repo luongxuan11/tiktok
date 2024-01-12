@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
-import formatTime from "../utilities/formatTime";
+import {formatTime} from "../utilities/formatTime";
 import Popup from "./Popup";
 
 const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {

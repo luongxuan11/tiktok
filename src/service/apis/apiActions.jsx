@@ -41,3 +41,45 @@ export const apiSearch = (text) =>
       reject(error);
     }
   });
+
+  export const apiUploadComment = (payload) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await axiosConfig({
+        method: "post",
+        url: `/api/v1/actions/comment-detail`,
+        data: payload,
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+  export const apiFeedbackComment = (payload) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await axiosConfig({
+        method: "post",
+        url: `/api/v1/actions/comment-detail--feedback`,
+        data: payload,
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+  export const apiDeleteComment = (payload) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await axiosConfig({
+        method: "delete",
+        url: `/api/v1/actions/comment-detail--delete`,
+        params: payload,
+      });
+      resolve(response);
+    } catch (error) {
+      reject(error);
+    }
+  });

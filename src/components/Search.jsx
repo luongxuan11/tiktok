@@ -111,7 +111,7 @@ const Search = () => {
                      <>
                         {valueApisResult[1]?.slice(0, 6).map((item) => {
                            return (
-                              <Link key={item.id} to={`${item.user.tiktok_id}/video/${item.id}`}>
+                              <Link key={item.id} to={`/${item.user.tiktok_id}/video/${item.id}`}>
                                  <div onClick={handleClickItemSearch} className="search-box__item row">
                                     <FiSearch className="search-box__item--icon" />
                                     <p className="ellipsis">{item.title}</p>
@@ -122,7 +122,7 @@ const Search = () => {
                         {valueApisResult[0]?.length > 0 && <h3>Tài khoản</h3>}
                         {valueApisResult[0]?.slice(0, 4).map((item, index) => {
                            return (
-                              <Link key={index} to={`${item.tiktok_id}`}>
+                              <Link key={index} to={`/${item.tiktok_id}`}>
                                  <div onClick={handleClickItemSearch} className="search-box__item row">
                                     <div className="search-avatar avatar">
                                        <img src={item.avatar || user} alt="TikTok" />

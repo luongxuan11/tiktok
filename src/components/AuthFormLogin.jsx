@@ -24,10 +24,9 @@ const AuthFormLogin = ({ setShowForm }) => {
    const dispatch = useDispatch();
    const navigate = useNavigate();
 
-
-   useEffect(() =>{
-      forgetPassword ? setPayload({email: ""}) : setPayload({email: "", password: ""})
-     }, [forgetPassword])
+   useEffect(() => {
+      forgetPassword ? setPayload({ email: "" }) : setPayload({ email: "", password: "" });
+   }, [forgetPassword]);
 
    // handle submit
    const handleSubmit = async (e) => {
@@ -36,7 +35,7 @@ const AuthFormLogin = ({ setShowForm }) => {
 
       if (invalids === 0 && !forgetPassword) {
          dispatch(actions.login(payload));
-      }else if(invalids === 0 && forgetPassword){
+      } else if (invalids === 0 && forgetPassword) {
          navigate(`/reset-password?email=${payload.email}`);
       }
    };
@@ -68,26 +67,24 @@ const AuthFormLogin = ({ setShowForm }) => {
                      htmlFor={"email"}
                      type={"text"}
                   />
-                  {!forgetPassword && <InputForm
-                     invalidFields={invalidFields}
-                     setInvalidFields={setInvalidFields}
-                     payload={payload.password}
-                     setPayload={setPayload}
-                     text={"Vui lòng nhập mật khẩu của bạn..."}
-                     label={"Mật khẩu"}
-                     htmlFor={"password"}
-                     type={`${showPassword ? "text" : "password"}`}
-                     setShowPassword={setShowPassword}
-                     icon={showPassword ? <PiEyeDuotone /> : <PiEyeClosedDuotone />}
-                  />}
+                  {!forgetPassword && (
+                     <InputForm
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
+                        payload={payload.password}
+                        setPayload={setPayload}
+                        text={"Vui lòng nhập mật khẩu của bạn..."}
+                        label={"Mật khẩu"}
+                        htmlFor={"password"}
+                        type={`${showPassword ? "text" : "password"}`}
+                        setShowPassword={setShowPassword}
+                        icon={showPassword ? <PiEyeDuotone /> : <PiEyeClosedDuotone />}
+                     />
+                  )}
                </div>
                <div className="form-control__forget row">
-                  <Link onClick={() => setForgetPassword(prev => !prev)} to={!forgetPassword ? path.FORGET : "/"}>
-                     {!forgetPassword ? "Bạn quên mật khẩu?" : "Đăng nhập"}
-                  </Link>
-                  {!forgetPassword && <Link to={"/auth"}>
-                     Tạo tài khoản mới
-                  </Link>}
+                  <Link onClick={() => setForgetPassword((prev) => !prev)}>{!forgetPassword ? "Bạn quên mật khẩu?" : "Đăng nhập"}</Link>
+                  {!forgetPassword && <Link to={"/auth"}>Tạo tài khoản mới</Link>}
                </div>
                <Button btnClass={`form-control__btn`} text={!forgetPassword ? "Tiếp tục" : "Làm mới mật khẩu"} />
                <span

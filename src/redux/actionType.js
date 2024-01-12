@@ -8,6 +8,8 @@ const actionTypes = {
     GET_POST_LIMIT: "GET_POST_LIMIT",
     GET_POST_FALSE: "GET_POST_FALSE",
 
+    FEEDBACK: "FEEDBACK",
+
     // user
     GET_CURRENT: 'GET_CURRENT',
 }
