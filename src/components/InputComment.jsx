@@ -1,8 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import { apiUploadComment, apiFeedbackComment } from "../service/apis";
 import icons from "../utilities/icons";
 
-const InputComment = ({ payload, setPayload, setActive, active, currentPostId, toast, icon, setShowInput, comment_id }) => {
+const InputComment = ({setActive, active, currentPostId, toast, icon, setShowInput, comment_id }) => {
+   const [payload, setPayload] = useState("");
    const { IoMdClose } = icons;
    // submit comment
    const handleBeforeSubmitComment = (e) => {

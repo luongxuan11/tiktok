@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState, useLayoutEffect } from "react";
 import { formatVi } from "../utilities/formatTime";
 import images from "../assets/imgExport";
 import { Button, InputComment, Feedback, FeedbackRealTime } from "./";
@@ -16,9 +16,11 @@ const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComme
 
    const { currentData } = useSelector((state) => state.user);
 
-   useEffect(() => {
+   useLayoutEffect(() => {
       if (comments && comments.length > 0) {
          setCommentArr(comments);
+      }else{
+         setCommentArr([])
       }
    }, [comments]);
    // handle delete comment and feedback

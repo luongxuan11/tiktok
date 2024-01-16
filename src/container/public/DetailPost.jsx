@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, {useEffect, useState, useLayoutEffect, memo } from "react";
 import icons from "../../utilities/icons";
 import Search from "../../components/Search";
 import InputComment from "../../components/InputComment";
@@ -26,11 +26,10 @@ const DetailPost = () => {
    const [currentPost, setCurrentPost] = useState(null);
    const [action, setAction] = useState("comment");
    const [active, setActive] = useState(false);
-   const [payload, setPayload] = useState("");
    const [commentIo, setCommentIo] = useState([]);
    const [feedbackIo, setFeedbackIo] = useState([]);
    const [deleteComment, setDeleteComment] = useState(null);
-
+   
    // call api
    const callApi = async (postId) => {
       const response = await apiGetCurrentPost({ post_id: postId });
@@ -40,10 +39,10 @@ const DetailPost = () => {
          console.error(error);
       }
    };
-
+   
    // data comment from socketIo
-   useEffect(() => {
-      const socket = io("http://localhost:8060");
+   useLayoutEffect(() => {
+      const socket = io(process.env.REACT_APP_SEVER_URL);
       const postId = location.pathname.split("/").slice(-1)[0];
       console.log("connect");
       socket.on("newComment", (data) => {
@@ -57,16 +56,17 @@ const DetailPost = () => {
             setDeleteComment(data);
          }
       });
-      socket.on('newFeedback', (data) => {
-         setFeedbackIo(prev => [data, ...prev])
-      })
+      socket.on("newFeedback", (data) => {
+         setFeedbackIo((prev) => [data, ...prev]);
+      });
 
       return () => {
          console.log("disConnect");
          socket.emit("leave-room", postId);
          socket.disconnect();
+         setCommentIo([])
       };
-   }, []);
+   }, [location.pathname]);
 
    // handle
    useEffect(() => {
@@ -75,8 +75,8 @@ const DetailPost = () => {
          const postId = location.pathname.split("/").slice(-1)[0];
          callApi(postId);
       }
+      
    }, [location.pathname, isLogin]);
-
    if (!isLogin) {
       dispatch(actions.getPostFalse());
       return <Navigate to="/" replace={true} />;
@@ -134,7 +134,7 @@ const DetailPost = () => {
                   <span></span>
                </div>
                <div className="movie row">
-                  <video controls preload="auto" src={currentPost?.video_file_name}></video>
+                  <video controls loop autoPlay preload="auto" src={currentPost?.video_file_name}></video>
                </div>
             </div>
          </div>
@@ -219,12 +219,12 @@ const DetailPost = () => {
                            feedbackIo={feedbackIo}
                         />
                      ) : (
-                        <VideoUser />
+                        <VideoUser userId={currentPost.user_id} currentPostId={currentPost.id} setCurrentPost={setCurrentPost}/>
                      )}
                   </div>
                </div>
                {action === "comment" && (
-                  <InputComment toast={toast} payload={payload} setPayload={setPayload} setActive={setActive} active={active} currentPostId={currentPost.id} />
+                  <InputComment toast={toast} setActive={setActive} active={active} currentPostId={currentPost.id} />
                )}
             </div>
          )}

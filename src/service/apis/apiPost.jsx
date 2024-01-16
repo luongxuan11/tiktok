@@ -1,43 +1,58 @@
 import axiosConfig from "../axiosConfig";
 
 export const apiGetPostsLimit = (lazyLoad) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await axiosConfig({
-        method: "get",
-        url: `/api/v1/overview/limit`,
-        params: lazyLoad,
-      });
-      resolve(response);
-    } catch (error) {
-      reject(error);
-    }
-  });
+   new Promise(async (resolve, reject) => {
+      try {
+         const response = await axiosConfig({
+            method: "get",
+            url: `/api/v1/overview/limit`,
+            params: lazyLoad,
+         });
+         resolve(response);
+      } catch (error) {
+         reject(error);
+      }
+   });
 
-  export const apiGetCurrentPost = (post_id) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const response = await axiosConfig({
-        method: "get",
-        url: `/api/v1/overview/get-current-post`,
-        params: post_id,
-      });
-      resolve(response);
-    } catch (error) {
-      reject(error);
-    }
-  });
+export const apiGetCurrentPost = (post_id) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const response = await axiosConfig({
+            method: "get",
+            url: `/api/v1/overview/get-current-post`,
+            params: post_id,
+         });
+         resolve(response);
+      } catch (error) {
+         reject(error);
+      }
+   });
 
-  export const apiUpdateFavorite = (payload) =>
-  new Promise(async (resolve, reject) => {
-    try {
+export const apiUpdateFavorite = (payload) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const response = await axiosConfig({
+            method: "post",
+            url: `/api/v1/overview/upload-favorite`,
+            data: payload,
+         });
+         resolve(response);
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+// api get post of user
+export const apiGetVideoOfUser = (payload) =>
+   new Promise(async (resolve, reject) => {
       const response = await axiosConfig({
-        method: "post",
-        url: `/api/v1/overview/upload-favorite`,
-        data: payload,
+         method: "get",
+         url: "/api/v1/overview/video-user",
+         params: payload,
       });
       resolve(response);
-    } catch (error) {
-      reject(error);
-    }
-  });
+      try {
+      } catch (error) {
+         reject(error);
+      }
+   });
