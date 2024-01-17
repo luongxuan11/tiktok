@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect, memo, useCallback } from "react";
-import { Button } from "../../components";
+// import { Button } from "../../components";
 import icons from "../../utilities/icons";
 import { useDispatch, useSelector } from "react-redux";
 import images from "../../assets/imgExport";
 import { Waypoint } from "react-waypoint";
 import { AuthFormLogin, PopupOtp, FavoriteBtn, CommentBtn, ShareBtn, FollowBtn } from "../../components";
-import { apiUpdateFavorite, apiFollow } from "../../service/apis";
-import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as actions from "../../redux/store/actions";
 
@@ -22,15 +20,15 @@ const HomeTitle = () => {
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
 
-   // state
-   const [lazyLoad, setLazyLoad] = useState(1);
+   const homeTitleRef = useRef(null);
    const videoRefs = useRef({});
    const currentPlayingRef = useRef(null);
+   // state
+   const [lazyLoad, setLazyLoad] = useState(1);
    const [playingCheck, setPlayingCheck] = useState("");
    const [isMute, setIsMute] = useState(false);
    const [posts, setPosts] = useState([]);
    const [appendSpan, setAppendSpan] = useState("");
-   const homeTitleRef = useRef(null);
    const [showForm, setShowForm] = useState(false);
    const [showPopup, setShowPopup] = useState(false);
    const [showOtp, setShowOtp] = useState(false);
@@ -58,7 +56,7 @@ const HomeTitle = () => {
    const toggleMute = useCallback(
       (e, id) => {
          e.stopPropagation();
-         const videoElement = videoRefs.current[id];
+         const videoElement = videoRefs.current;
          if (!videoElement) return;
          if (videoElement) {
             videoElement.muted = !isMute;
@@ -113,6 +111,43 @@ const HomeTitle = () => {
       }
    }, [location.pathname]);
 
+   // auto playVideo when scroll
+   const handleAutoPlay = (id) => {
+      const videoElement = videoRefs.current[id];
+      if (currentPlayingRef.current && currentPlayingRef.current !== videoElement) {
+         currentPlayingRef.current.pause();
+      }
+      if (videoElement.paused) {
+         videoElement.play();
+         currentPlayingRef.current = videoElement;
+         setPlayingCheck(id);
+      } else {
+         videoElement.pause();
+      }
+   };
+
+   // play video change tab
+   const handleVisibilityChange = () => {
+      if (document.hidden) {
+         // Page is not visible, pause the currently playing video
+         if (currentPlayingRef.current) {
+            currentPlayingRef.current.pause();
+         }
+      } else {
+         // Page is visible, resume playing the video if there was one playing
+         if (currentPlayingRef.current) {
+            currentPlayingRef.current.play();
+         }
+      }
+   };
+   useEffect(() => {
+      // Add event listener for visibility change
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      return () => {
+         document.removeEventListener("visibilitychange", handleVisibilityChange);
+      };
+   }, []);
+
    return (
       <>
          {showForm && <AuthFormLogin setShowForm={setShowForm} />}
@@ -150,13 +185,15 @@ const HomeTitle = () => {
                               <div className="info-video row">
                                  <div className="info-video__original">
                                     <video
+                                       className="info-video__original--video"
                                        poster={item.thumb_file_name}
                                        ref={(el) => (videoRefs.current[item.id] = el)}
                                        src={item.video_file_name}
                                        preload="auto"
                                        loop="loop"
                                     ></video>
-                                    <div onClick={() => handleNavigateRouter(`/${item.user.tiktok_id}/video/${item.id}`)} className="original-video__control row">
+                                    <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset="200px" />
+                                    <div className="original-video__control row">
                                        <span onClick={(e) => togglePlay(e, item.id)}>{playingCheck === item.id ? <FaPause className="icon" /> : <FaPlay className="icon" />}</span>
                                        <span onClick={(e) => toggleMute(e, item.id)}>
                                           {isMute ? <IoVolumeMute className="icon icon--mute" /> : <GoUnmute className="icon icon--mute" />}
@@ -165,11 +202,17 @@ const HomeTitle = () => {
                                  </div>
                                  <div className="info-video__status row">
                                     <FavoriteBtn item={item} setShowForm={setShowForm} />
-                                    <CommentBtn item={item} setShowForm={setShowForm} setShowPopup={setShowPopup} />
+                                    <CommentBtn
+                                       item={item}
+                                       setShowForm={setShowForm}
+                                       setShowPopup={setShowPopup}
+                                       flag={`/${item.user.tiktok_id}/video/${item.id}`}
+                                       navigate={navigate}
+                                    />
                                     <ShareBtn item={item} />
                                  </div>
                               </div>
-                              {appendSpan === index ? <Waypoint onEnter={handleCallApi} bottomOffset="50px" /> : ""}
+                              {appendSpan === index ? <Waypoint onEnter={handleCallApi} bottomOffset="0" /> : ""}
                            </div>
                         </div>
                      );

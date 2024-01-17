@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import icons from "../utilities/icons";
 import { useSelector } from "react-redux";
 
-const CommentBtn = ({ item, setShowForm, setShowPopup, not }) => {
+const CommentBtn = ({ item, setShowForm, setShowPopup, not, flag, navigate }) => {
    const { FaCommentDots } = icons;
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
@@ -16,7 +16,7 @@ const CommentBtn = ({ item, setShowForm, setShowPopup, not }) => {
       } else if (!currentData?.verifyOTP) {
          setShowPopup(true);
       } else {
-        console.log('here -> success!')
+        navigate(flag)
       }
    };
 

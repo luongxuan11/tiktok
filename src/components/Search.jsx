@@ -67,7 +67,6 @@ const Search = () => {
    useEffect(() => {
       // Thêm event listener khi component được mounted
       document.addEventListener("mousedown", handleClickOutside);
-
       // Cleanup event listener khi component được unmounted
       return () => {
          document.removeEventListener("mousedown", handleClickOutside);
@@ -93,7 +92,7 @@ const Search = () => {
          <div ref={ref} className={`header__search-box ${showDetailSearch ? "un--hidden" : ""}`}>
             <div className="search-box">
                <>
-                  {valueApiSearch.length <= 0 ? (
+                  {valueApiSearch.length === 0 ? (
                      <>
                         <h3>Bạn có thể thích</h3>
                         {favorite.map((item, index) => {
