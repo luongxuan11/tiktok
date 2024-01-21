@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, memo, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 // import { Button } from "../../components";
 import icons from "../../utilities/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ const HomeTitle = () => {
    const navigate = useNavigate();
 
    // redux
-   const { post, count } = useSelector((state) => state.posts);
+   const { post} = useSelector((state) => state.posts);
    const { isLogin } = useSelector((state) => state.auth);
    const { currentData } = useSelector((state) => state.user);
 
@@ -28,7 +28,7 @@ const HomeTitle = () => {
    const [playingCheck, setPlayingCheck] = useState("");
    const [isMute, setIsMute] = useState(false);
    const [posts, setPosts] = useState([]);
-   const [appendSpan, setAppendSpan] = useState("");
+   const [appendSpan, setAppendSpan] = useState(null);
    const [showForm, setShowForm] = useState(false);
    const [showPopup, setShowPopup] = useState(false);
    const [showOtp, setShowOtp] = useState(false);
@@ -52,19 +52,18 @@ const HomeTitle = () => {
       }
    }, []);
 
-   // toggle mute
-   const toggleMute = useCallback(
-      (e, id) => {
-         e.stopPropagation();
-         const videoElement = videoRefs.current;
-         if (!videoElement) return;
-         if (videoElement) {
-            videoElement.muted = !isMute;
-            setIsMute(!isMute);
-         }
-      },
-      [isMute],
-   );
+   // // toggle mute
+   const toggleMute = (e) => {
+      e.stopPropagation();
+      setIsMute((prevIsMute) => {
+         Object.values(videoRefs.current).forEach((videoElement) => {
+            if (videoElement) {
+               videoElement.muted = !prevIsMute;
+            }
+         });
+         return !prevIsMute;
+      });
+   };
 
    // spread post
    useEffect(() => {
@@ -87,7 +86,7 @@ const HomeTitle = () => {
    }, [dispatch, lazyLoad]);
 
    const handleCallApi = () => {
-      let number = Math.floor(count / 5 - 1); // redux number post
+      let number = Math.floor(posts.length / 5);
       if (lazyLoad <= number) {
          setLazyLoad(lazyLoad + 1);
       }
@@ -148,6 +147,10 @@ const HomeTitle = () => {
       };
    }, []);
 
+
+
+   // lưu ý bug 1 bài viết nữa sẽ không call api khi cuộn cuối trang =>>> cần fix 18/01
+
    return (
       <>
          {showForm && <AuthFormLogin setShowForm={setShowForm} />}
@@ -192,10 +195,10 @@ const HomeTitle = () => {
                                        preload="auto"
                                        loop="loop"
                                     ></video>
-                                    <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset="200px" />
+                                    <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset="100px" />
                                     <div className="original-video__control row">
                                        <span onClick={(e) => togglePlay(e, item.id)}>{playingCheck === item.id ? <FaPause className="icon" /> : <FaPlay className="icon" />}</span>
-                                       <span onClick={(e) => toggleMute(e, item.id)}>
+                                       <span onClick={(e) => toggleMute(e)}>
                                           {isMute ? <IoVolumeMute className="icon icon--mute" /> : <GoUnmute className="icon icon--mute" />}
                                        </span>
                                     </div>
@@ -212,7 +215,7 @@ const HomeTitle = () => {
                                     <ShareBtn item={item} />
                                  </div>
                               </div>
-                              {appendSpan === index ? <Waypoint onEnter={handleCallApi} bottomOffset="0" /> : ""}
+                              {appendSpan && appendSpan === index ? <Waypoint onEnter={handleCallApi} bottomOffset="0" /> : ""}
                            </div>
                         </div>
                      );
@@ -235,4 +238,4 @@ const HomeTitle = () => {
    );
 };
 
-export default memo(HomeTitle);
+export default HomeTitle;
