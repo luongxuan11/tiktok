@@ -1,0 +1,45 @@
+// loading
+.loading {
+   display: flex;
+   align-items: center;
+   width: 100%;
+   justify-content: center;
+   margin-bottom: 50px;
+   gap: 10px;
+   span {
+      width: 1.5rem;
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      background: #84cdfa;
+      &:last-child {
+         background: #9b59b6;
+         animation-delay: 0.2s;
+      }
+      &:nth-child(1) {
+         background: #5ad1cd;
+         animation-delay: 0.45s;
+      }
+      &::before {
+         content: "";
+         display: block;
+         border-radius: inherit;
+         width: 1.5rem;
+         aspect-ratio: 1/1;
+         background-color: inherit;
+         animation: ripple 1.8s ease-out infinite;
+         animation-delay: inherit;
+         z-index: -1;
+      }
+   }
+}
+@keyframes ripple {
+   from {
+      opacity: 1;
+      transform: scale(0);
+   }
+
+   to {
+      opacity: 0;
+      transform: scale(3);
+   }
+}

@@ -18,6 +18,7 @@ import twitter from "./img/twitter.svg"
 import whatsApp from "./img/washup.svg"
 import facebook from "./img/facebook.svg"
 import send from "./img/send.svg"
+import resetPassLogo from "./img/tiktok.png"
 
 
 const images = {
@@ -40,6 +41,7 @@ const images = {
     twitter,
     whatsApp,
     facebook,
-    send
+    send,
+    resetPassLogo
 }
 export default images

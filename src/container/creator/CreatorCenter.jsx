@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import "./creator.scss";
+import "../../sass/creator.scss";
 import logos from "../../assets/imgExport";
 import { useSelector } from "react-redux";
 import { Outlet, Link, Navigate, useLocation} from "react-router-dom";

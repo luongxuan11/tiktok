@@ -30,7 +30,7 @@ const SideBar = () => {
    };
    useEffect(() => {
       if (showForm === false && location.pathname.includes("info")) return navigate("/");
-   }, [location.pathname, showForm]);
+   }, [location.pathname, showForm, navigate]);
 
    return (
       <>

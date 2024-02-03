@@ -5,10 +5,6 @@ import { Outlet, useLocation} from "react-router-dom";
 import HomeTitle from './HomeTitle';
 const Home = () => {
   const location = useLocation();
-
-
-
-
   // jsx
   return (
     <div className='home'>

@@ -20,3 +20,5 @@ export { default as Comment } from "./Comment";
 export { default as InputComment } from "./InputComment";
 export { default as Feedback } from "./Feedback";
 export { default as FeedbackRealTime } from "./FeedbackRealTime";
+export { default as Video } from "./Video";
+export { default as PostsCommon } from "./PostsCommon";

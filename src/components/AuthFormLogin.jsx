@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import * as actions from "../redux/store/actions";
 import Swal from "sweetalert2";
 import { useNavigate, Link } from "react-router-dom";
-import { path } from "../utilities/constant";
+import { apiForgotPassword } from "../service/apis";
+import LineAnimated from "../components/animation/LineAnimated";
+// import { path } from "../utilities/constant";
 
 const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle } = icons;
 
@@ -14,6 +16,7 @@ const AuthFormLogin = ({ setShowForm }) => {
    const [showPassword, setShowPassword] = useState(false);
    const [forgetPassword, setForgetPassword] = useState(false);
    const [invalidFields, setInvalidFields] = useState([]);
+   const [loading, setLoading] = useState(false);
    const [payload, setPayload] = useState({
       email: "",
       password: "",
@@ -36,7 +39,21 @@ const AuthFormLogin = ({ setShowForm }) => {
       if (invalids === 0 && !forgetPassword) {
          dispatch(actions.login(payload));
       } else if (invalids === 0 && forgetPassword) {
-         navigate(`/reset-password?email=${payload.email}`);
+         try {
+            setLoading(true);
+            const response = await apiForgotPassword(payload);
+            if (response.err === 0) {
+               Swal.fire("Thành công", response.mess, "info").then(() => {
+                  setLoading(false);
+                  setShowForm(false);
+               });
+            } else {
+               Swal.fire("Oops !", response.mess, "warning");
+               setLoading(false);
+            }
+         } catch (error) {
+            console.log(error);
+         }
       }
    };
    //  navigate to home
@@ -57,16 +74,20 @@ const AuthFormLogin = ({ setShowForm }) => {
                <p className="process__step">Welcome to Tiktok</p>
                <h2 className="form-control__heading">{!forgetPassword ? "Đăng nhập" : "Bạn quên mật khẩu?"}</h2>
                <div className="form-control__box">
-                  <InputForm
-                     invalidFields={invalidFields}
-                     setInvalidFields={setInvalidFields}
-                     payload={payload.email}
-                     setPayload={setPayload}
-                     text={"Vui lòng nhập email của bạn..."}
-                     label={"Địa chỉ email"}
-                     htmlFor={"email"}
-                     type={"text"}
-                  />
+                  {!loading ? (
+                     <InputForm
+                        invalidFields={invalidFields}
+                        setInvalidFields={setInvalidFields}
+                        payload={payload.email}
+                        setPayload={setPayload}
+                        text={"Vui lòng nhập email của bạn..."}
+                        label={"Địa chỉ email"}
+                        htmlFor={"email"}
+                        type={"text"}
+                     />
+                  ) : (
+                     <LineAnimated />
+                  )}
                   {!forgetPassword && (
                      <InputForm
                         invalidFields={invalidFields}
@@ -83,7 +104,7 @@ const AuthFormLogin = ({ setShowForm }) => {
                   )}
                </div>
                <div className="form-control__forget row">
-                  <Link onClick={() => setForgetPassword((prev) => !prev)}>{!forgetPassword ? "Bạn quên mật khẩu?" : "Đăng nhập"}</Link>
+                  {!loading && <Link onClick={() => setForgetPassword((prev) => !prev)}>{!forgetPassword ? "Bạn quên mật khẩu?" : "Đăng nhập"}</Link>}
                   {!forgetPassword && <Link to={"/auth"}>Tạo tài khoản mới</Link>}
                </div>
                <Button btnClass={`form-control__btn`} text={!forgetPassword ? "Tiếp tục" : "Làm mới mật khẩu"} />

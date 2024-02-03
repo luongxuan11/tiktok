@@ -55,6 +55,7 @@
 
   .lineAnimated{
     display: block;
+    margin: 0 auto;
     --height-of-loader: 4px;
     --loader-color: #0071e2;
     width: 130px;

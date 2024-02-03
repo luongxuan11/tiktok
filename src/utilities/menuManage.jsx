@@ -122,3 +122,62 @@ export const favorite = [
       item: "Làm thế nào để cho tất cả người học react vào 1 thùng xốp"
    }
 ]
+
+export const exploreNav = [
+   {
+      id: 1,
+      item: "Tất cả danh mục"
+   },
+   {
+      id: 2,
+      item: "Giải trí"
+   },
+   {
+      id: 3,
+      item: "Thể thao"
+   },
+   {
+      id: 4,
+      item: "Truyện tranh & Hoạt hình"
+   },
+   {
+      id: 5,
+      item: "Mối quan hệ"
+   },
+   {
+      id: 6,
+      item: "Chương trình"
+   },
+   {
+      id: 7,
+      item: "Hát nhép"
+   },
+   {
+      id: 8,
+      item: "Đời sống"
+   },
+   {
+      id: 9,
+      item: "Chăm sóc sắc đẹp"
+   },
+   {
+      id: 10,
+      item: "Trò chơi"
+   },
+   {
+      id: 11,
+      item: "Xã hội"
+   },
+   {
+      id: 12,
+      item: "Trang phục"
+   },
+   {
+      id: 13,
+      item: "Giáo dục"
+   },
+   {
+      id: 14,
+      item: "Công nghệ"
+   },
+]

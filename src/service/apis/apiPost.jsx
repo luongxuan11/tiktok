@@ -56,3 +56,33 @@ export const apiGetVideoOfUser = (payload) =>
          reject(error);
       }
    });
+
+// api get post explore
+export const apiGetVideoExplore = (payload) =>
+   new Promise(async (resolve, reject) => {
+      const response = await axiosConfig({
+         method: "get",
+         url: "/api/v1/overview/limit--explore",
+         params: payload,
+      });
+      resolve(response);
+      try {
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+// api get post following
+export const apiGetVideoFollowing = (payload) =>
+   new Promise(async (resolve, reject) => {
+      const response = await axiosConfig({
+         method: "get",
+         url: "/api/v1/overview/following",
+         params: payload,
+      });
+      resolve(response);
+      try {
+      } catch (error) {
+         reject(error);
+      }
+   });

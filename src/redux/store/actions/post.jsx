@@ -7,8 +7,7 @@ export const getPostsLimit = (page) => async (dispatch) => {
     if(response?.err === 0){  
         dispatch({ 
             type: actionTypes.GET_POST_LIMIT,
-            posts: response.res.rows,
-            count: response.res?.count,
+            posts: response.res,
             mess: response.mess
         })
     } else{
@@ -18,7 +17,6 @@ export const getPostsLimit = (page) => async (dispatch) => {
         })
     }
     } catch (error) {
-        
         dispatch({
             type: actionTypes.GET_POST_LIMIT,
             posts: null

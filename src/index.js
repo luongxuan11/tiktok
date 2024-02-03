@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./resest.css";
+import "./sass/resest.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react"; // đảm bảo rằng state của ứng dụng được lưu trữ và khôi phục sau khi làm mới trang.

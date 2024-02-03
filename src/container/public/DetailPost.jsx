@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useLayoutEffect, memo } from "react";
+import React, { useEffect, useState, useLayoutEffect, memo } from "react";
 import icons from "../../utilities/icons";
 import Search from "../../components/Search";
 import InputComment from "../../components/InputComment";
@@ -9,7 +9,9 @@ import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { apiGetCurrentPost } from "../../service/apis";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../redux/store/actions";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
+import { formatVi } from "../../utilities/formatTime";
+import { socket } from "../../socket";
 
 const DetailPost = () => {
    const { IoMdClose, BsThreeDots, IoMusicalNotes, MdKeyboardArrowDown, MdKeyboardArrowUp } = icons;
@@ -29,7 +31,7 @@ const DetailPost = () => {
    const [commentIo, setCommentIo] = useState([]);
    const [feedbackIo, setFeedbackIo] = useState([]);
    const [deleteComment, setDeleteComment] = useState(null);
-   
+
    // call api
    const callApi = async (postId) => {
       const response = await apiGetCurrentPost({ post_id: postId });
@@ -39,13 +41,14 @@ const DetailPost = () => {
          console.error(error);
       }
    };
-   
+
    // data comment from socketIo
    useLayoutEffect(() => {
-      const socket = io(process.env.REACT_APP_SEVER_URL);
       const postId = location.pathname.split("/").slice(-1)[0];
-      console.log("connect");
+      // console.log("connect", socket.connected);
+      // socket.connect();
       socket.on("newComment", (data) => {
+         console.log(data, "check")
          if (data) {
             setCommentIo((prev) => [data, ...prev]);
          }
@@ -61,10 +64,10 @@ const DetailPost = () => {
       });
 
       return () => {
-         console.log("disConnect");
          socket.emit("leave-room", postId);
-         socket.disconnect();
-         setCommentIo([])
+         // console.log("disConnect");
+         // socket.disconnect();
+         setCommentIo([]);
       };
    }, [location.pathname]);
 
@@ -75,7 +78,6 @@ const DetailPost = () => {
          const postId = location.pathname.split("/").slice(-1)[0];
          callApi(postId);
       }
-      
    }, [location.pathname, isLogin]);
    if (!isLogin) {
       dispatch(actions.getPostFalse());
@@ -120,7 +122,7 @@ const DetailPost = () => {
       <div className="detail-post row">
          <div className="detail-post__video">
             <div className="video-nav row">
-               <span onClick={() => navigate("/")} className="icon--box row">
+               <span onClick={() => window.history.back()} className="icon--box row">
                   <IoMdClose className="icon" />
                </span>
                <Search />
@@ -149,7 +151,7 @@ const DetailPost = () => {
                            <strong className="name">{currentPost?.user.userName.length > 20 ? `${currentPost?.user.userName.slice(0, 20)}...` : currentPost?.user.userName}</strong>
                            <span className="tiktokId row">
                               {currentPost?.user.tiktok_id?.length > 10 ? `${currentPost?.user.tiktok_id?.slice(0, 10)}...` : `${currentPost?.user.tiktok_id} - `}{" "}
-                              <small>12/8</small>
+                              <small>{formatVi(currentPost.updatedAt)}</small>
                            </span>
                         </div>
                         {currentData?.id === currentPost?.user_id ? "" : <FollowBtn item={currentPost} btnClass={"tiktokFollow"} />}
@@ -219,13 +221,11 @@ const DetailPost = () => {
                            feedbackIo={feedbackIo}
                         />
                      ) : (
-                        <VideoUser userId={currentPost.user_id} currentPostId={currentPost.id} setCurrentPost={setCurrentPost}/>
+                        <VideoUser userId={currentPost.user_id} currentPostId={currentPost.id} setCurrentPost={setCurrentPost} />
                      )}
                   </div>
                </div>
-               {action === "comment" && (
-                  <InputComment toast={toast} setActive={setActive} active={active} currentPostId={currentPost.id} />
-               )}
+               {action === "comment" && <InputComment toast={toast} setActive={setActive} active={active} currentPostId={currentPost.id} />}
             </div>
          )}
       </div>

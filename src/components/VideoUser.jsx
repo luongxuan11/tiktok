@@ -1,16 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { apiGetVideoOfUser } from "../service/apis";
-import { useLocation, useNavigate } from "react-router-dom";
+import Video from "./Video";
 
 const VideoUser = ({ userId, currentPostId, setCurrentPost }) => {
-   const [hoveredVideo, setHoveredVideo] = useState("");
    const [posts, setPosts] = useState([]);
-   const videoRefs = useRef([]);
-   const navigate = useNavigate();
-
-   const handleMouseLeave = () => {
-      setHoveredVideo("");
-   };
 
    useEffect(() => {
       const callApi = async () => {
@@ -24,23 +17,6 @@ const VideoUser = ({ userId, currentPostId, setCurrentPost }) => {
       callApi();
    }, [userId]);
 
-   useEffect(() => {
-      if (videoRefs) {
-         videoRefs.current.forEach((item) => {
-            if (hoveredVideo === item?.src) {
-               item?.play();
-            } else {
-               item?.pause();
-            }
-         });
-      }
-   }, [hoveredVideo]);
-
-   // handleNavigate
-   const handleNavigate = (post) => {
-      if(post) return navigate(`/@user${post.user_id}/video/${post.id}`)
-   }
-
    return (
       <div className="video-container row">
          {posts &&
@@ -48,14 +24,7 @@ const VideoUser = ({ userId, currentPostId, setCurrentPost }) => {
             posts.map((item, index) => {
                return (
                   <div key={item.id}  className="video-container__item">
-                     <video
-                        onClick={() => handleNavigate(item)}
-                        src={item.video_file_name}
-                        onMouseEnter={() => setHoveredVideo(item.video_file_name)}
-                        onMouseLeave={handleMouseLeave}
-                        ref={(ref) => (videoRefs.current[index] = ref)}
-                        muted
-                     ></video>
+                     <Video item={item} index={index}/>
                      {item.id === currentPostId && (
                         <div className="playing row">
                            <div className="playing--anim row">

@@ -4,13 +4,11 @@ import icons from "../utilities/icons";
 import validate from "../container/public/validate";
 import { useDispatch, useSelector } from "react-redux";
 import { apiRegister } from "../service/apis";
-import * as actions from "../redux/store/actions"
+import * as actions from "../redux/store/actions";
 import Swal from "sweetalert2";
-import {useNavigate } from "react-router-dom";
-
-const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle } = icons;
 
 const AuthForm = ({ setShowForm }) => {
+   const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle } = icons;
    const [showPassword, setShowPassword] = useState(false);
    const [showPasswordRepeat, setShowPasswordRepeat] = useState(false);
    const [isChecked, setIsChecked] = useState(false);
@@ -23,27 +21,25 @@ const AuthForm = ({ setShowForm }) => {
       repeatPassword: "",
    });
 
-   const {isLogin, mess, update} = useSelector(state => state.auth)
+   const { mess, update } = useSelector((state) => state.auth);
 
-   useEffect(() =>{
-    if(!step){
-      setPayload({
-        userName: "",
-        email: "",
-        password: "",
-        repeatPassword: "",
-     })
-    }else{
-      setPayload({
-        email: "",
-        password: "",
-      })
-    }
-   }, [step])
-
+   useEffect(() => {
+      if (!step) {
+         setPayload({
+            userName: "",
+            email: "",
+            password: "",
+            repeatPassword: "",
+         });
+      } else {
+         setPayload({
+            email: "",
+            password: "",
+         });
+      }
+   }, [step]);
 
    const dispatch = useDispatch();
-   const navigate = useNavigate()
 
    // checkbox
    const handleCheckboxChange = () => {
@@ -60,32 +56,31 @@ const AuthForm = ({ setShowForm }) => {
             const response = await apiRegister(payload);
 
             if (response.err === 0) {
-              Swal.fire("Thành công", response.mess, "success").then(() => {
-                setPayload({
-                  userName: "",
-                  email: "",
-                  password: "",
-                  repeatPassword: "",
-                });
-                setStep(true);
-              });
+               Swal.fire("Thành công", response.mess, "success").then(() => {
+                  setPayload({
+                     userName: "",
+                     email: "",
+                     password: "",
+                     repeatPassword: "",
+                  });
+                  setStep(true);
+               });
             } else {
                Swal.fire("Oops !", response.mess, "error");
                setStep(false);
             }
          }
-      } else{
-        if (invalids === 0 && isChecked){
-          dispatch(actions.login(payload))
-        }
+      } else {
+         if (invalids === 0 && isChecked) {
+            dispatch(actions.login(payload));
+         }
       }
    };
 
-
-  // sweet alert2
-  useEffect(() =>{
-    mess && Swal.fire('Oops !', mess, 'error')
-  }, [mess, update])
+   // sweet alert2
+   useEffect(() => {
+      mess && Swal.fire("Oops !", mess, "error");
+   }, [mess, update]);
 
    return (
       <div className={`auth__form--wrapper`}>
@@ -173,15 +168,11 @@ const AuthForm = ({ setShowForm }) => {
                   <div className="box row">
                      <input type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
                      <p>
-                        Bằng cách nhấp vào đây, bạn đồng ý với <strong>TikTok Commercial Terms of Service</strong> để
-                        tìm hiểu cách chúng tôi thu thập, sử dụng và chia sẻ dữ liệu của bạn.
+                        Bằng cách nhấp vào đây, bạn đồng ý với <strong>TikTok Commercial Terms of Service</strong> để tìm hiểu cách chúng tôi thu thập, sử dụng và chia sẻ dữ liệu
+                        của bạn.
                      </p>
                   </div>
-                  {!isChecked && (
-                     <span className="form-control__rules--warning">
-                        Hãy đồng ý với tất cả các điều khoản và điều kiện trước khi đăng ký.
-                     </span>
-                  )}
+                  {!isChecked && <span className="form-control__rules--warning">Hãy đồng ý với tất cả các điều khoản và điều kiện trước khi đăng ký.</span>}
                </div>
                <Button btnClass={`form-control__btn ${isChecked ? "" : "error"}`} text={"Tiếp tục"} />
                <span onClick={() => setShowForm(false)} className="close">

@@ -6,7 +6,7 @@ import { Button, AuthForm } from "../../components";
 import { Text } from "../../components/animation";
 import ui from "../../assets/img/UI.png";
 import titok from "../../assets/img/tiktok.png";
-import "./auth.scss";
+import "../../sass/auth.scss";
 
 const Auth = () => {
    const { IoIosAdd, BsList } = icons;

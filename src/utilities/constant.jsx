@@ -2,7 +2,7 @@ export const path = {
     HOME: "/*",
     HOME_TITLE: "foryou",
     AUTH: "auth/*",
-    FORGET: "reset-password/",
+    FORGET: "reset-password/:resetToken",
 
     CREATOR_CENTER: 'creator-center',
     UPLOAD: '/creator-center/upload',
