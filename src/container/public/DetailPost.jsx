@@ -16,7 +16,7 @@ import { socket } from "../../socket";
 const DetailPost = () => {
    const { IoMdClose, BsThreeDots, IoMusicalNotes, MdKeyboardArrowDown, MdKeyboardArrowUp } = icons;
    const { twitter, whatsApp, facebook, send, user } = images;
-   const navigate = useNavigate();
+   // const navigate = useNavigate();
    const location = useLocation();
    const dispatch = useDispatch();
 
@@ -32,23 +32,11 @@ const DetailPost = () => {
    const [feedbackIo, setFeedbackIo] = useState([]);
    const [deleteComment, setDeleteComment] = useState(null);
 
-   // call api
-   const callApi = async (postId) => {
-      const response = await apiGetCurrentPost({ post_id: postId });
-      try {
-         setCurrentPost(response.data);
-      } catch (error) {
-         console.error(error);
-      }
-   };
-
    // data comment from socketIo
    useLayoutEffect(() => {
       const postId = location.pathname.split("/").slice(-1)[0];
-      // console.log("connect", socket.connected);
-      // socket.connect();
       socket.on("newComment", (data) => {
-         console.log(data, "check")
+         console.log(data, "check");
          if (data) {
             setCommentIo((prev) => [data, ...prev]);
          }
@@ -65,13 +53,19 @@ const DetailPost = () => {
 
       return () => {
          socket.emit("leave-room", postId);
-         // console.log("disConnect");
-         // socket.disconnect();
          setCommentIo([]);
       };
    }, [location.pathname]);
 
-   // handle
+   // call api
+   const callApi = async (postId) => {
+      try {
+         const response = await apiGetCurrentPost({ post_id: postId });
+         setCurrentPost(response.data);
+      } catch (error) {
+         console.error(error);
+      }
+   };
    useEffect(() => {
       if (isLogin) {
          setCurrentUrl(window.location.href);
@@ -79,6 +73,9 @@ const DetailPost = () => {
          callApi(postId);
       }
    }, [location.pathname, isLogin]);
+   // end call api
+
+   // check login
    if (!isLogin) {
       dispatch(actions.getPostFalse());
       return <Navigate to="/" replace={true} />;

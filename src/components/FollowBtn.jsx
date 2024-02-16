@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../redux/store/actions";
 import Button from "./Button";

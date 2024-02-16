@@ -1,10 +1,10 @@
 import actionTypes from "../../actionType";
-import {apiGetUser, apiLogout} from "../../../service/apis"
+import {apiGetCurrentUser, apiLogout} from "../../../service/apis"
 
 
 export const getUserCurrent = () => async (dispatch) => {  
     try {
-    const response = await apiGetUser()
+    const response = await apiGetCurrentUser()
     if(response.err === 0){  
         dispatch({
             type: actionTypes.GET_CURRENT,

@@ -5,8 +5,8 @@ import { RiQuestionAnswerLine, RiHome4Line, RiLiveLine } from "react-icons/ri";
 import { BsKeyboard, BsList ,BsFillPlayFill, BsBookmarkDash } from "react-icons/bs";
 import { IoCloudyNightOutline, IoMusicalNotes, IoVolumeMute } from "react-icons/io5";
 import { SlWrench } from "react-icons/sl";
-import { BiBadgeCheck,BiBarChartSquare , BiCheckDouble, BiSolidLockAlt, BiMessageAltMinus, BiLogIn, BiMessageDetail  } from "react-icons/bi";
-import { FaNodeJs, FaFigma, FaPlay, FaRegCompass, FaRegUser  } from "react-icons/fa";
+import { BiBadgeCheck,BiBarChartSquare , BiCheckDouble, BiSolidLockAlt, BiMessageAltMinus, BiLogIn, BiMessageDetail, BiEdit  } from "react-icons/bi";
+import { FaNodeJs, FaFigma, FaPlay, FaRegCompass, FaRegUser, FaLock  } from "react-icons/fa";
 import { DiReact } from "react-icons/di";
 import { SiPostgresql, SiAudiomack } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
@@ -86,7 +86,9 @@ const icons = {
     BsThreeDots,
     MdKeyboardArrowDown,
     AiTwotoneDelete,
-    MdKeyboardArrowUp
+    MdKeyboardArrowUp,
+    BiEdit,
+    FaLock
 };
 
 export default icons;

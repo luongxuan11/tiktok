@@ -86,3 +86,18 @@ export const apiGetVideoFollowing = (payload) =>
          reject(error);
       }
    });
+
+// api get video liked
+export const apiGetVideoLiked = (payload) =>
+   new Promise(async (resolve, reject) => {
+      const response = await axiosConfig({
+         method: "get",
+         url: "/api/v1/overview/video-liked",
+         params: payload,
+      });
+      resolve(response);
+      try {
+      } catch (error) {
+         reject(error);
+      }
+   });
