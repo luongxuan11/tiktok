@@ -75,7 +75,7 @@ body {
    width: 100vw;
    height: 100vh;
    position: fixed;
-   z-index: 999;
+   z-index: 1010;
    justify-content: center;
    top: 0;
    left: 0;
@@ -228,9 +228,6 @@ body {
                background-color: #2f2f2f;
                color: #fff;
                border-radius: 999px;
-               // &:focus ~ .header__search-box {
-               //    display: unset;
-               // }
             }
             .svg {
                position: absolute;
@@ -1679,6 +1676,12 @@ body {
                         }
                      }
                   }
+                  .reject__comment {
+                     justify-content: center;
+                     margin-top: 100px;
+                     color: rgba(255, 255, 255, 0.5019607843);
+                     font-size: 1.4rem;
+                  }
                   @keyframes animloadVideo {
                      0% {
                         background: #252525;
@@ -1934,6 +1937,214 @@ body {
                }
             }
          }
+         .profile-edit {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: #000000ad;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            justify-content: center;
+            .edit-box {
+               margin: 0 24px;
+               width: 700px;
+               min-width: 350px;
+               flex-direction: column;
+               border-radius: 8px;
+               background: #121212;
+               align-items: flex-start;
+               strong {
+                  font-size: 1.8rem;
+                  width: 30%;
+                  color: #ffffffe6;
+               }
+               .edit-box__title {
+                  padding: 32px 24px 16px 24px;
+                  border-bottom: 1px solid #ffffff2f;
+                  width: 100%;
+                  justify-content: space-between;
+                  h2,
+                  .icon {
+                     font-size: 2.2rem;
+                     font-weight: 600;
+                  }
+                  .icon {
+                     margin-right: 20px;
+                     cursor: pointer;
+                  }
+               }
+               .edit-box__avatar,
+               .edit-box__id,
+               .edit-box__id--story {
+                  align-items: flex-start;
+                  width: calc(100% - 40px);
+                  padding: 16px 0;
+                  margin: 0 24px;
+                  border-bottom: 0.5px solid rgba(255, 255, 255, 0.329);
+               }
+               .edit-box__avatar {
+                  .avatar__image {
+                     width: 70%;
+                     align-items: flex-end;
+                     img {
+                        width: 91px;
+                        aspect-ratio: 1/1;
+                        border-radius: 50%;
+                        margin-left: 60px;
+                        object-fit: cover;
+                        object-position: center;
+                     }
+                     input {
+                        display: none;
+                     }
+                     label {
+                        width: 30px;
+                        aspect-ratio: 1/1;
+                        border: 0.5px solid #ffffff54;
+                        background-color: #2e2c2c;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        position: relative;
+                        left: -25px;
+                        justify-content: center;
+                     }
+                  }
+               }
+               .edit-box__id {
+                  .input {
+                     width: 100%;
+                     align-items: flex-start;
+                     position: relative;
+                     input {
+                        color: #ffffffe6;
+                        background: rgba(255, 255, 255, 0.12);
+                        border-radius: 4px;
+                        padding: 7px 12px;
+                        width: 70%;
+                        cursor: text;
+                        font-size: 1.6rem;
+                        caret-color: rgb(254, 44, 85);
+                        font-weight: 600;
+                        line-height: 24px;
+                     }
+                     .edit-box__id--origin {
+                        padding: 7px 35px 7px 12px;
+                     }
+                     .pending,
+                     .success,
+                     .error {
+                        position: absolute;
+                        top: 11px;
+                        right: 32%;
+                        font-weight: 600;
+                     }
+                     .pending {
+                        animation: spin 0.5s linear infinite;
+                     }
+                     .success {
+                        color: #33c549aa;
+                     }
+                     .error {
+                        color: #de3030;
+                     }
+                     .edit--profile {
+                        font-size: 1.2rem;
+                        color: #ffffffbf;
+                        width: 70%;
+                        margin-top: 10px;
+                        display: block;
+                        font-weight: 500;
+                        line-height: 1.4;
+                     }
+                     .ellipsis {
+                        width: 55%;
+                     }
+                     .home-login__error {
+                        color: rgb(254, 44, 85);
+                        font-size: 1.3rem;
+                        font-weight: 600;
+                        margin-top: 5px;
+                     }
+                  }
+               }
+               .edit-box__id--story {
+                  padding: 16px 24px;
+                  margin: unset;
+                  width: 100%;
+                  border-bottom: 1px solid #ffffff2f;
+                  textarea {
+                     color: #ffffffe6;
+                     caret-color: rgb(254, 44, 85);
+                     resize: none;
+                     width: 70%;
+                     background: rgba(255, 255, 255, 0.12);
+                     border-radius: 4px;
+                     border: none;
+                     outline: none;
+                     padding: 12px;
+                     text-decoration: none;
+                     font-weight: 600;
+                     line-height: 24px;
+                     font-size: 1.6rem;
+                  }
+               }
+               .edit-box__btn {
+                  margin-left: auto;
+                  padding: 24px;
+                  gap: 10px;
+                  .btn {
+                     padding: 10px 30px;
+                     border-radius: 4px;
+                     background-color: #ffffff14;
+                     color: #fff;
+                     font-size: 1.5rem;
+                     border: 1px solid transparent;
+                     &:hover {
+                        border-color: rgb(208, 209, 211);
+                        background-color: rgb(18, 18, 18);
+                     }
+                  }
+                  .btn--save {
+                     background: #ff3b5c;
+                     &:hover {
+                        background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), rgb(254, 44, 85);
+                        border-color: transparent;
+                     }
+                  }
+                  .btn--save--notActive {
+                     border: none;
+                     color: rgba(255, 255, 255, 0.34);
+                     background-color: rgba(255, 255, 255, 0.08);
+                     pointer-events: none;
+                  }
+               }
+            }
+         }
+         .popup {
+            .popup-box {
+               background: #121212;
+               .popup-box__btn--cancel {
+                  color: #a9a9a9fe;
+               }
+            }
+            span {
+               .loadingPopup {
+                  color: #5f59ad;
+                  font-size: 5rem;
+                  animation: spin 0.3s linear infinite;
+               }
+            }
+         }
       }
+   }
+}
+
+@keyframes spin {
+   from {
+      transform: rotate(0deg);
+   }
+   to {
+      transform: rotate(360deg);
    }
 }

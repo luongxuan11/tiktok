@@ -8,12 +8,9 @@ const validate = (payload, setInvalidFields) => {
    //   check rỗng
 
    fields.forEach((item) => {
-      // map qua từng phần tử =>> mỗi pt ở đây vẫn là 1 mảng nhỏ
-      // console.log("map",item)
-      if (item[1] === "") {
+      if (item[1] === "" && item[0] !== "story") {
          setInvalidFields((prev) => [
-            // prev ở đây là invalidField trước nếu có => tức là nếu có lỗi trước đó thì giải ra và giữ lại sau đó + thêm lỗi tiếp
-            ...prev, // dã invalidField ra
+            ...prev,
             {
                name: item[0], // tên của trường k hợp lệ
                mess: `Không được bỏ trống.`,
@@ -110,6 +107,18 @@ const validate = (payload, setInvalidFields) => {
                   {
                      name: item[0],
                      mess: `Mật khẩu nhập lại không khớp.`,
+                  },
+               ]);
+               invalid += 1;
+            }
+            break;
+         case "tikTokId":
+            if (!/^[a-zA-Z0-9_.-]*$/.test(item[1])) {
+               setInvalidFields((prev) => [
+                  ...prev,
+                  {
+                     name: item[0],
+                     mess: `Có kí tự không hợp lệ`,
                   },
                ]);
                invalid += 1;

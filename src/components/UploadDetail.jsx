@@ -22,10 +22,12 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
    const handleCheckLengthInput = useCallback(
       (e) => {
          const value = e.target.value;
-         setPayload((prev) => ({
-            ...prev,
-            title: value,
-         }));
+         if (value.length < 1100) {
+            setPayload((prev) => ({
+               ...prev,
+               title: value,
+            }));
+         }
          setTextLength(value.length);
       },
       [setPayload],
@@ -116,7 +118,7 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
          try {
             const thumbnailArray = await generateVideoThumbnails(videoFile?.file, 8);
             setThumbnails(thumbnailArray);
-            setGetThumbnail(true)
+            setGetThumbnail(true);
          } catch (error) {
             console.error("Error generating thumbnails:", error);
          }
@@ -126,11 +128,11 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
    }, [videoURL]);
 
    useEffect(() => {
-      setPayload(prev => ({
+      setPayload((prev) => ({
          ...prev,
-         comment_status: selectedItems.includes("Bình luận") ? 1 : 0
-      }))
-   }, [selectedItems])
+         comment_status: selectedItems.includes("Bình luận") ? 1 : 0,
+      }));
+   }, [selectedItems]);
 
    useEffect(() => {
       if (optionValue) {
@@ -140,7 +142,6 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
          }));
       }
    }, [optionValue]);
-
 
    // jsx
    return (
@@ -159,9 +160,7 @@ const UploadDetail = ({ canvas, getThumbnail, videoFile, payload, setPayload, se
             <h4>Ảnh bìa</h4>
             <div className="detail-drag">
                <div className="imageBox-wrapper row">
-                  {getThumbnail && thumbnails.map((thumbnail, index) => (
-                     <img key={index} src={thumbnail} alt={`Thumbnail ${index}`} />
-                  ))}
+                  {getThumbnail && thumbnails.map((thumbnail, index) => <img key={index} src={thumbnail} alt={`Thumbnail ${index}`} />)}
                   <span className={`${getThumbnail ? "imageBox--active" : ""}`}></span>
                </div>
                <input type="range" className={`detail-drag__touch`} value={rangeValue} onChange={(e) => handleRangeChange(e)} max={100}></input>

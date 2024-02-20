@@ -97,7 +97,6 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
       };
    }, []);
 
-
    return (
       <div className="post-item row">
          <div onClick={() => handleNavigateRouter(item.user.tiktok_id)} className="post-item__avatar avatar">
@@ -110,7 +109,7 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
                <div className="info-user__box">
                   <div className="name row">
                      <strong onClick={() => handleNavigateRouter(item.user.tiktok_id)}>{item.user?.userName}</strong>
-                     <span> - {item.user.tiktok_id.slice(0, 20)}...</span>
+                     <span> - {item.user.tiktok_id.slice(0, 20).replace(/@/g, "")}...</span>
                   </div>
                   <div className="title-box">
                      <p className="title">{item?.title}</p>

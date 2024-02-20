@@ -5,7 +5,7 @@ import { Button, InputComment, Feedback, FeedbackRealTime } from "./";
 import { apiDeleteComment } from "../service/apis";
 import { useSelector } from "react-redux";
 
-const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComment, MdKeyboardArrowDown, author, MdKeyboardArrowUp, currentPostId, feedbackIo }) => {
+const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComment, MdKeyboardArrowDown, author, MdKeyboardArrowUp, currentPostId, feedbackIo, statusComment }) => {
    const { user } = images;
 
    const [commentArr, setCommentArr] = useState([]);
@@ -19,8 +19,8 @@ const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComme
    useLayoutEffect(() => {
       if (comments && comments.length > 0) {
          setCommentArr(comments);
-      }else{
-         setCommentArr([])
+      } else {
+         setCommentArr([]);
       }
    }, [comments]);
    // handle delete comment and feedback
@@ -69,115 +69,121 @@ const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComme
    // jsx
    return (
       // arr get api
-      <div className="feature-comment">
-         {/* comment realTime */}
-         {commentIo &&
-            commentIo.length > 0 &&
-            commentIo.map((item) => {
-               return (
-                  <div key={item.id} className="feature-comment__user row">
-                     <img src={item.userCurrent.avatar || user} alt="TikTok" />
-                     <div className="user row">
-                        <span className="user__userName">
-                           {item.userCurrent.userName} {author === item.userId && <small>Tác giả</small>}
-                        </span>
-                        <span className="user__content ellipsis">{item.comment}</span>
-                        <div className="feedback row">
-                           <span className="row">{formatVi(item.updatedAt).length > 8 ? `${formatVi(item.updatedAt).slice(0, 8)}...` : formatVi(item.updatedAt)}</span>
-                           <span onClick={() => showCommentInput(item.id)} className="row">
-                              Trả lời
-                           </span>
-                        </div>
-                        {/* show input feedback */}
-
-                        {showInput && item.id === showInput && (
-                           <InputComment
-                              setActive={setActive}
-                              active={active}
-                              payload={payload}
-                              setPayload={setPayload}
-                              setShowInput={setShowInput}
-                              comment_id={showInput}
-                              icon
-                              currentPostId={currentPostId}
-                           />
-                        )}
-                        {/* realtime */}
-                        {feedbackIo.length > 0 && (
-                           <div className="feedback--reply">
-                              <FeedbackRealTime feedbackIo={feedbackIo} avatarDefault={user} currentData={currentData} comment_id={item.id} author={author} />
-                           </div>
-                        )}
-                     </div>
-                     <Button
-                        onClick={() => handleDeleteComment(idUser === item.userCurrent.id ? "Xóa" : "Báo cáo", item.id)}
-                        btnClass={"action"}
-                        text={`${idUser === item.userCurrent.id ? "Xóa" : "Báo cáo"}`}
-                     />
-                  </div>
-               );
-            })}
-         {/* end realtime */}
-         {commentArr &&
-            commentArr.map((item) => {
-               return (
-                  <div key={item.id} className="feature-comment__user row">
-                     <img src={item.userCurrent.avatar || user} alt="TikTok" />
-                     <div className="user row">
-                        <span className="user__userName">
-                           {item.userCurrent.userName} {author === item.userId && <small>Tác giả</small>}
-                        </span>
-                        <span className="user__content ellipsis">{item.comment}</span>
-                        <div className="feedback row">
-                           <span className="row">{formatVi(item.updatedAt).length > 8 ? `${formatVi(item.updatedAt).slice(0, 8)}...` : formatVi(item.updatedAt)}</span>
-                           <span onClick={() => showCommentInput(item.id)} className="row">
-                              Trả lời
-                           </span>
-                        </div>
-                        {/* show input feedback */}
-                        {showInput && item.id === showInput && (
-                           <InputComment
-                              setActive={setActive}
-                              active={active}
-                              payload={payload}
-                              setPayload={setPayload}
-                              setShowInput={setShowInput}
-                              comment_id={showInput}
-                              icon
-                              currentPostId={currentPostId}
-                           />
-                        )}
-                        {/* realtime */}
-                        {feedbackIo.length > 0 && (
-                           <div className="feedback--reply">
-                              <FeedbackRealTime feedbackIo={feedbackIo} avatarDefault={user} currentData={currentData} comment_id={item.id} author={author} />
-                           </div>
-                        )}
-                        {/* count people */}
-                        {item.link_feedback.length > 0 && (
-                           <div className="feedback--reply">
-                              <span onClick={() => replyComment(item.id)} className={`reply__comment row ${openFeedback === item.id ? "hidden" : ""}`}>
-                                 xem thêm {item.link_feedback.length} câu trả lời <MdKeyboardArrowDown className="icon" />
+      <>
+         {statusComment ? (
+            <div className="feature-comment">
+               {/* comment realTime */}
+               {commentIo &&
+                  commentIo.length > 0 &&
+                  commentIo.map((item) => {
+                     return (
+                        <div key={item.id} className="feature-comment__user row">
+                           <img src={item.userCurrent.avatar || user} alt="TikTok" />
+                           <div className="user row">
+                              <span className="user__userName">
+                                 {item.userCurrent.userName} {author === item.userId && <small>Tác giả</small>}
                               </span>
-                              {openFeedback === item.id && <Feedback value={item.link_feedback} avatarDefault={user} currentData={currentData} author={author}/>}
-                              {openFeedback === item.id && (
-                                 <span onClick={() => setOpenFeedback("")} className={`reply__comment hihi row`}>
-                                    Ẩn phản hồi <MdKeyboardArrowUp className="icon" />
+                              <span className="user__content ellipsis">{item.comment}</span>
+                              <div className="feedback row">
+                                 <span className="row">{formatVi(item.updatedAt).length > 8 ? `${formatVi(item.updatedAt).slice(0, 8)}...` : formatVi(item.updatedAt)}</span>
+                                 <span onClick={() => showCommentInput(item.id)} className="row">
+                                    Trả lời
                                  </span>
+                              </div>
+                              {/* show input feedback */}
+
+                              {showInput && item.id === showInput && (
+                                 <InputComment
+                                    setActive={setActive}
+                                    active={active}
+                                    payload={payload}
+                                    setPayload={setPayload}
+                                    setShowInput={setShowInput}
+                                    comment_id={showInput}
+                                    icon
+                                    currentPostId={currentPostId}
+                                 />
+                              )}
+                              {/* realtime */}
+                              {feedbackIo.length > 0 && (
+                                 <div className="feedback--reply">
+                                    <FeedbackRealTime feedbackIo={feedbackIo} avatarDefault={user} currentData={currentData} comment_id={item.id} author={author} />
+                                 </div>
                               )}
                            </div>
-                        )}
-                     </div>
-                     <Button
-                        onClick={() => handleDeleteComment(idUser === item.userCurrent.id ? "Xóa" : "Báo cáo", item.id)}
-                        btnClass={"action"}
-                        text={`${idUser === item.userCurrent.id ? "Xóa" : "Báo cáo"}`}
-                     />
-                  </div>
-               );
-            })}
-         {commentArr.length === 0 && commentIo.length === 0 ? <span className="first-user__comment row">Hãy là người đầu tiên bình luận!</span> : ""}
-      </div>
+                           <Button
+                              onClick={() => handleDeleteComment(idUser === item.userCurrent.id ? "Xóa" : "Báo cáo", item.id)}
+                              btnClass={"action"}
+                              text={`${idUser === item.userCurrent.id ? "Xóa" : "Báo cáo"}`}
+                           />
+                        </div>
+                     );
+                  })}
+               {/* end realtime */}
+               {commentArr &&
+                  commentArr.map((item) => {
+                     return (
+                        <div key={item.id} className="feature-comment__user row">
+                           <img src={item.userCurrent.avatar || user} alt="TikTok" />
+                           <div className="user row">
+                              <span className="user__userName">
+                                 {item.userCurrent.userName} {author === item.userId && <small>Tác giả</small>}
+                              </span>
+                              <span className="user__content ellipsis">{item.comment}</span>
+                              <div className="feedback row">
+                                 <span className="row">{formatVi(item.updatedAt).length > 8 ? `${formatVi(item.updatedAt).slice(0, 8)}...` : formatVi(item.updatedAt)}</span>
+                                 <span onClick={() => showCommentInput(item.id)} className="row">
+                                    Trả lời
+                                 </span>
+                              </div>
+                              {/* show input feedback */}
+                              {showInput && item.id === showInput && (
+                                 <InputComment
+                                    setActive={setActive}
+                                    active={active}
+                                    payload={payload}
+                                    setPayload={setPayload}
+                                    setShowInput={setShowInput}
+                                    comment_id={showInput}
+                                    icon
+                                    currentPostId={currentPostId}
+                                 />
+                              )}
+                              {/* realtime */}
+                              {feedbackIo.length > 0 && (
+                                 <div className="feedback--reply">
+                                    <FeedbackRealTime feedbackIo={feedbackIo} avatarDefault={user} currentData={currentData} comment_id={item.id} author={author} />
+                                 </div>
+                              )}
+                              {/* count people */}
+                              {item.link_feedback.length > 0 && (
+                                 <div className="feedback--reply">
+                                    <span onClick={() => replyComment(item.id)} className={`reply__comment row ${openFeedback === item.id ? "hidden" : ""}`}>
+                                       xem thêm {item.link_feedback.length} câu trả lời <MdKeyboardArrowDown className="icon" />
+                                    </span>
+                                    {openFeedback === item.id && <Feedback value={item.link_feedback} avatarDefault={user} currentData={currentData} author={author} />}
+                                    {openFeedback === item.id && (
+                                       <span onClick={() => setOpenFeedback("")} className={`reply__comment hihi row`}>
+                                          Ẩn phản hồi <MdKeyboardArrowUp className="icon" />
+                                       </span>
+                                    )}
+                                 </div>
+                              )}
+                           </div>
+                           <Button
+                              onClick={() => handleDeleteComment(idUser === item.userCurrent.id ? "Xóa" : "Báo cáo", item.id)}
+                              btnClass={"action"}
+                              text={`${idUser === item.userCurrent.id ? "Xóa" : "Báo cáo"}`}
+                           />
+                        </div>
+                     );
+                  })}
+               {commentArr.length === 0 && commentIo.length === 0 ? <span className="first-user__comment row">Hãy là người đầu tiên bình luận!</span> : ""}
+            </div>
+         ) : (
+            <div className="reject__comment row">Tính năng bình luận đã được tắt.</div>
+         )}
+      </>
    );
 };
 

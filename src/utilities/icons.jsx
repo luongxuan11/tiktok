@@ -1,7 +1,7 @@
 import { IoIosAdd, IoIosCut, IoMdArrowDropdown, IoMdClose} from "react-icons/io";
 import { BsThreeDotsVertical, BsSearch, BsEyeSlash, BsArrowReturnLeft, BsThreeDots } from "react-icons/bs";
 import { FcIdea } from "react-icons/fc";
-import { RiQuestionAnswerLine, RiHome4Line, RiLiveLine } from "react-icons/ri";
+import { RiQuestionAnswerLine, RiHome4Line, RiLiveLine, RiLoader4Line } from "react-icons/ri";
 import { BsKeyboard, BsList ,BsFillPlayFill, BsBookmarkDash } from "react-icons/bs";
 import { IoCloudyNightOutline, IoMusicalNotes, IoVolumeMute } from "react-icons/io5";
 import { SlWrench } from "react-icons/sl";
@@ -11,7 +11,7 @@ import { DiReact } from "react-icons/di";
 import { SiPostgresql, SiAudiomack } from "react-icons/si";
 import { GrMysql } from "react-icons/gr";
 import { FiUpload, FiSearch } from "react-icons/fi";
-import {CiShare1, CiCircleList, CiCircleCheck  } from "react-icons/ci";
+import {CiShare1, CiCircleList, CiCircleCheck, CiEdit} from "react-icons/ci";
 import {PiEyeDuotone, PiEyeClosedDuotone, PiPaperPlaneTiltBold} from "react-icons/pi";
 import {AiOutlineCloseCircle, AiFillFire, AiTwotoneDelete} from "react-icons/ai";
 import {MdKeyboardArrowLeft, MdCloudUpload, MdFavorite, MdOutlinePlayCircle, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
@@ -88,7 +88,9 @@ const icons = {
     AiTwotoneDelete,
     MdKeyboardArrowUp,
     BiEdit,
-    FaLock
+    FaLock,
+    CiEdit,
+    RiLoader4Line
 };
 
 export default icons;

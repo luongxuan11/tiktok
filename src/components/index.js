@@ -22,3 +22,4 @@ export { default as Feedback } from "./Feedback";
 export { default as FeedbackRealTime } from "./FeedbackRealTime";
 export { default as Video } from "./Video";
 export { default as PostsCommon } from "./PostsCommon";
+export { default as EditInformation } from "./EditInformation";

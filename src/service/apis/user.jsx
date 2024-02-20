@@ -54,3 +54,50 @@ export const apiVerifyOtp = (otp) =>
          reject(error);
       }
    });
+
+export const apiCheckIdInvalid = (tikTokId) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const response = await axiosConfig({
+            method: "get",
+            url: "/api/v1/user/check-id",
+            params: tikTokId,
+         });
+         resolve(response);
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+export const apiUpdateImageUser = (avatar) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const formData = new FormData();
+         Object.keys(avatar).forEach((key) => {
+            formData.append(key, avatar[key]);
+         });
+         const response = await axiosConfig({
+            method: "put",
+            url: "/api/v1/user/update-image-user",
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+         });
+         resolve(response);
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+export const apiUpdateUser = (payload) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const response = await axiosConfig({
+            method: "put",
+            url: "/api/v1/user/update-user",
+            data: payload,
+         });
+         resolve(response);
+      } catch (error) {
+         reject(error);
+      }
+   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { PostsCommon} from "../../components";
+import { PostsCommon } from "../../components";
 import { apiGetVideoFollowing } from "../../service/apis";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -90,7 +90,8 @@ const Following = () => {
                         />
                      );
                   })}
-               {loading && <LoadingLimitPost />}
+               {loading && posts.length > 0 && <LoadingLimitPost />}
+               {posts.length === 0 && <strong style={{marginTop: "40px", color: "#ffffffd6"}}>Hiện chưa có video nào.</strong>}
             </div>
          </div>
       </>

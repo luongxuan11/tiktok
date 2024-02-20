@@ -145,9 +145,11 @@ const DetailPost = () => {
                      <div className="group-info__user row">
                         <img src={currentPost?.user.avatar || user} alt="TikTok" />
                         <div className="box row">
-                           <strong className="name">{currentPost?.user.userName.length > 20 ? `${currentPost?.user.userName.slice(0, 20)}...` : currentPost?.user.userName}</strong>
+                           <strong className="name">{currentPost.user.userName.length > 20 ? `${currentPost.user.userName.slice(0, 20)}...` : currentPost.user.userName}</strong>
                            <span className="tiktokId row">
-                              {currentPost?.user.tiktok_id?.length > 10 ? `${currentPost?.user.tiktok_id?.slice(0, 10)}...` : `${currentPost?.user.tiktok_id} - `}{" "}
+                              {currentPost.user.tiktok_id?.length > 10
+                                 ? `${currentPost.user.tiktok_id.slice(0, 10).replace(/@/g, "")}...`
+                                 : `${currentPost.user.tiktok_id.replace(/@/g, "")} - `}{" "}
                               <small>{formatVi(currentPost.updatedAt)}</small>
                            </span>
                         </div>
@@ -216,13 +218,14 @@ const DetailPost = () => {
                            MdKeyboardArrowUp={MdKeyboardArrowUp}
                            currentPostId={currentPost.id}
                            feedbackIo={feedbackIo}
+                           statusComment={currentPost.comment_status}
                         />
                      ) : (
                         <VideoUser userId={currentPost.user_id} currentPostId={currentPost.id} setCurrentPost={setCurrentPost} />
                      )}
                   </div>
                </div>
-               {action === "comment" && <InputComment toast={toast} setActive={setActive} active={active} currentPostId={currentPost.id} />}
+               {action === "comment" && currentPost.comment_status && <InputComment toast={toast} setActive={setActive} active={active} currentPostId={currentPost.id} />}
             </div>
          )}
       </div>
