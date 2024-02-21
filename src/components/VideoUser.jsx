@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo } from "react";
 import { apiGetVideoOfUser } from "../service/apis";
 import Video from "./Video";
 
-const VideoUser = ({ userId, currentPostId, setCurrentPost, title, videoLiked }) => {
+const VideoUser = ({ userId, currentPostId, title, videoLiked }) => {
    const [posts, setPosts] = useState([]);
 
    useEffect(() => {

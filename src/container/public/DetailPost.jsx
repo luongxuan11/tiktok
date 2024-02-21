@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect, memo } from "react";
+import React, { useEffect, useState, memo } from "react";
 import icons from "../../utilities/icons";
 import Search from "../../components/Search";
 import InputComment from "../../components/InputComment";
@@ -9,14 +9,12 @@ import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { apiGetCurrentPost } from "../../service/apis";
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../redux/store/actions";
-// import { io } from "socket.io-client";
 import { formatVi } from "../../utilities/formatTime";
-import { socket } from "../../socket";
 
 const DetailPost = () => {
    const { IoMdClose, BsThreeDots, IoMusicalNotes, MdKeyboardArrowDown, MdKeyboardArrowUp } = icons;
    const { twitter, whatsApp, facebook, send, user } = images;
-   // const navigate = useNavigate();
+   const navigate = useNavigate();
    const location = useLocation();
    const dispatch = useDispatch();
 
@@ -27,35 +25,7 @@ const DetailPost = () => {
    const [currentUrl, setCurrentUrl] = useState(null);
    const [currentPost, setCurrentPost] = useState(null);
    const [action, setAction] = useState("comment");
-   const [active, setActive] = useState(false);
-   const [commentIo, setCommentIo] = useState([]);
-   const [feedbackIo, setFeedbackIo] = useState([]);
-   const [deleteComment, setDeleteComment] = useState(null);
-
-   // data comment from socketIo
-   useLayoutEffect(() => {
-      const postId = location.pathname.split("/").slice(-1)[0];
-      socket.on("newComment", (data) => {
-         console.log(data, "check");
-         if (data) {
-            setCommentIo((prev) => [data, ...prev]);
-         }
-      });
-      socket.emit("join-room", postId);
-      socket.on("deleteComment", (data) => {
-         if (data) {
-            setDeleteComment(data);
-         }
-      });
-      socket.on("newFeedback", (data) => {
-         setFeedbackIo((prev) => [data, ...prev]);
-      });
-
-      return () => {
-         socket.emit("leave-room", postId);
-         setCommentIo([]);
-      };
-   }, [location.pathname]);
+   const postId = location.pathname.split("/").slice(-1)[0];
 
    // call api
    const callApi = async (postId) => {
@@ -69,10 +39,9 @@ const DetailPost = () => {
    useEffect(() => {
       if (isLogin) {
          setCurrentUrl(window.location.href);
-         const postId = location.pathname.split("/").slice(-1)[0];
          callApi(postId);
       }
-   }, [location.pathname, isLogin]);
+   }, [isLogin, postId]);
    // end call api
 
    // check login
@@ -114,12 +83,17 @@ const DetailPost = () => {
    const handleToggleAction = (value) => {
       setAction(value);
    };
+   // console.log(commentIo);
+
+   const backPage = () => {
+      navigate(localStorage.getItem("myData"));
+   };
 
    return (
       <div className="detail-post row">
          <div className="detail-post__video">
             <div className="video-nav row">
-               <span onClick={() => window.history.back()} className="icon--box row">
+               <span onClick={backPage} className="icon--box row">
                   <IoMdClose className="icon" />
                </span>
                <Search />
@@ -143,7 +117,7 @@ const DetailPost = () => {
                <div className="detail-post__group custom-scroll">
                   <div className="group-info">
                      <div className="group-info__user row">
-                        <img src={currentPost?.user.avatar || user} alt="TikTok" />
+                        <img src={currentPost.user.avatar || user} alt="TikTok" />
                         <div className="box row">
                            <strong className="name">{currentPost.user.userName.length > 20 ? `${currentPost.user.userName.slice(0, 20)}...` : currentPost.user.userName}</strong>
                            <span className="tiktokId row">
@@ -153,13 +127,13 @@ const DetailPost = () => {
                               <small>{formatVi(currentPost.updatedAt)}</small>
                            </span>
                         </div>
-                        {currentData?.id === currentPost?.user_id ? "" : <FollowBtn item={currentPost} btnClass={"tiktokFollow"} />}
+                        {currentData?.id === currentPost.user_id ? "" : <FollowBtn item={currentPost} btnClass={"tiktokFollow"} />}
                      </div>
-                     <p className="group-info__content ellipsis">{currentPost?.title}</p>
+                     <p className="group-info__content ellipsis">{currentPost.title}</p>
                      <div className="group-info__music row">
                         <IoMusicalNotes className="icon" />
                         <span>
-                           {currentPost?.user.userName?.length > 13 ? `Nhạc nền - ${currentPost?.user.userName?.slice(0, 13)}...` : `Nhạc nền - ${currentPost?.user.userName}`}
+                           {currentPost.user.userName?.length > 13 ? `Nhạc nền - ${currentPost.user.userName?.slice(0, 13)}...` : `Nhạc nền - ${currentPost.user.userName}`}
                         </span>
                      </div>
                   </div>
@@ -196,7 +170,7 @@ const DetailPost = () => {
                   <div className="group-action">
                      <div className="group-action__active row">
                         <span className={`row ${action === "comment" ? "active" : ""}`} onClick={() => handleToggleAction("comment")}>
-                           Bình luận ({currentPost?.comments.length})
+                           Bình luận ({currentPost.comments.length})
                         </span>
                         <span className={`row ${action === "user" ? "active" : ""}`} onClick={() => handleToggleAction("user")}>
                            Video của nhà sáng tạo
@@ -207,9 +181,6 @@ const DetailPost = () => {
                   <div className="group-feature">
                      {action === "comment" ? (
                         <Comment
-                           deleteComment={deleteComment}
-                           commentIo={commentIo}
-                           setCommentIo={setCommentIo}
                            toast={toast}
                            comments={currentPost?.comments}
                            idUser={currentData.id}
@@ -217,15 +188,14 @@ const DetailPost = () => {
                            author={currentPost.user_id}
                            MdKeyboardArrowUp={MdKeyboardArrowUp}
                            currentPostId={currentPost.id}
-                           feedbackIo={feedbackIo}
                            statusComment={currentPost.comment_status}
                         />
                      ) : (
-                        <VideoUser userId={currentPost.user_id} currentPostId={currentPost.id} setCurrentPost={setCurrentPost} />
+                        <VideoUser userId={currentPost.user_id} currentPostId={currentPost.id} />
                      )}
                   </div>
                </div>
-               {action === "comment" && currentPost.comment_status && <InputComment toast={toast} setActive={setActive} active={active} currentPostId={currentPost.id} />}
+               {action === "comment" && currentPost.comment_status && <InputComment toast={toast} currentPostId={currentPost.id} />}
             </div>
          )}
       </div>

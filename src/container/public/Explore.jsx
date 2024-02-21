@@ -8,6 +8,9 @@ import { Waypoint } from "react-waypoint";
 import { LoadingLimitPost } from "../../components/animation";
 
 const Explore = () => {
+   useEffect(() => {
+      localStorage.setItem("myData", "/explore");
+   }, []);
    const { user } = images;
    const { MdFavorite } = icons;
 
@@ -87,7 +90,7 @@ const Explore = () => {
                   );
                })}
          </div>
-         {loading && <LoadingLimitPost/>}
+         {loading && <LoadingLimitPost />}
       </div>
    );
 };

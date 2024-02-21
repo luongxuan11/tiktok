@@ -1,10 +1,12 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import images from "../assets/imgExport";
 import icons from "../utilities/icons";
-import {formatTime} from "../utilities/formatTime";
+import { formatTime } from "../utilities/formatTime";
 import Popup from "./Popup";
+import { useSelector } from "react-redux";
 
-const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
+const UploadPhone = ({ videoFile, getThumbnail, handleUnsetPost, setTime, titleVideo }) => {
+   const { currentData } = useSelector((state) => state.user);
    const { control_image, live, user } = images;
    const { BsSearch, IoMusicalNotes, MdFavorite, FaCommentDots, PiShareFatFill, MdOutlinePlayCircle, FaPause, GoUnmute, IoVolumeMute, CiCircleCheck } = icons;
 
@@ -14,13 +16,13 @@ const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
    const [currentTime, setCurrentTime] = useState(0);
    const [duration, setDuration] = useState(0);
    const [videoURL, setVideoURL] = useState(null);
-   const [showPopup, setShowPopup] = useState(false)
+   const [showPopup, setShowPopup] = useState(false);
 
    useEffect(() => {
       // Tạo URL mới khi videoFile.file thay đổi
       if (videoFile && videoFile.file) {
          const newVideoURL = URL.createObjectURL(videoFile.file);
-         setVideoURL(newVideoURL); 
+         setVideoURL(newVideoURL);
          return () => {
             URL.revokeObjectURL(newVideoURL);
          };
@@ -30,14 +32,16 @@ const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
    const togglePlay = useCallback(
       (e) => {
          e.stopPropagation();
-         if(isPlaying){
-            videoRef.current.pause()
-            setIsPlaying(false)
-         }else{
-            videoRef.current.play()
-            setIsPlaying(true)
+         if (isPlaying) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+         } else {
+            videoRef.current.play();
+            setIsPlaying(true);
          }
-      },[isPlaying]);
+      },
+      [isPlaying],
+   );
 
    const toggleMute = useCallback(
       (e) => {
@@ -46,11 +50,13 @@ const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
             videoRef.current.muted = !isMute;
             setIsMute(!isMute);
          }
-      },[isMute]);
+      },
+      [isMute],
+   );
 
    const handleTimeUpdate = () => {
       setCurrentTime(videoRef.current?.currentTime);
-      setTime(duration)
+      setTime(duration);
    };
    const handleLoadedMetadata = () => {
       setDuration(videoRef.current?.duration);
@@ -101,12 +107,14 @@ const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
                </div>
                <div className="inner-info row">
                   <div className="inner-info__user row">
-                     <span>@Hihi?</span>
-                     <span>link anh</span>
+                     <span>{currentData?.tiktok_id}</span>
+                     <span>{titleVideo.length > 20 ? `${titleVideo.slice(0, 20)}...` : titleVideo}</span>
                      <div className="inner-info__user--icon row">
                         <IoMusicalNotes className="icon" />
-                        <small>
-                           <span>Âm thanh gốc - @Hihi?</span>
+                        <small className="row">
+                           <span className={`${!isPlaying && "pause"}`}>Âm thanh gốc - {currentData?.tiktok_id}</span>
+                           <span className={`${!isPlaying && "pause"}`}>Âm thanh gốc - {currentData?.tiktok_id}</span>
+                           <span className={`${!isPlaying && "pause"}`}>Âm thanh gốc - {currentData?.tiktok_id}</span>
                         </small>
                      </div>
                   </div>
@@ -149,17 +157,30 @@ const UploadPhone = ({videoFile, getThumbnail, handleUnsetPost, setTime}) => {
                </div>
             </div>
          </div>
-         {!getThumbnail && <div className="handle-video__upload row">
-            <div className="loader-handle"></div>
-            <span>Tối ưu hóa hiển thị...</span>
-         </div>}
+         {!getThumbnail && (
+            <div className="handle-video__upload row">
+               <div className="loader-handle"></div>
+               <span>Tối ưu hóa hiển thị...</span>
+            </div>
+         )}
 
          <div className="phone-change__link row">
             <CiCircleCheck className="phone-change__link--icon" />
-            <span className="phone-change__link--video">{`${videoFile?.name.slice(0, 18)}...` || ''}</span>
-            <small onClick={() => setShowPopup(true)} className="phone-change__link--change">Thay đổi video</small>
+            <span className="phone-change__link--video">{`${videoFile?.name.slice(0, 18)}...` || ""}</span>
+            <small onClick={() => setShowPopup(true)} className="phone-change__link--change">
+               Thay đổi video
+            </small>
          </div>
-         {showPopup && <Popup accessAction={handleUnsetPost} title={"Thay thế video này?"} setShowPopup={setShowPopup} content={"Chú thích và cài đặt video vẫn sẽ được lưu."} cancel={"Tiếp tục chỉnh sửa"} access={"Thay thế"}/>}
+         {showPopup && (
+            <Popup
+               accessAction={handleUnsetPost}
+               title={"Thay thế video này?"}
+               setShowPopup={setShowPopup}
+               content={"Chú thích và cài đặt video vẫn sẽ được lưu."}
+               cancel={"Tiếp tục chỉnh sửa"}
+               access={"Thay thế"}
+            />
+         )}
       </div>
    );
 };

@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import icons from "../utilities/icons";
 import { Waypoint } from "react-waypoint";
 import { FavoriteBtn, FollowBtn, ShareBtn, CommentBtn } from ".";
+import { useLocation } from "react-router-dom";
 
 const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentData, appendSpan, handleBeforeCallApi, videoRefs, currentPlayingRef, following }) => {
    const { IoMusicalNotes, FaPlay, FaPause, GoUnmute, IoVolumeMute } = icons;
    const { user } = images;
    // route
    const navigate = useNavigate();
+   const location = useLocation();
    //state
    const [playingCheck, setPlayingCheck] = useState("");
    const [isMute, setIsMute] = useState(false);
@@ -73,6 +75,14 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
          videoElement.pause();
       }
    };
+
+   useEffect(() => {
+      if (location.pathname.includes("video")) {
+         currentPlayingRef.current.pause();
+      } else {
+         currentPlayingRef.current.play();
+      }
+   }, [location.pathname, currentPlayingRef]);
    // end handle playingVideo auto
 
    // play video change tab
@@ -122,6 +132,7 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
             </div>
             <div className="info-video row">
                <div className="info-video__original">
+                  <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset="100px" />
                   <video
                      className="info-video__original--video"
                      poster={item.thumb_file_name}
@@ -130,7 +141,6 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
                      preload="auto"
                      loop="loop"
                   ></video>
-                  <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset="120px" />
                   <div className="original-video__control row">
                      <span onClick={(e) => togglePlay(e, item.id)}>{playingCheck === item.id ? <FaPause className="icon" /> : <FaPlay className="icon" />}</span>
                      <span onClick={(e) => toggleMute(e)}>{isMute ? <IoVolumeMute className="icon icon--mute" /> : <GoUnmute className="icon icon--mute" />}</span>

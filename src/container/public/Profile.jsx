@@ -45,7 +45,9 @@ const Profile = () => {
    };
    useEffect(() => {
       try {
-         callApi(location.pathname.replace("/", ""));
+         const tikTokId = location.pathname.replace("/", "");
+         localStorage.setItem("myData", tikTokId);
+         callApi(tikTokId);
       } catch (error) {
          console.log(error);
       }

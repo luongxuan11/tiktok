@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthFormLogin, PopupOtp, PostsCommon } from "../../components";
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import * as actions from "../../redux/store/actions";
 import { LoadingLimitPost } from "../../components/animation";
 
@@ -28,6 +28,7 @@ const HomeTitle = () => {
    // spread post
    useEffect(() => {
       if (post.length !== 0 && location.pathname === "/") {
+         localStorage.setItem("myData", "/");
          setPosts((prev) => [...prev, ...post]);
       }
    }, [post, location.pathname]);
@@ -65,25 +66,25 @@ const HomeTitle = () => {
    return (
       <>
          {showForm && <AuthFormLogin setShowForm={setShowForm} />}
-         <div className="home-title" >
+         <div className="home-title">
             <div className="post row">
                {posts &&
                   posts.length > 0 &&
                   posts.map((item, index) => {
                      return (
-                           <PostsCommon
-                              key={index}
-                              index={index}
-                              item={item}
-                              isLogin={isLogin}
-                              currentData={currentData}
-                              setShowForm={setShowForm}
-                              setShowPopup={setShowPopup}
-                              appendSpan={appendSpan}
-                              handleBeforeCallApi={handleBeforeCallApi}
-                              videoRefs={videoRefs}
-                              currentPlayingRef={currentPlayingRef}
-                           />
+                        <PostsCommon
+                           key={index}
+                           index={index}
+                           item={item}
+                           isLogin={isLogin}
+                           currentData={currentData}
+                           setShowForm={setShowForm}
+                           setShowPopup={setShowPopup}
+                           appendSpan={appendSpan}
+                           handleBeforeCallApi={handleBeforeCallApi}
+                           videoRefs={videoRefs}
+                           currentPlayingRef={currentPlayingRef}
+                        />
                      );
                   })}
                {loading && <LoadingLimitPost />}

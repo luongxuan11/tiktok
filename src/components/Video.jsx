@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef, memo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Video = ({ item, index }) => {
-   const [hoveredVideo, setHoveredVideo] = useState("");
+   const [hoveredVideo, setHoveredVideo] = useState(null);
    const navigate = useNavigate();
    const videoRefs = useRef([]);
    const handleMouseLeave = () => {
-      setHoveredVideo("");
+      setHoveredVideo(null);
    };
 
    useEffect(() => {

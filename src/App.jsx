@@ -42,7 +42,7 @@ function App() {
                <Route path={`${path.PROFILE}/*`} element={<Profile />} />
                <Route path={`explore/*`} element={<Explore />} />
                <Route path={`following/*`} element={<Following />} />
-               <Route path={`${path.DETAIL_POST}/*`} element={<DetailPost />} />
+               {/* <Route path={`${path.DETAIL_POST}/*`} element={<DetailPost />} /> */}
             </Route>
             <Route path={path.CREATOR_CENTER} element={<CreatorCenter />}>
                <Route path={path.UPLOAD} element={<CreatorUpload />} />

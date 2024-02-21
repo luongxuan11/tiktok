@@ -133,7 +133,7 @@ const CreatorUpload = () => {
                      <p>Đăng video vào tài khoản của bạn</p>
                   </div>
                   <div className="upload-detail row">
-                     <UploadPhone setTime={setTime} handleUnsetPost={handleUnsetPost} getThumbnail={getThumbnail} videoFile={videoFile} />
+                     <UploadPhone setTime={setTime} handleUnsetPost={handleUnsetPost} getThumbnail={getThumbnail} videoFile={videoFile} titleVideo={payload.title} />
                      <UploadDetail getThumbnail={getThumbnail} setGetThumbnail={setGetThumbnail} payload={payload} setPayload={setPayload} videoFile={videoFile} canvas={canvas} />
                   </div>
                   <div className="upload-action__box row">

@@ -6,6 +6,9 @@ import { Navigate } from "react-router-dom";
 import { LoadingLimitPost } from "../../components/animation";
 
 const Following = () => {
+   useEffect(() => {
+      localStorage.setItem("myData", "/following");
+   }, []);
    // redux
    const { currentData } = useSelector((state) => state.user);
    const { isLogin } = useSelector((state) => state.auth);
@@ -91,7 +94,7 @@ const Following = () => {
                      );
                   })}
                {loading && posts.length > 0 && <LoadingLimitPost />}
-               {posts.length === 0 && <strong style={{marginTop: "40px", color: "#ffffffd6"}}>Hiện chưa có video nào.</strong>}
+               {posts.length === 0 && <strong style={{ marginTop: "40px", color: "#ffffffd6" }}>Hiện chưa có video nào.</strong>}
             </div>
          </div>
       </>

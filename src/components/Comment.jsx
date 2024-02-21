@@ -4,17 +4,44 @@ import images from "../assets/imgExport";
 import { Button, InputComment, Feedback, FeedbackRealTime } from "./";
 import { apiDeleteComment } from "../service/apis";
 import { useSelector } from "react-redux";
+import { socket } from "../socket";
 
-const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComment, MdKeyboardArrowDown, author, MdKeyboardArrowUp, currentPostId, feedbackIo, statusComment }) => {
+const Comment = ({ comments, idUser, toast, MdKeyboardArrowDown, author, MdKeyboardArrowUp, currentPostId, statusComment }) => {
    const { user } = images;
-
    const [commentArr, setCommentArr] = useState([]);
    const [showInput, setShowInput] = useState(null);
    const [active, setActive] = useState(false);
    const [payload, setPayload] = useState("");
    const [openFeedback, setOpenFeedback] = useState("");
+   const [commentIo, setCommentIo] = useState([]);
+   const [feedbackIo, setFeedbackIo] = useState([]);
+   const [deleteComment, setDeleteComment] = useState(null);
 
    const { currentData } = useSelector((state) => state.user);
+
+   // data comment from socketIo
+   useEffect(() => {
+      socket.on("newComment", (data) => {
+         if (data) {
+            setCommentIo((prev) => [data, ...prev]);
+         }
+      });
+      socket.emit("join-room", currentPostId);
+      socket.on("deleteComment", (data) => {
+         if (data) {
+            setDeleteComment(data);
+         }
+      });
+      socket.on("newFeedback", (data) => {
+         setFeedbackIo((prev) => [data, ...prev]);
+      });
+
+      return () => {
+         console.log("leave");
+         socket.emit("leave-room", currentPostId);
+         setCommentIo([]);
+      };
+   }, [currentPostId]);
 
    useLayoutEffect(() => {
       if (comments && comments.length > 0) {
@@ -23,28 +50,25 @@ const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComme
          setCommentArr([]);
       }
    }, [comments]);
-   // handle delete comment and feedback
-   const handleDeleteComment = useCallback(
-      async (value, id) => {
-         if (value === "Xóa") {
-            const response = await apiDeleteComment({ comment_id: id });
-            if (response.err === 0) {
-               toast.success("Đã xóa bình luận", {
-                  duration: 1500,
-                  position: "top-center",
-                  style: {
-                     background: "#121212",
-                     color: "#fff",
-                     ["fontweight"]: "600",
-                     padding: "5px 30px",
-                  },
-               });
-            }
-         }
-      },
-      [deleteComment],
-   );
 
+   // handle delete comment and feedback
+   const handleDeleteComment = async (value, id) => {
+      if (value === "Xóa") {
+         const response = await apiDeleteComment({ comment_id: id });
+         if (response.err === 0) {
+            toast.success("Đã xóa bình luận", {
+               duration: 1500,
+               position: "top-center",
+               style: {
+                  background: "#121212",
+                  color: "#fff",
+                  ["fontweight"]: "600",
+                  padding: "5px 30px",
+               },
+            });
+         }
+      }
+   };
    // delete comment user interface
    useEffect(() => {
       if (deleteComment && commentIo.length === 0) {
@@ -57,10 +81,10 @@ const Comment = ({ comments, commentIo, idUser, toast, setCommentIo, deleteComme
       }
    }, [deleteComment]);
 
+   // onclick action
    const showCommentInput = (id) => {
       setShowInput(id);
    };
-
    // api feedback
    const replyComment = (id) => {
       setOpenFeedback(id);
