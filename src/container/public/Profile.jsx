@@ -119,7 +119,7 @@ const Profile = () => {
                   </span>
                   <span className="line" style={{ left: lineLocation, width: lineWidth }}></span>
                </div>
-               {lineClass === "video" ? <VideoUser userId={currentUser.id} title /> : <VideoUser videoLiked={videoLiked} title />}
+               {lineClass === "video" ? <VideoUser userId={currentUser.id} title control /> : <VideoUser videoLiked={videoLiked} title />}
                {lineClass === "liked" && currentUser.id !== currentData.id && (
                   <div className="profile-privacy row">
                      <FaLock className="icon" />

@@ -101,3 +101,33 @@ export const apiGetVideoLiked = (payload) =>
          reject(error);
       }
    });
+
+// api update post
+export const apiUpdatePost = (payload) =>
+   new Promise(async (resolve, reject) => {
+      const response = await axiosConfig({
+         method: "put",
+         url: "/api/v1/overview/update-post",
+         data: payload,
+      });
+      resolve(response);
+      try {
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+// api update post
+export const apiDeletePost = (payload) =>
+   new Promise(async (resolve, reject) => {
+      const response = await axiosConfig({
+         method: "delete",
+         url: "/api/v1/overview/delete-post",
+         params: payload,
+      });
+      resolve(response);
+      try {
+      } catch (error) {
+         reject(error);
+      }
+   });

@@ -1,12 +1,15 @@
 import React from "react";
 import Button from "./Button";
 
-const Popup = ({ title, content, cancel, access, setShowPopup, accessAction, loadingIcon }) => {
+const Popup = ({ title, content, cancel, access, setShowPopup, accessAction, loadingIcon, processTitle }) => {
    return (
       <div className="popup row">
          <div className="popup-box">
             {loadingIcon ? (
-               <span>{loadingIcon}</span>
+               <>
+                  <span className="loadingIcon">{loadingIcon}</span>
+                  <small className="processTitle">{processTitle}</small>
+               </>
             ) : (
                <>
                   <h1>{title}</h1>

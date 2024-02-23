@@ -2,14 +2,14 @@ import React, { useState, useEffect, memo } from "react";
 import { apiGetVideoOfUser } from "../service/apis";
 import Video from "./Video";
 
-const VideoUser = ({ userId, currentPostId, title, videoLiked }) => {
+const VideoUser = ({ userId, currentPostId, title, videoLiked, control }) => {
    const [posts, setPosts] = useState([]);
 
    useEffect(() => {
       try {
          if (userId) {
             const callApi = async () => {
-               const response = await apiGetVideoOfUser({ userId });
+               const response = await apiGetVideoOfUser({ userId, control });
                if (response.err === 0) {
                   setPosts(response.res);
                } else {

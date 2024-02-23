@@ -391,6 +391,9 @@ body {
                   border-radius: 4px;
                   display: none;
                }
+               .box{
+                  position: absolute;
+               }
             }
             .message {
                .icon:hover + span {

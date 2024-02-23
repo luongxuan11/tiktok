@@ -40,6 +40,7 @@ const DetailPost = () => {
       if (isLogin) {
          setCurrentUrl(window.location.href);
          callApi(postId);
+         localStorage.setItem("detailPost", true);
       }
    }, [isLogin, postId]);
    // end call api

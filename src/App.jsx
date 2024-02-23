@@ -2,9 +2,8 @@ import { useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Home, Auth, SearchDetail, Profile, Explore, Following, ResetPassword } from "./container/public";
-import { CreatorCenter, CreatorUpload } from "./container/creator";
+import { CreatorCenter, CreatorUpload, CreatorContent } from "./container/creator";
 import { path } from "./utilities/constant";
-import { DetailPost } from "./components";
 import * as actions from "./redux/store/actions";
 import "./sass/App.scss";
 import { socket } from "./socket";
@@ -28,6 +27,12 @@ function App() {
    }, [isLogin, dispatch]);
 
    useEffect(() => {
+      if (!location.pathname.includes("video")) {
+         localStorage.setItem("detailPost", false);
+      }
+   }, [location.pathname]);
+
+   useEffect(() => {
       if (location.pathname !== "/") {
          dispatch(actions.getPostFalse());
       }
@@ -46,6 +51,7 @@ function App() {
             </Route>
             <Route path={path.CREATOR_CENTER} element={<CreatorCenter />}>
                <Route path={path.UPLOAD} element={<CreatorUpload />} />
+               <Route path={path.CONTENT} element={<CreatorContent />} />
             </Route>
             <Route path={path.AUTH} element={<Auth />} />
             <Route path={path.FORGET} element={<ResetPassword />} />

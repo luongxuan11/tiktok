@@ -3,16 +3,18 @@ import icons from "../../utilities/icons";
 import { Button, UploadPhone, UploadDetail, EditVideo, Popup } from "../../components";
 import { apiUpload } from "../../service/apis";
 import Swal from "sweetalert2";
-
-const { MdCloudUpload, IoIosCut, TfiSplitH } = icons;
+import { useNavigate } from "react-router-dom";
 
 const CreatorUpload = () => {
+   const { MdCloudUpload, IoIosCut, TfiSplitH, RiLoader4Line } = icons;
+   const navigate = useNavigate();
    const [showUploadDetail, setShowUploadDetail] = useState(false);
    const [videoFile, setVideoFile] = useState(null);
    const [showEditVideo, setShowEditVideo] = useState(false);
    const [getThumbnail, setGetThumbnail] = useState(false);
    const [payload, setPayload] = useState({});
    const [showPopup, setShowPopup] = useState(false);
+   const [activeSubmit, setActiveSubmit] = useState(false);
    const [time, setTime] = useState(null);
 
    const canvas = useRef(null);
@@ -65,10 +67,24 @@ const CreatorUpload = () => {
 
    // submit
    const handleSubmit = async () => {
-      if (payload.video && payload.image) {
-         const response = await apiUpload(payload);
-      } else {
-         Swal.fire("Thất bại!", "Opps! có lỗi rùi!", "error");
+      try {
+         if (payload.video && payload.image) {
+            setActiveSubmit(true);
+            const response = await apiUpload(payload);
+            if (response.err === 0) {
+               setActiveSubmit(false);
+               Swal.fire("Thành công", "Return Control posts!", "success").then(() => navigate("/creator-center/content"));
+            } else {
+               setActiveSubmit(false);
+               Swal.fire("Thất bại!", response.mess, "error");
+            }
+         } else {
+            setActiveSubmit(false);
+            Swal.fire("Thất bại!", "Opps! có lỗi rùi!", "error");
+         }
+      } catch (error) {
+         Swal.fire("Thất bại!", error.mess, "error");
+         setActiveSubmit(false);
       }
    };
 
@@ -154,6 +170,7 @@ const CreatorUpload = () => {
                access={"Hủy bỏ"}
             />
          )}
+         {payload && activeSubmit && <Popup processTitle={"Video đang được tải lên vui lòng chờ."} loadingIcon={<RiLoader4Line className="icon" />} />}
       </section>
    );
 };

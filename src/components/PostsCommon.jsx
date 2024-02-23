@@ -77,10 +77,12 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
    };
 
    useEffect(() => {
-      if (location.pathname.includes("video")) {
-         currentPlayingRef.current.pause();
-      } else {
-         currentPlayingRef.current.play();
+      if (currentPlayingRef.current) {
+         if (location.pathname.includes("video")) {
+            currentPlayingRef.current.pause();
+         } else {
+            currentPlayingRef.current.play();
+         }
       }
    }, [location.pathname, currentPlayingRef]);
    // end handle playingVideo auto
@@ -94,7 +96,7 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
          }
       } else {
          // Page is visible, resume playing the video if there was one playing
-         if (currentPlayingRef.current) {
+         if (currentPlayingRef.current && !localStorage.getItem("detailPost")) {
             currentPlayingRef.current.play();
          }
       }
@@ -132,7 +134,6 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
             </div>
             <div className="info-video row">
                <div className="info-video__original">
-                  <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset="100px" />
                   <video
                      className="info-video__original--video"
                      poster={item.thumb_file_name}
@@ -141,6 +142,7 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
                      preload="auto"
                      loop="loop"
                   ></video>
+                  <Waypoint onEnter={() => handleAutoPlay(item.id)} bottomOffset={"100px"} />
                   <div className="original-video__control row">
                      <span onClick={(e) => togglePlay(e, item.id)}>{playingCheck === item.id ? <FaPause className="icon" /> : <FaPlay className="icon" />}</span>
                      <span onClick={(e) => toggleMute(e)}>{isMute ? <IoVolumeMute className="icon icon--mute" /> : <GoUnmute className="icon icon--mute" />}</span>
