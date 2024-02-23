@@ -11,7 +11,7 @@ router.get("/get-current-post", controllers.getCurrentPost);
 router.get("/limit--explore", controllers.getPostsExplore);
 
 router.use(verifyToken);
-router.post("/create-post", setupUploadFile, controllers.createNewPost);
+router.post("/create-post", requireVerifyOtp, setupUploadFile, controllers.createNewPost);
 router.get("/following", requireVerifyOtp, controllers.getPostsFollowing);
 router.put("/update-post", requireVerifyOtp, controllers.updatePost);
 router.post("/upload-favorite", controllers.uploadFavorite);
