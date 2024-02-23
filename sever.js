@@ -21,7 +21,7 @@ var io = require("socket.io")(server, {
 app.use(
    cors({
       // dùng để đăng kí 1 middleware được phép truy cập
-      origin: process.env.CLIENT_URL, // origin là tên miền được phép truy cập
+      origin: "*", // origin là tên miền được phép truy cập
       optionsSuccessStatus: 200, // Được vào với state 200
       methods: ["GET", "POST", "PUT", "DELETE"],
       credentials: true, // Cho phép sử dụng Cookie
@@ -35,7 +35,6 @@ app.use(express.urlencoded({ extended: true })); // giúp đọc được dạng
 
 const publicDir = path.join(__dirname, "src", "onOutput");
 app.use("/public", express.static(publicDir));
-
 
 initRouter(app, io);
 
