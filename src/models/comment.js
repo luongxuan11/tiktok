@@ -13,9 +13,14 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "overview_id",
             targetKey: "id",
             as: "comments",
-          });
+         });
 
-          Comment.hasMany(models.Feedback, { foreignKey: "comment_id", as: "link_feedback" });
+         Comment.hasMany(models.Feedback, { foreignKey: "comment_id", as: "link_feedback" });
+         Comment.belongsTo(models.User, {
+            foreignKey: "userId",
+            targetKey: "id",
+            as: "userCurrent",
+         });
       }
    }
    Comment.init(

@@ -27,9 +27,9 @@ export const search = (text) =>
                {
                   model: db.User,
                   as: "user",
-                  attributes: ['tiktok_id'],
+                  attributes: ["tiktok_id"],
                },
-            ]
+            ],
          });
 
          resolve({
@@ -61,7 +61,7 @@ export const follow = (id, follower) =>
             resolve({
                err: 0,
                mess: "follower record deleted successfully!",
-               state: "Follow"
+               state: "Follow",
             });
          } else {
             const res = await db.Follow.create({
@@ -72,7 +72,7 @@ export const follow = (id, follower) =>
             resolve({
                err: res ? 0 : 1,
                mess: res ? "New follow record created successfully!" : "có lỗi rồi",
-               state: "Đang follow"
+               state: "Đang follow",
             });
          }
       } catch (error) {
@@ -80,21 +80,93 @@ export const follow = (id, follower) =>
       }
    });
 
-
-   export const getFollower = (query) =>
+export const getFollower = (query) =>
    new Promise(async (resolve, reject) => {
       try {
          const res = await db.User.findAll({
             attributes: ["id", "userName", "tiktok_id", "avatar"],
             where: {
-               id: query.id_follow
-            }
-         })
+               id: query.id_follow,
+            },
+         });
          resolve({
             err: res ? 0 : 1,
             mess: res ? "get follower successfully!" : "Opss! error",
-            data: res
-         })
+            data: res,
+         });
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+export const uploadComment = (overview_id, comment, user_id, io) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const res = await db.Comment.create({
+            id: generateId(),
+            overview_id,
+            comment,
+            userId: user_id,
+         });
+         if (res) {
+            const commentWithUser = await db.User.findOne({
+               where: { id: res.userId },
+               attributes: ["id", "avatar", "userName"],
+               raw: true,
+            });
+            io.to(overview_id).emit("newComment", { ...res.dataValues, userCurrent: commentWithUser });
+         }
+         resolve({
+            err: res ? 0 : 1,
+            mess: res ? "success!" : "Cannot initialize data!",
+         });
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+export const uploadFeedback = (overview_id, comment_id, feedback, user_id, io) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const res = await db.Feedback.create({
+            id: generateId(),
+            comment_id,
+            feedback,
+            userId: user_id,
+         });
+         const feedbackOfUser = await db.User.findOne({
+            where: { id: res.userId },
+            attributes: ["id", "avatar", "userName"],
+         });
+         if (res && feedbackOfUser) {
+            io.to(overview_id).emit("newFeedback", { ...res.dataValues, userCurrent: feedbackOfUser });
+         }
+         resolve({
+            err: res && feedbackOfUser ? 0 : 1,
+            mess: res && feedbackOfUser ? "success!" : "Cannot initialize data!",
+         });
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+// delete comment
+export const deleteComment = (comment_id, io) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const res = await db.Comment.destroy({
+            where: { id: comment_id },
+         });
+         const res1 = await db.Feedback.destroy({
+            where: { comment_id },
+         });
+         if (res) {
+            io.emit("deleteComment", comment_id);
+         }
+         resolve({
+            err: res || res1 ? 0 : 1,
+            mess: res || res1 ? "success!" : "Không tìm thấy nội dung",
+         });
       } catch (error) {
          reject(error);
       }

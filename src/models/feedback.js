@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
             targetKey: "id",
             as: "link_feedback",
           });
+          Feedback.belongsTo(models.User, {
+            foreignKey: "userId",
+            targetKey: "id",
+            as: "feedbackCurrent",
+         });
       }
    }
    Feedback.init(

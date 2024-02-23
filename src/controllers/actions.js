@@ -45,3 +45,58 @@ export const getFollower = async (req, res) => {
       return internalError(res, error.mess);
    }
 };
+
+// action comment
+export const uploadComment = async (req, res) => {
+   try {
+      const { overview_id, comment } = req.body;
+      const { id } = req.user;
+      const io = req.io;
+      if (!overview_id || !comment)
+         return res.status(404).json({
+            err: 1,
+            mess: "missing input",
+         });
+      const response = await services.uploadComment(overview_id, comment, id, io);
+      return res.status(200).json(response);
+   } catch (error) {
+      console.log(error);
+      return internalError(res, error.mess);
+   }
+};
+export const uploadFeedback = async (req, res) => {
+   try {
+      const { comment_id, feedback, overview_id } = req.body;
+      const { id } = req.user;
+      const io = req.io;
+      if (!comment_id || !feedback)
+         return res.status(404).json({
+            err: 1,
+            mess: "missing input",
+         });
+      const response = await services.uploadFeedback(overview_id ,comment_id, feedback, id, io);
+      return res.status(200).json(response);
+   } catch (error) {
+      console.log(error);
+      return internalError(res, error.mess);
+   }
+};
+
+// action delete comment
+export const deleteComment = async (req, res) => {
+   try {
+      const { comment_id } = req.query;
+      const io = req.io;
+      if (!comment_id) {
+         return res.status(404).json({
+            err: 1,
+            mess: "missing input",
+         });
+      }
+      const response = await services.deleteComment(comment_id, io);
+      return res.status(200).json(response);
+   } catch (error) {
+      console.log(error);
+      return internalError(res, error.mess);
+   }
+};

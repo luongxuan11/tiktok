@@ -24,8 +24,8 @@ export const getUserCurrent = (userId) =>
                   model: db.Follow,
                   as: "follow",
                   attributes: {
-                     exclude: ['createdAt', 'updatedAt']
-                  }
+                     exclude: ["createdAt", "updatedAt"],
+                  },
                },
             ],
          });
@@ -40,57 +40,111 @@ export const getUserCurrent = (userId) =>
       }
    });
 
+export const getUser = (tikTokId) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const res = await db.User.findOne({
+            where: { tiktok_id: tikTokId },
+            attributes: {
+               exclude: ["password", "refresh_token", "otp", "passwordResetExpires", "passwordResetToken", "role_code"],
+            },
+            include: [
+               {
+                  model: db.Follow,
+                  as: "follow",
+                  attributes: {
+                     exclude: ["createdAt", "updatedAt"],
+                  },
+               },
+            ],
+         });
+         if (!res) {
+            return resolve({
+               err: 1,
+               mess: "user undefined!",
+            });
+         }
+         const userId = res.id;
+         const follower = await db.Follow.findAll({
+            where: { user_follow: userId },
+         });
+         const overviewId = await db.Status.findAll({
+            where: { user_id: userId },
+            attributes: ["overview_id"],
+         });
+         resolve({
+            err: res ? 0 : 1,
+            mess: res ? "got" : "user not found",
+            userData: res,
+            follower: follower.length,
+            overviewId,
+         });
+      } catch (error) {
+         reject(error);
+      }
+   });
+
 // update
 export const updateImageUser = (userId, fileData) =>
    new Promise(async (resolve, reject) => {
       try {
          // Delete when there are avatar in the database
          const deleteAvatarOld = await db.User.findOne({
-            where: {id: userId},
-            attributes: ['fileName']
-         })
-         if(deleteAvatarOld.fileName && fileData){
+            where: { id: userId },
+            attributes: ["fileName"],
+         });
+         if (deleteAvatarOld.fileName && fileData) {
             try {
-               await cloudinary.uploader.destroy(deleteAvatarOld.fileName)
+               await cloudinary.uploader.destroy(deleteAvatarOld.fileName);
             } catch (error) {
-               reject(error)
+               reject(error);
             }
          }
-
          // update new avatar
-         const res = await db.User.update({
-            avatar: fileData.path,
-            fileName: fileData.filename
-         }, {
-            where: { id: userId },
-         });
+         const res = await db.User.update(
+            {
+               avatar: fileData.path,
+               fileName: fileData.filename,
+            },
+            {
+               where: { id: userId },
+            },
+         );
          resolve({
             err: res ? 0 : 1,
             mess: res ? "updated user successfully!" : "fail to update",
             userData: res,
          });
       } catch (error) {
-         if(fileData){
-            await cloudinary.uploader.destroy(fileData.fileName)
+         if (fileData) {
+            await cloudinary.uploader.destroy(fileData.fileName);
          }
          reject(error);
       }
    });
 
-export const updateUser = (id, body) => new Promise(async(resolve, reject) => {
-   try {
-      const user = await db.User.update(body, {
-         where: {id}
-      })
+export const updateUser = (id, body) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const user = await db.User.update(
+            {
+               tiktok_id: `@${body.tikTokId}`,
+               userName: body.userName,
+               introduce: body.story.length === 0 ? null : body.story,
+            },
+            {
+               where: { id },
+            },
+         );
 
-      resolve({
-         err: user ? 0 : 1,
-         mess: user ? "Bạn đã đổi tên thành công" : "Opps! Error"
-      })
-   } catch (error) {
-      reject(error)
-   }
-})
+         resolve({
+            err: user ? 0 : 1,
+            mess: user ? "Bạn đã đổi thông tin thành công" : "Opps! Error",
+         });
+      } catch (error) {
+         reject(error);
+      }
+   });
 // =============== end update =============== //
 
 /*
@@ -102,7 +156,7 @@ export const changePassword = (id, body) =>
       const currentPassword = body.password;
       const newPassword = body.newPassword;
       try {
-        // check invalid user
+         // check invalid user
          const res = await db.User.findOne({
             where: { id },
             raw: true,
@@ -113,7 +167,7 @@ export const changePassword = (id, body) =>
                mess: `Không tìm thấy người dùng có mã ${id} trong hệ thống`,
             });
 
-        // check password
+         // check password
          const isChecked = await bcrypt.compareSync(currentPassword, res.password);
          if (!isChecked)
             return resolve({
@@ -121,58 +175,61 @@ export const changePassword = (id, body) =>
                mess: "Mật khẩu vừa nhập không đúng",
             });
 
-        // save password into db
-        const updatePassword = await db.User.update({
-          password: hashPassword(newPassword)
-        }, {
-          where: {id}
-        })
+         // save password into db
+         const updatePassword = await db.User.update(
+            {
+               password: hashPassword(newPassword),
+            },
+            {
+               where: { id },
+            },
+         );
 
-
-        resolve({
-          err: updatePassword ? 0 : 1,
-          mess: updatePassword ? "Cập nhật mật khẩu thành công!" : "Opps! lỗi rồi"
-        })
+         resolve({
+            err: updatePassword ? 0 : 1,
+            mess: updatePassword ? "Cập nhật mật khẩu thành công!" : "Opps! lỗi rồi",
+         });
       } catch (error) {
          reject(error);
       }
    });
 
 // delete user
-export const deleteUser = (id, password) => new Promise(async(resolve, reject) => {
-   try {
-      const user = await db.User.findOne({
-         where: {id},
-         attributes: ['fileName', 'password']
-      })
+export const deleteUser = (id, password) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         const user = await db.User.findOne({
+            where: { id },
+            attributes: ["fileName", "password"],
+         });
 
-      // check pass
-      const isChecked = await bcrypt.compareSync(password, user.password);
-      if(!isChecked) return resolve({
-         err: 1,
-         mess: "Mật khẩu không khớp vui lòng thử lại"
-      })
+         // check pass
+         const isChecked = await bcrypt.compareSync(password, user.password);
+         if (!isChecked)
+            return resolve({
+               err: 1,
+               mess: "Mật khẩu không khớp vui lòng thử lại",
+            });
 
-      // delete file
-      const deleteFile = await cloudinary.uploader.destroy(user.fileName)
-      if(!deleteFile) return resolve({
-         err: 1,
-         mess: "Opps! Có vấn đề về đường truyền"
-      })
-      const res = await db.User.destroy({
-         where: {id}
-      })
+         // delete file
+         const deleteFile = await cloudinary.uploader.destroy(user.fileName);
+         if (!deleteFile)
+            return resolve({
+               err: 1,
+               mess: "Opps! Có vấn đề về đường truyền",
+            });
+         const res = await db.User.destroy({
+            where: { id },
+         });
 
-      resolve({
-         err: (deleteFile && res) ? 0 : 1,
-         mess: (deleteFile && res) ? "Xóa tài khoản thành công" : "Error! Thất bại",
-      })
-   } catch (error) {
-      reject(error)
-   }   
-})
-
-
+         resolve({
+            err: deleteFile && res ? 0 : 1,
+            mess: deleteFile && res ? "Xóa tài khoản thành công" : "Error! Thất bại",
+         });
+      } catch (error) {
+         reject(error);
+      }
+   });
 
 // send otp
 export const sendOtp = (id, email) =>
@@ -204,7 +261,9 @@ export const sendOtp = (id, email) =>
 
          resolve({
             err: resMail ? 0 : 1,
-            mess: resMail ? `Chúng tôi đã gửi Mail cho bạn vui lòng kiểm tra tin nhắn. ${resMail}` : "Có lỗi xảy ra khi gửi mail.",
+            mess: resMail
+               ? `Chúng tôi đã gửi Mail cho bạn vui lòng kiểm tra tin nhắn. ${resMail}`
+               : "Có lỗi xảy ra khi gửi mail.",
          });
       } catch (error) {
          reject(error);
@@ -238,6 +297,30 @@ export const verifyOtp = (userId, otp) =>
                mess: "opt không hợp lệ, vui lòng thử lại!",
             });
          }
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+// check id invalid
+export const checkIdInvalid = (tikTokId) =>
+   new Promise(async (resolve, reject) => {
+      try {
+         if (!/^[a-zA-Z0-9_.-]*$/.test(tikTokId)) {
+            resolve({
+               err: 1,
+               mess: "There're invalid characters!",
+            });
+         }
+         const res = await db.User.findOne({
+            raw: true,
+            where: { tiktok_id: `@${tikTokId}` },
+         });
+
+         resolve({
+            err: 0,
+            invalid: res ? true : false,
+         });
       } catch (error) {
          reject(error);
       }

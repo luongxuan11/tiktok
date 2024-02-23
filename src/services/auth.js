@@ -83,7 +83,10 @@ export const login = ({ email, password }, response) =>
    });
 
 // api refresh token
-export const refreshAccessToken = ( cookie, res) => // lưu ý: khi bắt được lỗi 401 bên getUser thì gọi api này
+export const refreshAccessToken = (
+   cookie,
+   res, // lưu ý: khi bắt được lỗi 401 bên getUser thì gọi api này
+) =>
    new Promise(async (resolve, reject) => {
       try {
          // Xác minh refresh_token bằng cách sử dụng jwt.verify
@@ -192,16 +195,14 @@ export const forgotPassword = (email) =>
             );
          }
 
-         const html = `
-    Vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.
-    Lưu ý: Link này sẽ hết hạn sau 15 phút kể từ bây giờ.
-    <a href=${process.env.SERVER_URL}/api/v1/auth/reset-password/${passwordResetToken}>click here</a>
-    `;
+         const html = `Vui lòng click vào link dưới đây để thay đổi mật khẩu của bạn.
+                        Lưu ý: Link này sẽ hết hạn sau 15 phút kể từ bây giờ.
+                        <a href=${process.env.CLIENT_URL}/reset-password/${passwordResetToken}>click here</a>`;
          const res = await sendEmail(email, html);
 
          resolve({
             err: res ? 0 : 1,
-            mess: res ? `Chúng tôi đã gửi mail với mã ${res} - vui lòng kiểm tra gmail.` : "Opps! error",
+            mess: res ? `Chúng tôi đã gửi thông tin tới bạn - vui lòng kiểm tra gmail.` : "Opps! error",
          });
       } catch (error) {
          reject(error);
@@ -228,18 +229,18 @@ export const checkResetPassword = (password, token) =>
          });
          if (!user)
             return resolve({
-               err: 1,
-               mess: "Opps!, Token resetPassword invalid.",
+               err: 2,
+               mess: "Opps!, Link này đã quá cũ, thử gửi lại",
             });
 
          // check expire token
          const currentTime = Date.now();
-         console.log(currentTime);
-         console.log(user);
+         // console.log(currentTime);
+         // console.log(user);
          if (user.passwordResetExpires < currentTime) {
             return resolve({
-               err: 1,
-               mess: "Token has expired!",
+               err: 2,
+               mess: "Link hết hạn",
             });
          }
 

@@ -36,7 +36,6 @@ const setupUploadFile = (req, res, next) => {
          api_secret: process.env.CLOUDINARY_SECRET2,
       },
    ];
-
    const getRandomAccount = () => {
       const randomNumber = Math.random();
       if (randomNumber < 1 / 3) {
@@ -54,7 +53,7 @@ const setupUploadFile = (req, res, next) => {
    const upload = multer({
       storage: multer.memoryStorage(),
       limits: {
-         fileSize: 50 * 1024 * 1024, // Giới hạn dung lượng file
+         fileSize: 50 * 1024 * 1024,
       },
       fileFilter: (req, file, callback) => {
          if (file.mimetype === "video/mp4" || file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
@@ -121,7 +120,7 @@ const setupUploadFile = (req, res, next) => {
             deleteTemporaryFile(inputVideoPath);
             deleteTemporaryFile(outputVideoPath);
             deleteTemporaryFile(outputImagePath);
-            next()
+            next();
          } catch (uploadError) {
             console.error("Lỗi khi tải lên Cloudinary Storage:", uploadError);
             deleteTemporaryFile(inputVideoPath);

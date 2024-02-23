@@ -1,5 +1,5 @@
 import * as services from "../services";
-import { userName, email, password, repeatPassword, token } from "../helpers/joi_schema";
+import { userName, email, password, repeatPassword, token, resetPassword } from "../helpers/joi_schema";
 import { badRequest, internalError } from "../middlewares/handleError";
 import joi from "joi";
 
@@ -22,7 +22,6 @@ export const login = async (req, res) => {
    try {
       const { error } = joi.object({ email, password }).validate(req.body);
       if (error) return badRequest(error.details[0]?.message, res);
-
       const response = await services.login(req.body, res);
       return res.status(200).json(response);
    } catch (error) {
@@ -97,10 +96,9 @@ export const forgotPassword = async (req, res) => {
 // reset password
 export const checkResetPassword = async (req, res) => {
    try {
-      const { error } = joi.object({ password, token }).validate(req.body);
+      const { error } = joi.object({ resetPassword, token }).validate(req.body);
       if (error) return badRequest(error.details[0]?.message, res);
-
-      const response = await services.checkResetPassword(req.body?.password, req.body?.token);
+      const response = await services.checkResetPassword(req.body?.resetPassword, req.body?.token);
       return res.status(200).json(response);
    } catch (error) {
       return internalError(res, error.message);

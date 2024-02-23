@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
       static associate(models) {
          Overview.hasMany(models.Comment, { foreignKey: "overview_id", as: "comments" });
          Overview.hasMany(models.Status, { foreignKey: "overview_id", as: "status" });
-         Overview.hasMany(models.Share, { foreignKey: "overview_id", as: "share" });
          Overview.belongsTo(models.User, {
             foreignKey: "user_id",
             targetKey: "id",
