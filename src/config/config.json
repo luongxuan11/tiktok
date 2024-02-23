@@ -1,25 +1,31 @@
 {
-  "development": {
-    "username": "root",
-    "password": null,
-    "database": "tiktok",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
-    "logging": false,
-    "timezone": "+07:00"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
+   "development": {
+      "username": "dbtiktok_user",
+      "password": "HlHmMuAu67eAraD5XORJFhID84SdiRoL",
+      "database": "dbtiktok",
+      "host": "dpg-cnch5k6v3ddc73c6vn5g-a.singapore-postgres.render.com",
+      "dialect": "postgres",
+      "logging": false,
+      "timezone": "+07:00",
+      "dialectOptions": {
+         "ssl": {
+            "require": true,
+            "rejectUnauthorized": false
+         }
+      }
+   },
+   "production": {
+      "username": "dbtiktok_user",
+      "password": "HlHmMuAu67eAraD5XORJFhID84SdiRoL",
+      "database": "dbtiktok",
+      "host": "dpg-cnch5k6v3ddc73c6vn5g-a.singapore-postgres.render.com",
+      "dialect": "postgres",
+      "logging": false,
+      "dialectOptions": {
+         "ssl": {
+            "require": true,
+            "rejectUnauthorized": false
+         }
+      }
+   }
 }
