@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
    Notification.init(
       {
          user_id: DataTypes.STRING,
+         overviewId: DataTypes.STRING,
+         type: DataTypes.STRING,
          mess: DataTypes.TEXT,
+         thumbFile: DataTypes.STRING,
       },
       {
          sequelize,

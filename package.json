@@ -33,11 +33,12 @@
     "mysql2": "^3.2.4",
     "nodemailer": "^6.9.4",
     "otp-generator": "^4.0.1",
+    "pg": "^8.11.3",
     "sequelize": "^6.31.1",
     "sequelize-cli": "^6.6.1",
     "socket.io": "^4.7.2",
     "sqlite3": "^5.1.6",
     "uuid": "^9.0.0",
-    "pg": "^8.11.3"
+    "yarn": "^1.22.21"
   }
 }
