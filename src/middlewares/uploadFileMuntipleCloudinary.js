@@ -1,9 +1,12 @@
-const multer = require("multer");
-const dotenv = require("dotenv");
+import multer from "multer";
+import { diskStorage } from "multer";
+import dotenv from "dotenv";
 dotenv.config();
-const handbrake = require("handbrake-js");
+import handbrake from "handbrake-js";
 const cloudinary = require("cloudinary").v2;
-import { writeBufferToInput, deleteTemporaryFile, writeBufferToOutput } from "../helpers/writeFileToFolder";
+const path = require("path");
+
+import { deleteTemporaryFile } from "../helpers/writeFileToFolder";
 
 const compressVideo = (inputFilePath, outputFilePath, options, callback) => {
    handbrake.exec(
@@ -18,7 +21,6 @@ const compressVideo = (inputFilePath, outputFilePath, options, callback) => {
 
 const setupUploadFile = (req, res, next) => {
    const userId = req.user.id;
-
    const cloudinaryAccounts = [
       {
          cloud_name: process.env.CLOUDINARY_NAME,
@@ -50,8 +52,18 @@ const setupUploadFile = (req, res, next) => {
    const randomAccount = getRandomAccount();
    cloudinary.config(randomAccount);
 
+   const storage = diskStorage({
+      destination: function (req, file, cb) {
+         cb(null, path.join(__dirname, "../onInput/"));
+      },
+      filename: function (req, file, cb) {
+         const fileExtension = file.mimetype.startsWith("video/") ? "mp4" : "jpg";
+         cb(null, `${file.fieldname}_${userId}_${Date.now()}_input.${fileExtension}`);
+      },
+   });
+
    const upload = multer({
-      storage: multer.memoryStorage(),
+      storage: storage,
       limits: {
          fileSize: 50 * 1024 * 1024,
       },
@@ -74,10 +86,16 @@ const setupUploadFile = (req, res, next) => {
          return res.status(500).send("Lỗi khi tải lên file.");
       }
 
-      const inputVideoPath = writeBufferToInput(req.files.video[0].buffer, "mp4", userId);
-      const outputVideoPath = writeBufferToOutput(req.files.video[0].buffer, "mp4", userId);
-      const outputImagePath = writeBufferToOutput(req.files.image[0].buffer, "jpg", userId);
+      // khởi tạo path
+      const inputVideoPath = req.files.video[0].path;
+      const outputVideoPath = path.join(
+         __dirname,
+         "../onOutput/",
+         `${req.files.video[0].fieldname}_${userId}_${Date.now()}_output.mp4`,
+      );
+      const imagePath = req.files.image[0].path;
 
+      // option compress
       const videoOptionsDefault = {
          preset: "Very Fast 720p30",
          "encoder-profile": "main",
@@ -86,14 +104,15 @@ const setupUploadFile = (req, res, next) => {
          width: 720,
          height: 1280,
       };
-
       const videoOptions = req.body.videoOptions || videoOptionsDefault;
 
+      // // // compress video
       compressVideo(inputVideoPath, outputVideoPath, videoOptions, async (err, stdout, stderr) => {
          if (err) {
             console.error("Lỗi khi nén video:", err);
             deleteTemporaryFile(inputVideoPath);
-            deleteTemporaryFile(outputImagePath);
+            deleteTemporaryFile(imagePath);
+            deleteTemporaryFile(outputVideoPath);
             return res.status(500).send("Lỗi khi nén video.");
          }
 
@@ -102,12 +121,10 @@ const setupUploadFile = (req, res, next) => {
                folder: `tiktokVideo`,
                resource_type: "video",
             });
-
-            const imageUploadResult = await cloudinary.uploader.upload(outputImagePath, {
+            const imageUploadResult = await cloudinary.uploader.upload(imagePath, {
                folder: `tiktokVideo`,
                resource_type: "image",
             });
-
             req.filesDetail = {
                video_file_name: videoUploadResult.secure_url, // URL của video
                video_file_id: videoUploadResult.public_id, // ID của video trên Cloudinary
@@ -115,17 +132,15 @@ const setupUploadFile = (req, res, next) => {
                thumb_file_id: imageUploadResult.public_id,
                account_cloud: videoUploadResult.api_key,
             };
-            // console.log(videoUploadResult);
-            // console.log(imageUploadResult);
             deleteTemporaryFile(inputVideoPath);
+            deleteTemporaryFile(imagePath);
             deleteTemporaryFile(outputVideoPath);
-            deleteTemporaryFile(outputImagePath);
             next();
          } catch (uploadError) {
             console.error("Lỗi khi tải lên Cloudinary Storage:", uploadError);
             deleteTemporaryFile(inputVideoPath);
+            deleteTemporaryFile(imagePath);
             deleteTemporaryFile(outputVideoPath);
-            deleteTemporaryFile(outputImagePath);
             return res.status(500).send("Lỗi khi tải lên Cloudinary Storage.");
          }
       });
