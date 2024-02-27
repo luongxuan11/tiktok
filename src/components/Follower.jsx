@@ -21,8 +21,8 @@ const Follower = () => {
                console.error("Error fetching API:", error);
             }
          })();
-      }else if(isLogin && currentData.follow?.length === 0){
-         setFollower([])
+      } else if (isLogin && currentData.follow?.length === 0) {
+         setFollower([]);
       }
    }, [currentData.follow]);
 
@@ -35,10 +35,7 @@ const Follower = () => {
                return (
                   <div key={item.id} className="following-box row">
                      <div className="following-box__image avatar">
-                        <img
-                           src={item.avatar || user}
-                           alt="TikTok"
-                        />
+                        <img src={item.avatar || user} alt="TikTok" />
                      </div>
                      <div className="following-box__name row">
                         <strong>{item.userName.length >= 14 ? `${item.userName.slice(0, 14)}...` : item.userName}</strong>

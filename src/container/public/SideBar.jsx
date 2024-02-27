@@ -21,12 +21,12 @@ const SideBar = () => {
    const { currentData } = useSelector((state) => state.user);
 
    const handleShowInfo = (e) => {
-      e.preventDefault(); 
+      e.preventDefault();
       if (!isLogin) {
          setShowForm(true);
       } else if (isLogin && !currentData.verifyOTP) {
          setShowPopup(true);
-      }else return navigate(currentData?.tiktok_id)
+      } else return navigate(currentData?.tiktok_id);
    };
    useEffect(() => {
       if (showForm === false && location.pathname.includes("info")) return navigate("/");
@@ -40,13 +40,13 @@ const SideBar = () => {
                   return (
                      <NavLink key={item.id} to={item.path} className={`item row ${item.isActive ? active : ""}`}>
                         {item.icon}
-                        {item.text}
+                        <p>{item.text}</p>
                      </NavLink>
                   );
                })}
                <NavLink onClick={(e) => handleShowInfo(e)} to={`${currentData?.tiktok_id}`} className={`item item-profile row`}>
                   <FaRegUser />
-                  Hồ sơ
+                  <p>Hồ sơ</p>
                </NavLink>
                {!isLogin ? (
                   <div className="require-login">
@@ -61,7 +61,7 @@ const SideBar = () => {
                <div className="effect row">
                   <img src={btn_image} alt="tiktok" />
                   <span className="row">
-                     <TbWindow className="icon" /> Tạo hiệu ứng
+                     <TbWindow className="icon" /> <p>Tạo hiệu ứng</p>
                   </span>
                </div>
                <div className="rule row">

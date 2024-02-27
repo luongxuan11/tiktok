@@ -76,38 +76,38 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
       }
    };
 
-   useEffect(() => {
-      if (currentPlayingRef.current) {
-         if (location.pathname.includes("video")) {
-            currentPlayingRef.current.pause();
-         } else {
-            currentPlayingRef.current.play();
-         }
-      }
-   }, [location.pathname, currentPlayingRef]);
+   // useEffect(() => {
+   //    if (currentPlayingRef.current) {
+   //       if (location.pathname.includes("video")) {
+   //          currentPlayingRef.current.pause();
+   //       } else {
+   //          currentPlayingRef.current.play();
+   //       }
+   //    }
+   // }, [location.pathname, currentPlayingRef]);
    // end handle playingVideo auto
 
    // play video change tab
-   const handleVisibilityChange = () => {
-      if (document.hidden) {
-         // Page is not visible, pause the currently playing video
-         if (currentPlayingRef.current) {
-            currentPlayingRef.current.pause();
-         }
-      } else {
-         // Page is visible, resume playing the video if there was one playing
-         if (currentPlayingRef.current && !localStorage.getItem("detailPost")) {
-            currentPlayingRef.current.play();
-         }
-      }
-   };
-   useEffect(() => {
-      // Add event listener for visibility change
-      document.addEventListener("visibilitychange", handleVisibilityChange);
-      return () => {
-         document.removeEventListener("visibilitychange", handleVisibilityChange);
-      };
-   }, []);
+   // const handleVisibilityChange = () => {
+   //    if (document.hidden) {
+   //       // Page is not visible, pause the currently playing video
+   //       if (currentPlayingRef.current) {
+   //          currentPlayingRef.current.pause();
+   //       }
+   //    } else {
+   //       // Page is visible, resume playing the video if there was one playing
+   //       if (currentPlayingRef.current && !localStorage.getItem("detailPost")) {
+   //          currentPlayingRef.current.play();
+   //       }
+   //    }
+   // };
+   // useEffect(() => {
+   //    // Add event listener for visibility change
+   //    document.addEventListener("visibilitychange", handleVisibilityChange);
+   //    return () => {
+   //       document.removeEventListener("visibilitychange", handleVisibilityChange);
+   //    };
+   // }, []);
 
    return (
       <div className="post-item row">
@@ -124,7 +124,7 @@ const PostsCommon = ({ index, item, setShowForm, setShowPopup, isLogin, currentD
                      <span> - {item.user.tiktok_id.slice(0, 20).replace(/@/g, "")}...</span>
                   </div>
                   <div className="title-box">
-                     <p className="title">{item?.title}</p>
+                     <p className="title ellipsis">{item?.title}</p>
                   </div>
                   <span className="music-name">
                      <IoMusicalNotes /> original sound - {item.user.userName}

@@ -8,15 +8,14 @@ import Swal from "sweetalert2";
 import { useNavigate, Link } from "react-router-dom";
 import { apiForgotPassword } from "../service/apis";
 import LineAnimated from "../components/animation/LineAnimated";
-// import { path } from "../utilities/constant";
-
-const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle } = icons;
 
 const AuthFormLogin = ({ setShowForm }) => {
+   const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle, RiLoader4Line } = icons;
    const [showPassword, setShowPassword] = useState(false);
    const [forgetPassword, setForgetPassword] = useState(false);
    const [invalidFields, setInvalidFields] = useState([]);
    const [loading, setLoading] = useState(false);
+   const [loadingLogin, setLoadingLogin] = useState(false);
    const [payload, setPayload] = useState({
       email: "",
       password: "",
@@ -37,6 +36,7 @@ const AuthFormLogin = ({ setShowForm }) => {
       let invalids = validate(payload, setInvalidFields);
 
       if (invalids === 0 && !forgetPassword) {
+         setLoadingLogin(true);
          dispatch(actions.login(payload));
       } else if (invalids === 0 && forgetPassword) {
          try {
@@ -64,7 +64,11 @@ const AuthFormLogin = ({ setShowForm }) => {
 
    // sweet alert2
    useEffect(() => {
-      mess && Swal.fire("Oops !", mess, "error");
+      if (mess) {
+         Swal.fire("Oops !", mess, "error").then(() => {
+            setLoadingLogin(false);
+         });
+      }
    }, [mess, update]);
 
    return (
@@ -117,6 +121,11 @@ const AuthFormLogin = ({ setShowForm }) => {
                >
                   <AiOutlineCloseCircle />
                </span>
+               {loadingLogin && (
+                  <div className="form--loading form--loading1 row">
+                     <RiLoader4Line className="icon" />
+                  </div>
+               )}
             </form>
          </div>
       </div>

@@ -8,7 +8,7 @@ import * as actions from "../redux/store/actions";
 import Swal from "sweetalert2";
 
 const AuthForm = ({ setShowForm }) => {
-   const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle } = icons;
+   const { PiEyeDuotone, PiEyeClosedDuotone, AiOutlineCloseCircle, RiLoader4Line } = icons;
    const [showPassword, setShowPassword] = useState(false);
    const [showPasswordRepeat, setShowPasswordRepeat] = useState(false);
    const [isChecked, setIsChecked] = useState(false);
@@ -20,6 +20,7 @@ const AuthForm = ({ setShowForm }) => {
       password: "",
       repeatPassword: "",
    });
+   const [loading, setLoading] = useState(false);
 
    const { mess, update } = useSelector((state) => state.auth);
 
@@ -53,6 +54,7 @@ const AuthForm = ({ setShowForm }) => {
 
       if (!step) {
          if (invalids === 0 && isChecked) {
+            setLoading(true);
             const response = await apiRegister(payload);
 
             if (response.err === 0) {
@@ -63,15 +65,18 @@ const AuthForm = ({ setShowForm }) => {
                      password: "",
                      repeatPassword: "",
                   });
+                  setLoading(false);
                   setStep(true);
                });
             } else {
                Swal.fire("Oops !", response.mess, "error");
+               setLoading(false);
                setStep(false);
             }
          }
       } else {
          if (invalids === 0 && isChecked) {
+            setLoading(true);
             dispatch(actions.login(payload));
          }
       }
@@ -79,7 +84,11 @@ const AuthForm = ({ setShowForm }) => {
 
    // sweet alert2
    useEffect(() => {
-      mess && Swal.fire("Oops !", mess, "error");
+      if (mess) {
+         Swal.fire("Oops !", mess, "error").then(() => {
+            setLoading(false);
+         });
+      }
    }, [mess, update]);
 
    return (
@@ -178,6 +187,11 @@ const AuthForm = ({ setShowForm }) => {
                <span onClick={() => setShowForm(false)} className="close">
                   <AiOutlineCloseCircle />
                </span>
+               {loading && (
+                  <div className="form--loading row">
+                     <RiLoader4Line className="icon" />
+                  </div>
+               )}
             </form>
          </div>
       </div>

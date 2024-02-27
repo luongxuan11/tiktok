@@ -69,7 +69,7 @@ const Header = () => {
    return (
       <div className="header">
          <div className="header__box row">
-            <Link className="header__box__logo" to={'/'}>
+            <Link className="header__box__logo" to={"/"}>
                <img src={logo} alt="tiktok" />
             </Link>
             <Search />
@@ -93,9 +93,30 @@ const Header = () => {
                   <div className="notification">
                      <BiMessageAltMinus className="icon" />
                      <span>Thông báo</span>
+                     {/* <div className="notification-box">
+                        <h2>Thông báo</h2>
+                        <div className="notification-box__categories row">
+                           <p>Tất cả thông báo</p>
+                           <p>Thích</p>
+                           <p>Bình luận</p>
+                           <p>Lượt nhắc đến và gắn thẻ</p>
+                           <p>Follower</p>
+                        </div>
+                     </div>
+                     <div className="notification-box__list">
+                        <strong>Mới</strong>
+                        <div className="list">
+                           <img className="avatar" src={user} alt="" />
+                           <div className="title">
+                              <strong>username</strong>
+                              <p>type notification</p>
+                              <p>mess eqweu ejqwhe weqiej </p>
+                           </div>
+                           <img className="thumb" src="" alt="" />
+                        </div>
+                     </div> */}
                   </div>
                )}
-               
 
                {!isLogin && <Button onClick={handleShowForm} btnClass={"header__btn--login"} text={"Đăng nhập"} />}
 

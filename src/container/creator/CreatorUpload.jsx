@@ -20,12 +20,12 @@ const CreatorUpload = () => {
    const canvas = useRef(null);
    const fileInputRef = useRef(null);
 
-   const handleShowPhone = useCallback((e) => {
+   const handleShowPhone = (e) => {
       const file = e.target.files[0];
       if (file) {
          const fileType = file.name.split(".");
          const fileSizeInMB = file.size / (1024 * 1024);
-         if (fileSizeInMB > 50) return Swal.fire("Lỗi!", "Video phải có dung lượng dưới 50MB.", "error");
+         if (fileSizeInMB > 20) return Swal.fire("Lỗi!", `Video phải có dung lượng dưới 20MB. fileMb hiện tại ->${fileSizeInMB}`, "error");
          if (fileType.slice(-1)[0] !== "mp4") return Swal.fire("Lỗi!", "Định dạng file không hợp lệ", "error");
          setShowUploadDetail(true);
          setVideoFile({
@@ -38,7 +38,7 @@ const CreatorUpload = () => {
             video: file,
          }));
       }
-   }, []);
+   };
 
    useEffect(() => {
       const handleBodyOverflow = () => {

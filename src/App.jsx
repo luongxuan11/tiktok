@@ -6,6 +6,7 @@ import { CreatorCenter, CreatorUpload, CreatorContent } from "./container/creato
 import { path } from "./utilities/constant";
 import * as actions from "./redux/store/actions";
 import "./sass/App.scss";
+import "./sass/responsive.scss";
 import { socket } from "./socket";
 
 function App() {

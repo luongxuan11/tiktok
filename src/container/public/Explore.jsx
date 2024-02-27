@@ -74,7 +74,7 @@ const Explore = () => {
                         <div className="video">
                            <Video item={item} index={index} />
                         </div>
-                        <span className="item__content ellipsis">{item.title}</span>
+                        <span className="item__content ellipsis">{item.title.length > 18 ? `${item.title.slice(0, 18)}...` : item.tile}</span>
                         <div className="item-trend row">
                            <div className="item-trend__user row">
                               <img src={item.user.avatar || user} alt="" />
