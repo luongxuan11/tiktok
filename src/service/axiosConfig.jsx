@@ -1,28 +1,26 @@
-import axios from "axios"
-
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const instance = axios.create({
-    baseURL: process.env.REACT_APP_SEVER_URL,
-    withCredentials: true, // bật việc sử dụng cookie
+   baseURL: process.env.REACT_APP_SEVER_URL,
+   withCredentials: true, // bật việc sử dụng cookie
 });
-
 
 /*
   --- add token into header ---
   1. Một cụm interceptors bao gồm req, res
 */
 instance.interceptors.request.use(
-    (config) => {
+   (config) => {
       let token = JSON.parse(window.localStorage.getItem("persist:auth"))?.token.slice(1, -1);
-      config.headers = {authorization: token ? `${token}` : null};
-  
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-);
+      config.headers = { authorization: token ? `${token}` : null };
 
+      return config;
+   },
+   (error) => {
+      return Promise.reject(error);
+   },
+);
 
 /*
     --- bộ res bao gồm ---\
@@ -32,46 +30,45 @@ instance.interceptors.request.use(
 */
 
 instance.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
-  async(error) => {
-    const originalConfig = error.config
-    console.warn("accessToken expired!")
-    if(error.response && error.response.status === 401){
-      try {
-        console.warn("call refreshToken api")
-        const result = await instance.post(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/refresh-token`)
-        console.warn("check refresh token when called => ", result)
+   (response) => {
+      return response.data;
+   },
+   async (error) => {
+      const originalConfig = error.config;
+      console.warn("accessToken expired!");
+      if (error.response && error.response.status === 401) {
+         try {
+            console.warn("call refreshToken api");
+            const result = await instance.post(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/refresh-token`);
+            console.warn("check refresh token when called => ", result);
 
-         // Update localStorage with the new token
-         const newToken = result.access_token;
-         const authData = JSON.parse(
-           window.localStorage.getItem("persist:auth")
-         );
-         authData.token = `"${newToken}"`;
-         window.localStorage.setItem("persist:auth", JSON.stringify(authData));
- 
- 
-         // Update the authorization header in the original request config
-         originalConfig.headers = { authorization: newToken };
- 
+            // Update localStorage with the new token
+            const newToken = result.access_token;
+            const authData = JSON.parse(window.localStorage.getItem("persist:auth"));
+            authData.token = `"${newToken}"`;
+            window.localStorage.setItem("persist:auth", JSON.stringify(authData));
 
-        return instance(originalConfig)
-      } catch (error) {
-        // refresh token expired
-        if(error.response && error.response.status === 419){
-          console.error("refresh token expired")
-          const res = await instance.get(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/logout`)
-          if(res.err === 0 || res.err === 1){
-            window.localStorage.removeItem("persist:auth");
-          }
-        }
-        return Promise.reject(error);
+            // Update the authorization header in the original request config
+            originalConfig.headers = { authorization: newToken };
+
+            return instance(originalConfig);
+         } catch (error) {
+            // refresh token expired
+            if (error.response && error.response.status === 419) {
+               console.error("refresh token expired");
+               const res = await instance.get(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/logout`);
+               if (res.err === 0 || res.err === 1) {
+                  window.localStorage.removeItem("persist:auth");
+                  Swal.fire("Expired", "Vui lòng đăng nhập lại.", "info").then(() => {
+                     window.location.reload();
+                  });
+               }
+            }
+            return Promise.reject(error);
+         }
       }
-    }
-    return Promise.reject(error)
-  }
+      return Promise.reject(error);
+   },
 );
 
 export default instance;
