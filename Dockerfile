@@ -14,7 +14,7 @@ COPY . .
 RUN npm install
 
 # Mở cổng mạng cho ứng dụng
-EXPOSE 3000
+EXPOSE 8060
 
 # Chạy ứng dụng
 CMD [ "npm", "start" ]

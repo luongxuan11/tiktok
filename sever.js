@@ -17,16 +17,22 @@ var io = require("socket.io")(server, {
       origin: "*",
    },
 });
+const allowedOrigins = ["http://localhost:3000", "https://tiktok-nine-mu.vercel.app/"];
 
-app.use(
-   cors({
-      // dùng để đăng kí 1 middleware được phép truy cập
-      origin: process.env.CLIENT_URL, // origin là tên miền được phép truy cập
-      optionsSuccessStatus: 200, // Được vào với state 200
-      methods: ["GET", "POST", "PUT", "DELETE"],
-      credentials: true, // Cho phép sử dụng Cookie
-   }),
-);
+const corsOptions = {
+   origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+         callback(null, true);
+      } else {
+         callback(new Error("Not allowed by CORS"));
+      }
+   },
+   credentials: true, // Cho phép sử dụng Cookie
+   optionsSuccessStatus: 200,
+   methods: ["GET", "POST", "PUT", "DELETE"],
+};
+
+app.use(cors(corsOptions));
 
 // middleware đọc data
 app.use(cookieParser()); // tương tác cookie
@@ -35,7 +41,6 @@ app.use(express.urlencoded({ extended: true })); // giúp đọc được dạng
 
 const publicDir = path.join(__dirname, "src", "onOutput");
 app.use("/public", express.static(publicDir));
-
 
 initRouter(app, io);
 
