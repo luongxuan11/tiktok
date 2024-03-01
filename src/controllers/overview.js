@@ -132,7 +132,6 @@ export const getPostsFollowing = async (req, res) => {
             err: 1,
             mess: "Missing input!",
          });
-
       const response = await services.getPostsFollowing(page, idFollower);
       return res.status(200).json(response);
    } catch (error) {

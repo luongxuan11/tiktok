@@ -13,11 +13,11 @@ export const create_access_token = (res) => {
               verifyOTP: res.verifyOTP,
            },
            process.env.JWT_SECRET,
-           { expiresIn: "30s" },
+           { expiresIn: "2h" },
         )
       : null;
 };
 
 export const create_refresh_token = (id) => {
-   return jwt.sign({ id }, process.env.JWT_SECRET_REFRESH, { expiresIn: "60s" });
+   return jwt.sign({ id }, process.env.JWT_SECRET_REFRESH, { expiresIn: "15d" });
 };

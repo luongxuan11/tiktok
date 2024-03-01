@@ -126,11 +126,6 @@ export const getCurrentPost = (post_id, io) =>
                   as: "status",
                   attributes: { exclude: ["createdAt"] },
                },
-               // {
-               //    model: db.Share,
-               //    as: "share",
-               //    attributes: { exclude: ["createdAt"] },
-               // },
                //db user
                {
                   model: db.User,
@@ -367,9 +362,10 @@ export const getPostsFollowing = (page, idFollower) =>
          let offset = !page || +page <= 1 ? 0 : +page - 1;
 
          const res = await db.Overview.findAll({
-            limit: limit,
+            nest: true,
             offset: offset * limit,
-            order: [["UpdatedAt", "DESC"]],
+            limit: limit,
+            order: [["updatedAt", "DESC"]],
 
             where: {
                user_id: idFollower,
@@ -389,22 +385,10 @@ export const getPostsFollowing = (page, idFollower) =>
                   as: "status",
                   attributes: { exclude: ["createdAt"] },
                },
-               // {
-               //    model: db.Share,
-               //    as: "share",
-               //    attributes: { exclude: ["createdAt"] },
-               // },
                {
                   model: db.Comment,
                   as: "comments",
                   attributes: { exclude: ["createdAt"] },
-                  include: [
-                     {
-                        model: db.Feedback,
-                        as: "link_feedback",
-                        attributes: { exclude: ["createdAt"] },
-                     },
-                  ],
                },
             ],
          });
