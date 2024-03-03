@@ -7,8 +7,8 @@ import { v4 } from "uuid";
 import resetToken from "../helpers/resetToken";
 import { sendEmail } from "../helpers/sendMail";
 import { hashPassword } from "../helpers/hashPassword";
-// import { date } from "joi";
-// const crypto = require("crypto");
+const fs = require("fs");
+const path = require("path");
 
 // register
 export const register = ({ userName, email, password }) =>
@@ -44,6 +44,7 @@ export const register = ({ userName, email, password }) =>
 export const login = ({ email, password }, response) =>
    new Promise(async (resolve, reject) => {
       try {
+         const filePath = path.join(__dirname, "../../refreshToken.txt");
          const res = await db.User.findOne({
             where: { email },
             raw: true,
@@ -59,11 +60,13 @@ export const login = ({ email, password }, response) =>
          // save into database
          if (refreshToken) {
             await db.User.update({ refresh_token: refreshToken }, { where: { id: res.id } });
-
-            // save refreshToken into cookie
-            response.cookie("refresh_token", refreshToken, {
-               httpOnly: true,
-               maxAge: 15 * 24 * 60 * 60 * 1000,
+            fs.writeFile(filePath, refreshToken, (err) => {
+               if (err) {
+                  return res.status(500).json({
+                     err: 1,
+                     mess: "Lôĩ không mong muốn",
+                  });
+               }
             });
          }
 
@@ -84,13 +87,13 @@ export const login = ({ email, password }, response) =>
 
 // api refresh token
 export const refreshAccessToken = (
-   cookie,
+   refreshToken,
    res, // lưu ý: khi bắt được lỗi 401 bên getUser thì gọi api này
 ) =>
    new Promise(async (resolve, reject) => {
       try {
          // Xác minh refresh_token bằng cách sử dụng jwt.verify
-         jwt.verify(cookie.refresh_token, process.env.JWT_SECRET_REFRESH, async (err, decode) => {
+         jwt.verify(refreshToken, process.env.JWT_SECRET_REFRESH, async (err, decode) => {
             if (err) {
                return res.status(419).json({
                   err: 1,
@@ -102,11 +105,10 @@ export const refreshAccessToken = (
             const user = await db.User.findOne({
                where: {
                   id: decode.id,
-                  refresh_token: cookie.refresh_token,
+                  refresh_token: refreshToken,
                },
                raw: true,
             });
-            // console.log(user)
 
             if (!user) {
                return res.status(404).json({
@@ -130,13 +132,13 @@ export const refreshAccessToken = (
    });
 
 // logout
-export const logout = (cookie) =>
+export const logout = (refreshToken) =>
    new Promise(async (resolve, reject) => {
       try {
          // Tìm người dùng có refresh_token và xóa nó
          const user = await db.User.findOne({
             where: {
-               refresh_token: cookie.refresh_token,
+               refresh_token: refreshToken,
             },
          });
 
@@ -144,7 +146,7 @@ export const logout = (cookie) =>
             await db.User.update(
                { refresh_token: null },
                {
-                  where: { refresh_token: cookie.refresh_token },
+                  where: { refresh_token: refreshToken },
                },
             );
          } else {

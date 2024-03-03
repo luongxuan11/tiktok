@@ -2,6 +2,8 @@ import * as services from "../services";
 import { userName, email, password, repeatPassword, token, resetPassword } from "../helpers/joi_schema";
 import { badRequest, internalError } from "../middlewares/handleError";
 import joi from "joi";
+const fs = require("fs");
+const path = require("path");
 
 // register controller
 export const register = async (req, res) => {
@@ -33,15 +35,23 @@ export const login = async (req, res) => {
 // refresh accessToken
 export const refreshAccessToken = async (req, res) => {
    try {
-      const cookie = req.cookies;
-      if (!cookie && !cookie.refresh_token)
+      const filePath = path.join(__dirname, "../../refreshToken.txt");
+      const refreshToken = fs.readFileSync(filePath, "utf8", (err, data) => {
+         if (err) {
+            return res.status(400).json({
+               err: 1,
+               mess: err,
+            });
+         }
+         return data;
+      });
+      if (!refreshToken)
          return res.status(401).json({
             err: 1,
-            mess: "No refresh token in cookies",
+            mess: "No refresh",
          });
-      // console.log("===",cookie)
 
-      const response = await services.refreshAccessToken(cookie, res);
+      const response = await services.refreshAccessToken(refreshToken, res);
       return res.status(200).json(response);
    } catch (error) {
       return internalError(res, error.mess);
@@ -51,24 +61,33 @@ export const refreshAccessToken = async (req, res) => {
 // logout
 export const logout = async (req, res) => {
    try {
-      const cookie = req.cookies;
-      if (!cookie || !cookie.refresh_token) {
-         throw new Error("Không có refresh token trong cookies");
-      }
-
-      // Xóa refresh token khỏi cơ sở dữ liệu
-      await services.logout(cookie);
-
-      // Xóa cookie refresh_token khỏi trình duyệt
-      res.clearCookie("refresh_token", {
-         httpOnly: true,
-         secure: true,
+      const filePath = path.join(__dirname, "../../refreshToken.txt");
+      const refreshToken = fs.readFileSync(filePath, "utf8", (err, data) => {
+         if (err) {
+            return res.status(400).json({
+               err: 1,
+               mess: err,
+            });
+         }
+         return data;
       });
 
-      // Trả về phản hồi sau khi xóa cookie và cơ sở dữ liệu
-      return res.status(200).json({
-         err: 0,
-         mess: "Đăng xuất thành công.",
+      await services.logout(refreshToken);
+      if (!refreshToken) {
+         throw new Error("Không có refresh được khởi tạo");
+      }
+
+      fs.writeFile(filePath, "", (err) => {
+         if (err) {
+            return res.status(500).json({
+               err: 1,
+               mess: "Không thể xóa refresh token",
+            });
+         }
+         return res.status(200).json({
+            err: 0,
+            mess: "Đăng xuất thành công",
+         });
       });
    } catch (error) {
       return internalError(res, error.message);

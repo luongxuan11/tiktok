@@ -17,18 +17,17 @@ var io = require("socket.io")(server, {
       origin: "*",
    },
 });
-const allowedOrigins = ["http://localhost:3000", "https://tiktok-nine-mu.vercel.app/"];
+const allowedOrigins = ["http://localhost:3000", "https://tiktok-nine-mu.vercel.app"];
 
 const corsOptions = {
    origin: function (origin, callback) {
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      if (!origin || allowedOrigins.includes(origin)) {
          callback(null, true);
       } else {
          callback(new Error("Not allowed by CORS"));
       }
    },
    credentials: true, // Cho phép sử dụng Cookie
-   optionsSuccessStatus: 200,
    methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
