@@ -62,6 +62,7 @@ const Header = () => {
       if (response?.err === 0) {
          Swal.fire("Thành công !", response.mess, "success");
       } else {
+         dispatch(actions.logout());
          Swal.fire("Thất bại!", response.mess, "error");
       }
       dispatch(actions.logout());
