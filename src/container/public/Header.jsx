@@ -57,7 +57,8 @@ const Header = () => {
 
    //  logout
    const handleLogout = async () => {
-      const response = await apiLogout();
+      const refreshToken = localStorage.getItem("refreshToken");
+      const response = await apiLogout({ refreshToken });
       if (response?.err === 0) {
          Swal.fire("Thành công !", response.mess, "success");
       } else {

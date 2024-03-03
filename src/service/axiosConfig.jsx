@@ -36,10 +36,11 @@ instance.interceptors.response.use(
    async (error) => {
       const originalConfig = error.config;
       console.warn("accessToken expired!");
+      const refreshToken = localStorage.getItem("refreshToken");
       if (error.response && error.response.status === 401) {
          try {
             console.warn("call refreshToken api");
-            const result = await instance.post(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/refresh-token`);
+            const result = await instance.post(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/refresh-token`, { refreshToken });
             console.warn("check refresh token when called => ", result);
 
             // Update localStorage with the new token
@@ -56,7 +57,7 @@ instance.interceptors.response.use(
             // refresh token expired
             if (error.response && error.response.status === 419) {
                console.error("refresh token expired");
-               const res = await instance.get(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/logout`);
+               const res = await instance.get(`${process.env.REACT_APP_SEVER_URL}/api/v1/user/logout?refreshToken=${refreshToken}`);
                if (res.err === 0 || res.err === 1) {
                   window.localStorage.removeItem("persist:auth");
                   Swal.fire("Expired", "Vui lòng đăng nhập lại.", "info").then(() => {
