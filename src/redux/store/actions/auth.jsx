@@ -6,7 +6,7 @@ export const login = (payload) => async (dispatch) => {
    try {
       const response = await apiLogin(payload);
       if (response?.err === 0) {
-         await localStorage.setItem("refreshToken", response.refreshToken);
+         localStorage.setItem("refreshToken", response.refreshToken);
          dispatch({
             type: actionTypes.LOGIN_SUCCESS,
             data: response.access_token,
